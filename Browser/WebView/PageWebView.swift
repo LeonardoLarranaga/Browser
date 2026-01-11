@@ -14,8 +14,6 @@ struct PageWebView: View {
     @Environment(\.scenePhase) var scenePhase
     @Environment(BrowserWindowState.self) var browserWindowState
     
-    @EnvironmentObject var userPreferences: UserPreferences
-    
     let browserSpaces: [BrowserSpace]
     
     // UUID to scroll to the current space (using browserWindowState.viewScrollState doesn't work)
@@ -23,7 +21,7 @@ struct PageWebView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if userPreferences.urlBarPosition == .onToolbar {
+            if Preferences.shared.urlBarPosition == .onToolbar {
                 SidebarURLToolbar()
             }
             
@@ -48,7 +46,7 @@ struct PageWebView: View {
         .transaction { $0.disablesAnimations = true }
         // Try to enter Picture in Picture of current tab when tab changes or app goes to background
         .onChange(of: browserWindowState.currentSpace?.currentTab) { oldValue, newValue in
-            if userPreferences.openPipOnTabChange {
+            if Preferences.shared.openPipOnTabChange {
                 if let oldValue {
                     oldValue.webview?.togglePictureInPicture()
                 }
@@ -59,12 +57,12 @@ struct PageWebView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
-            if userPreferences.openPipOnTabChange {
+            if Preferences.shared.openPipOnTabChange {
                 browserWindowState.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willBecomeActiveNotification)) { _ in
-            if userPreferences.openPipOnTabChange {
+            if Preferences.shared.openPipOnTabChange {
                 browserWindowState.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }

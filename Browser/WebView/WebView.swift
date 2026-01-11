@@ -11,7 +11,6 @@ import SwiftUI
 struct WebView: View {
     
     @Environment(BrowserWindowState.self) var browserWindowState
-    @EnvironmentObject var userPreferences: UserPreferences
     
     @Bindable var tab: BrowserTab
     @Bindable var browserSpace: BrowserSpace
@@ -68,7 +67,7 @@ struct WebView: View {
             }
         }
         .overlay(alignment: .top) {
-            if userPreferences.loadingIndicatorPosition == .onWebView && browserWindowState.currentSpace?.currentTab == tab {
+            if Preferences.shared.loadingIndicatorPosition == .onWebView && browserWindowState.currentSpace?.currentTab == tab {
                 if tab.isLoading {
                     ProgressView(value: tab.estimatedProgress)
                         .progressViewStyle(.linear)

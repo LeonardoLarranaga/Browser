@@ -10,6 +10,7 @@
 		4A3CCDB62D5C94BD00D7C8CE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4A3CCDB52D5C94BD00D7C8CE /* .gitignore */; };
 		4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4A62F7192D5349EE0084D3A2 /* SymbolPicker */; };
 		4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AC77A852D573849005BEF25 /* KeyboardShortcuts */; };
+		4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 			files = (
 				4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */,
 				4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */,
+				4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +100,7 @@
 			packageProductDependencies = (
 				4A62F7192D5349EE0084D3A2 /* SymbolPicker */,
 				4AC77A852D573849005BEF25 /* KeyboardShortcuts */,
+				4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */,
 			);
 			productName = Browser;
 			productReference = 4AC596AD2D3C6DC400FF0326 /* Browser.app */;
@@ -131,6 +134,7 @@
 			packageReferences = (
 				4A62F7182D5349EE0084D3A2 /* XCRemoteSwiftPackageReference "SymbolPicker" */,
 				4AC77A842D573849005BEF25 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
+				4AE5103A2F14446F00BCE2D0 /* XCRemoteSwiftPackageReference "ObservableDefaults" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AC596AE2D3C6DC400FF0326 /* Products */;
@@ -409,6 +413,14 @@
 				minimumVersion = 2.2.4;
 			};
 		};
+		4AE5103A2F14446F00BCE2D0 /* XCRemoteSwiftPackageReference "ObservableDefaults" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/fatbobman/ObservableDefaults";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.7.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -421,6 +433,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4AC77A842D573849005BEF25 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4AE5103A2F14446F00BCE2D0 /* XCRemoteSwiftPackageReference "ObservableDefaults" */;
+			productName = ObservableDefaults;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoadingPlacePicker: View {
-    @EnvironmentObject var userPreferences: UserPreferences
+
     var body: some View {
         VStack(alignment: .leading) {
             Label("Loading Indicator Position", systemImage: "progress.indicator")
@@ -22,16 +22,16 @@ struct LoadingPlacePicker: View {
     }
     
     @ViewBuilder
-    func LoadingPickerButton(_ value: UserPreferences.LoadingIndicatorPosition, image: ImageResource) -> some View {
+    func LoadingPickerButton(_ value: Preferences.LoadingIndicatorPosition, image: ImageResource) -> some View {
         Button {
-            userPreferences.loadingIndicatorPosition = value
+            Preferences.shared.loadingIndicatorPosition = value
         } label: {
             Image(image)
                 .resizable()
                 .scaledToFit()
                 .overlay {
                     Rectangle()
-                        .strokeBorder(.blue, lineWidth: userPreferences.loadingIndicatorPosition == value ? 2 : 0)
+                        .strokeBorder(.blue, lineWidth: Preferences.shared.loadingIndicatorPosition == value ? 2 : 0)
                 }
         }
         .buttonStyle(.plain)

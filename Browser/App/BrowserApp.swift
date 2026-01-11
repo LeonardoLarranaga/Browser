@@ -28,9 +28,8 @@ struct BrowserApp: App {
     func BrowserWindow(_ id: String, inMemory: Bool = false) -> some Scene {
         WindowGroup(id: id) {
             ContentView()
-                .environmentObject(appDelegate.userPreferences)
                 .transaction {
-                    $0.disablesAnimations = appDelegate.userPreferences.disableAnimations
+                    $0.disablesAnimations = Preferences.shared.disableAnimations
                 }
                 .frame(minWidth: 400, minHeight: 200)
         }
@@ -43,7 +42,6 @@ struct BrowserApp: App {
         Settings {
             SettingsView()
                 .frame(width: 750, height: 550)
-                .environmentObject(appDelegate.userPreferences)
         }
     }
 }

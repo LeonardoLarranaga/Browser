@@ -14,7 +14,6 @@ struct Sidebar: View {
     
     @Environment(SidebarModel.self) var sidebarModel
     
-    @EnvironmentObject var userPreferences: UserPreferences
     @Environment(BrowserWindowState.self) var browserWindowState
     
     let browserSpaces: [BrowserSpace]
@@ -22,7 +21,7 @@ struct Sidebar: View {
     var body: some View {
         VStack {
             SidebarToolbar(browserSpaces: browserSpaces)
-            if userPreferences.urlBarPosition == .onSidebar {
+            if Preferences.shared.urlBarPosition == .onSidebar {
                 SidebarURL()
             }
             SidebarSpacesTabView(browserSpaces: browserSpaces)
@@ -31,7 +30,7 @@ struct Sidebar: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.bottom, 10)
         .opacity(sidebarModel.currentSidebarWidth == 0 ? 0 : 1)
-        .padding(.trailing, userPreferences.sidebarPosition == .trailing ? .sidebarPadding * 2 : 0)
+        .padding(.trailing, Preferences.shared.sidebarPosition == .trailing ? .sidebarPadding * 2 : 0)
         .gesture(WindowDragGesture()) // Move the browser window by dragging the sidebar
         .task {
             if browserSpaces.isEmpty {

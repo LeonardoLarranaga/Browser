@@ -28,10 +28,10 @@ import SwiftData
     
     var searchOpenLocation: SearchOpenLocation? = .none
     var searchPanelOrigin: CGPoint {
-        searchOpenLocation == .fromNewTab || UserDefaults.standard.integer(forKey: "url_bar_position") == UserPreferences.URLBarPosition.onToolbar.rawValue ? .zero : CGPoint(x: 5, y: 50)
+        searchOpenLocation == .fromNewTab || UserDefaults.standard.integer(forKey: "url_bar_position") == Preferences.URLBarPosition.onToolbar.rawValue ? .zero : CGPoint(x: 5, y: 50)
     }
     var searchPanelSize: CGSize {
-        searchOpenLocation == .fromNewTab || UserDefaults.standard.integer(forKey: "url_bar_position")  == UserPreferences.URLBarPosition.onToolbar.rawValue ? CGSize(width: 700, height: 300) : CGSize(width: 400, height: 300)
+        searchOpenLocation == .fromNewTab || UserDefaults.standard.integer(forKey: "url_bar_position") == Preferences.URLBarPosition.onToolbar.rawValue ? CGSize(width: 700, height: 300) : CGSize(width: 400, height: 300)
     }
     
     var showURLQRCode = false

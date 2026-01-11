@@ -8,38 +8,39 @@
 import SwiftUI
 
 struct SettingsAppearanceView: View {
-    @EnvironmentObject var userPreferences: UserPreferences
+    
     var body: some View {
+      @Bindable var preferences = Preferences.shared
         Form {
             Section("App") {
-                Picker("Sidebar Position", systemImage: "sidebar.left", selection: $userPreferences.sidebarPosition) {
-                    Label("Leading", systemImage: "sidebar.left").tag(UserPreferences.SidebarPosition.leading)
-                    Label("Trailing", systemImage: "sidebar.right").tag(UserPreferences.SidebarPosition.trailing)
+              Picker("Sidebar Position", systemImage: "sidebar.left", selection: $preferences.sidebarPosition) {
+                Label("Leading", systemImage: "sidebar.left").tag(Preferences.SidebarPosition.leading)
+                    Label("Trailing", systemImage: "sidebar.right").tag(Preferences.SidebarPosition.trailing)
                 }
                 
-                Toggle("Disable Animations", systemImage: "figure.run", isOn: $userPreferences.disableAnimations)
+                Toggle("Disable Animations", systemImage: "figure.run", isOn: $preferences.disableAnimations)
                 
-                Toggle("Show Window Controls On Trailling Sidebar", systemImage: "macwindow", isOn: $userPreferences.showWindowControlsOnTrailingSidebar)
+                Toggle("Show Window Controls On Trailling Sidebar", systemImage: "macwindow", isOn: $preferences.showWindowControlsOnTrailingSidebar)
                 
-                Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $userPreferences.reverseColorsOnTrailingSidebar)
+                Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $preferences.reverseColorsOnTrailingSidebar)
                 
                 LoadingPlacePicker()
                 
-                Picker("URL Bar Position", systemImage: "link", selection: $userPreferences.urlBarPosition) {
-                    Label("On Sidebar", systemImage: "sidebar.left").tag(UserPreferences.URLBarPosition.onSidebar)
-                    Label("On Toolbar", systemImage: "menubar.rectangle").tag(UserPreferences.URLBarPosition.onToolbar)
+                Picker("URL Bar Position", systemImage: "link", selection: $preferences.urlBarPosition) {
+                    Label("On Sidebar", systemImage: "sidebar.left").tag(Preferences.URLBarPosition.onSidebar)
+                    Label("On Toolbar", systemImage: "menubar.rectangle").tag(Preferences.URLBarPosition.onToolbar)
                 }
                 
-                if userPreferences.urlBarPosition == .onToolbar {
-                    Toggle("Show Full URL on Toolbar", systemImage: "menubar.arrow.up.rectangle", isOn: $userPreferences.showFullURLOnToolbar)
+                if Preferences.shared.urlBarPosition == .onToolbar {
+                    Toggle("Show Full URL on Toolbar", systemImage: "menubar.arrow.up.rectangle", isOn: $preferences.showFullURLOnToolbar)
                 }
             }
             
             Section {
-                Toggle("Rounded Corners", systemImage: "button.roundedtop.horizontal", isOn: $userPreferences.roundedCorners)
-                Toggle("Enable Padding", systemImage: "inset.filled.rectangle", isOn: $userPreferences.enablePadding)
-                Toggle("Enable Shadow", systemImage: "shadow", isOn: $userPreferences.enableShadow)
-                Toggle("Immersive View On Full Screen", systemImage: "rectangle.fill", isOn: $userPreferences.immersiveViewOnFullscreen)
+                Toggle("Rounded Corners", systemImage: "button.roundedtop.horizontal", isOn: $preferences.roundedCorners)
+                Toggle("Enable Padding", systemImage: "inset.filled.rectangle", isOn: $preferences.enablePadding)
+                Toggle("Enable Shadow", systemImage: "shadow", isOn: $preferences.enableShadow)
+                Toggle("Immersive View On Full Screen", systemImage: "rectangle.fill", isOn: $preferences.immersiveViewOnFullscreen)
             } header: {
                 Text("Web View")
             } footer: {

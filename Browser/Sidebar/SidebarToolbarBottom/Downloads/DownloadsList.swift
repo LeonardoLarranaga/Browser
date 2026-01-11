@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct DownloadsList: View {
-    
-    @EnvironmentObject var userPreferences: UserPreferences
+
     @Environment(BrowserWindowState.self) var browserWindowState
     
     @State private var downloads: [Download] = []
@@ -22,7 +21,7 @@ struct DownloadsList: View {
         }
         .browserTransition(.move(edge: .bottom).combined(with: .opacity))
         .onAppear {
-            guard let downloadURL = userPreferences.downloadURL, downloadURL.startAccessingSecurityScopedResource() else {
+            guard let downloadURL = Preferences.shared.downloadURL, downloadURL.startAccessingSecurityScopedResource() else {
                 return browserWindowState.presentActionAlert(message: "Select a Downloads Folder in Settings", systemImage: "arrow.down.app.dashed.trianglebadge.exclamationmark")
             }
             

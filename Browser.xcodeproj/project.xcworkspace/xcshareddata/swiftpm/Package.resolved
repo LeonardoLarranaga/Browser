@@ -1,5 +1,5 @@
 {
-  "originHash" : "084dcea98ee3d5c20b4c7dc29bdb408316e719966e247c4a2ed718feea1987ac",
+  "originHash" : "e8ffc7a0b6eb784e21c5bcbddab93bb6f32fe80896d86e3bf415af64a736b404",
   "pins" : [
     {
       "identity" : "keyboardshortcuts",
@@ -8,6 +8,24 @@
       "state" : {
         "revision" : "7ecc38bb6edf7d087d30e737057b8d8a9b7f51eb",
         "version" : "2.2.4"
+      }
+    },
+    {
+      "identity" : "observabledefaults",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/fatbobman/ObservableDefaults",
+      "state" : {
+        "revision" : "e47f77885e2adcf5682dad77d98e0bb2c787a609",
+        "version" : "1.7.2"
+      }
+    },
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/swiftlang/swift-syntax",
+      "state" : {
+        "revision" : "4799286537280063c85a32f09884cfbca301b1a1",
+        "version" : "602.0.0"
       }
     },
     {

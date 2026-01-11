@@ -14,8 +14,6 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var newWindowOpened = false
     var windowWasClosed = false
     
-    var userPreferences = UserPreferences()
-    
     /// Add window observers to save the window position and size
     func applicationWillFinishLaunching(_ notification: Notification) {
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
@@ -41,7 +39,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        if userPreferences.warnBeforeQuitting {
+        if Preferences.shared.warnBeforeQuitting {
             let alert = NSAlert()
             alert.messageText = "Are you sure you want to quit?"
             alert.addButton(withTitle: "Cancel")
@@ -91,8 +89,8 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         window.delegate = self
         window.toolbar?.allowsDisplayModeCustomization = false
         
-        if userPreferences.sidebarPosition == .trailing {
-            NSApp.setBrowserWindowControls(hidden: !userPreferences.showWindowControlsOnTrailingSidebar)
+        if Preferences.shared.sidebarPosition == .trailing {
+            NSApp.setBrowserWindowControls(hidden: !Preferences.shared.showWindowControlsOnTrailingSidebar)
         }
     }
     
@@ -135,7 +133,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
     
     @objc func setWarnBeforeQuitting(_ sender: NSButton) {
-        userPreferences.warnBeforeQuitting = sender.state == .on
+        Preferences.shared.warnBeforeQuitting = sender.state == .on
     }
     
     func deleteTemporaryImages() {

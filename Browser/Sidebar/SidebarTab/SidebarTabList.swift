@@ -11,7 +11,6 @@ import SwiftUI
 struct SidebarTabList: View {
     
     @Environment(SidebarModel.self) var sidebarModel
-    @EnvironmentObject var userPreferences: UserPreferences
     
     @Bindable var browserSpace: BrowserSpace
     @Binding var tabs: [BrowserTab]
@@ -50,7 +49,7 @@ struct SidebarTabList: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.leading, .sidebarPadding)
-        .padding(.trailing, userPreferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
+        .padding(.trailing, Preferences.shared.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
     }
     
     func moveTab(to destination: BrowserTab) {

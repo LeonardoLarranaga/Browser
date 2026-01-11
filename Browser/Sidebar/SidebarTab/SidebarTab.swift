@@ -13,8 +13,6 @@ struct SidebarTab: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
     
-    @EnvironmentObject var userPreferences: UserPreferences
-    
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
     
@@ -64,7 +62,7 @@ struct SidebarTab: View {
     
     var faviconImage: some View {
         Group {
-            if userPreferences.loadingIndicatorPosition == .onTab && browserTab.isLoading {
+            if Preferences.shared.loadingIndicatorPosition == .onTab && browserTab.isLoading {
                 ProgressView()
                     .controlSize(.small)
             } else if let favicon = browserTab.favicon, let nsImage = NSImage(data: favicon) {
@@ -98,7 +96,7 @@ struct SidebarTab: View {
     func selectTab() {
         browserSpace.currentTab = browserTab
         
-        if !userPreferences.disableAnimations {
+        if !Preferences.shared.disableAnimations {
             // Scale bounce effect
             withAnimation(.bouncy(duration: 0.15, extraBounce: 0.0)) {
                 isPressed = true

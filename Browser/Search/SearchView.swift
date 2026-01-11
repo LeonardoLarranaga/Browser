@@ -14,8 +14,6 @@ struct SearchView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindowState.self) var browserWindowState
     
-    @AppStorage("sidebar_position") var sidebarPosition = UserPreferences.SidebarPosition.leading
-    
     @State var searchManager = SearchManager()
     
     var body: some View {

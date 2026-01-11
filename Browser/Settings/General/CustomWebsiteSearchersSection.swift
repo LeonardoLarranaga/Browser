@@ -10,8 +10,6 @@ import SwiftUI
 /// Section to manage the custom website searchers
 struct CustomWebsiteSearchersSection: View {
     
-    @EnvironmentObject var userPreferences: UserPreferences
-    
     @State var showWebsiteSearcherEditor = false
     @State var selectedWebsiteSearcher: BrowserCustomSearcher?
     
@@ -26,7 +24,7 @@ struct CustomWebsiteSearchersSection: View {
                 website = ""
                 queryURL = ""
             }
-            List(userPreferences.customWebsiteSearchers) { searcher in
+            List(Preferences.shared.customWebsiteSearchers) { searcher in
                 HStack {
                     Text(searcher.website)
                     
@@ -40,7 +38,7 @@ struct CustomWebsiteSearchersSection: View {
                     }
                     
                     Button("Remove", systemImage: "trash.fill") {
-                        userPreferences.customWebsiteSearchers.removeAll(where: { $0.id == searcher.id })
+                        Preferences.shared.customWebsiteSearchers.removeAll(where: { $0.id == searcher.id })
                     }
                 }
             }
@@ -62,11 +60,11 @@ struct CustomWebsiteSearchersSection: View {
             }
             
             Button("Save") {
-                if let selectedWebsiteSearcher, let index = userPreferences.customWebsiteSearchers.firstIndex(where: { $0.id == selectedWebsiteSearcher.id }) {
-                    userPreferences.customWebsiteSearchers[index].website = website
-                    userPreferences.customWebsiteSearchers[index].queryURL = queryURL
+                if let selectedWebsiteSearcher, let index = Preferences.shared.customWebsiteSearchers.firstIndex(where: { $0.id == selectedWebsiteSearcher.id }) {
+                    Preferences.shared.customWebsiteSearchers[index].website = website
+                    Preferences.shared.customWebsiteSearchers[index].queryURL = queryURL
                 } else {
-                    userPreferences.customWebsiteSearchers.append(BrowserCustomSearcher(website: website, queryURL: queryURL))
+                    Preferences.shared.customWebsiteSearchers.append(BrowserCustomSearcher(website: website, queryURL: queryURL))
                 }
             }
             .disabled(website.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || queryURL.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)

@@ -12,8 +12,6 @@ struct SidebarURLToolbar: View {
     @Environment(BrowserWindowState.self) var browserWindowState
     @Environment(\.colorScheme) var colorScheme
     
-    @EnvironmentObject var userPreferences: UserPreferences
-    
     var currentTab: BrowserTab? {
         browserWindowState.currentSpace?.currentTab
     }
@@ -35,7 +33,7 @@ struct SidebarURLToolbar: View {
             Spacer()
             
             if let url = currentTab?.url {
-                (Text(url.cleanHost) + (userPreferences.showFullURLOnToolbar ? Text("/" + url.route).foregroundStyle(foregroundColor.opacity(0.6)) : Text("")))
+                (Text(url.cleanHost) + (Preferences.shared.showFullURLOnToolbar ? Text("/" + url.route).foregroundStyle(foregroundColor.opacity(0.6)) : Text("")))
                     .lineLimit(1)
                     .foregroundStyle(foregroundColor.opacity(0.8))
                     .padding(3)

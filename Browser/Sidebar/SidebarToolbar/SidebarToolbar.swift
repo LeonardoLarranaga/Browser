@@ -13,8 +13,6 @@ struct SidebarToolbar: View {
     @Environment(\.modelContext) var modelContext
     
     @Environment(SidebarModel.self) var sidebarModel
-    
-    @EnvironmentObject var userPreferences: UserPreferences
     @Environment(BrowserWindowState.self) var browserWindowState
     
     let browserSpaces: [BrowserSpace]
@@ -26,14 +24,14 @@ struct SidebarToolbar: View {
     var body: some View {
         LazyVStack(alignment: .leading) {
             HStack {
-                SidebarToolbarButton(userPreferences.sidebarPosition == .leading ? "sidebar.left" : "sidebar.right", action: sidebarModel.toggleSidebar)
-                    .padding(.leading, userPreferences.sidebarPosition == .trailing ? 5 : 0)
+                SidebarToolbarButton(Preferences.shared.sidebarPosition == .leading ? "sidebar.left" : "sidebar.right", action: sidebarModel.toggleSidebar)
+                    .padding(.leading, Preferences.shared.sidebarPosition == .trailing ? 5 : 0)
                 // Only add padding if the sidebar is on the leading side
-                    .padding(.leading, userPreferences.sidebarPosition == .leading ? 85 : 0)
+                    .padding(.leading, Preferences.shared.sidebarPosition == .leading ? 85 : 0)
                 
                 Spacer()
                 
-                if userPreferences.urlBarPosition == .onSidebar {
+                if Preferences.shared.urlBarPosition == .onSidebar {
                     SidebarToolbarButton("arrow.left", disabled: currentTab == nil || currentTab?.canGoBack == false, action: browserWindowState.backButtonAction)
                     
                     SidebarToolbarButton("arrow.right", disabled: currentTab == nil || currentTab?.canGoForward == false, action: browserWindowState.forwardButtonAction)
