@@ -35,7 +35,6 @@ struct SidebarSpaceBackground: View {
                         $0
                             .opacity(browserSpace.colorOpacity)
                     }
-                    .drawingGroup(opaque: true)
             }
         }
     }
