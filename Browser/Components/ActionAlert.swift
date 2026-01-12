@@ -42,6 +42,7 @@ struct ActionAlert: ViewModifier {
                             .shadow(radius: 3)
                             .padding()
                         }
+                        .scrollIndicators(.hidden)
                     }
                     .browserTransition(.scale.combined(with: .move(edge: .top)))
                     .onScrollPhaseChange { oldPhase, newPhase in

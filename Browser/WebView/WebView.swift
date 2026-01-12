@@ -54,7 +54,7 @@ struct WebView: View {
                             showHoverURL = true
                         }
                         
-                        hoverURLTimer = Timer.scheduledTimer(withTimeInterval: 3.5, repeats: false) { _ in
+                        hoverURLTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
                             withAnimation(.browserDefault) {
                                 showHoverURL = false
                                 hoverURL = ""

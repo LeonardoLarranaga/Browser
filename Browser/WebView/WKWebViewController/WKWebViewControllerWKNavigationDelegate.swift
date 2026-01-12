@@ -19,8 +19,8 @@ extension WKWebViewController: WKNavigationDelegate {
         if self.tab.url.cleanHost != url.cleanHost {
             self.tab.updateFavicon(with: url)
         }
-        
-        if UserDefaults.standard.bool(forKey: "show_hover_url") {
+
+        if Preferences.shared.showHoverURL {
             addHoverURLListener()
         }
     }

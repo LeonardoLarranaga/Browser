@@ -38,7 +38,7 @@ import SwiftUI
             if sidebarCollapsed {
                 lastSidebarWidth = currentSidebarWidth
                 currentSidebarWidth = 0
-                if UserDefaults.standard.string(forKey: "sidebar_position") == "leading" {
+                if Preferences.shared.sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: true)
                 }
             } else {
@@ -47,7 +47,7 @@ import SwiftUI
         } completion: {
             // When finished, show the traffic lights if the sidebar is not collapsed
             if !self.sidebarCollapsed {
-                if UserDefaults.standard.string(forKey: "sidebar_position") == "leading" {
+                if Preferences.shared.sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: false)
                 }
             }
@@ -63,27 +63,26 @@ import SwiftUI
     /// Only show the sidebar when the cursor is near the window's edge + threshold
     /// - Parameter event: The mouse movement event
     func handleMouseMovement(event: NSEvent) -> NSEvent? {
-        guard let keyWindow = NSApp.keyWindow,
-              let sidebarPosition = UserDefaults.standard.string(forKey: "sidebar_position")
-        else { return event }
-        
-        let windowX = sidebarPosition == "leading" ? keyWindow.frame.minX : keyWindow.frame.maxX
+        guard let keyWindow = NSApp.keyWindow else { return event }
+        let sidebarPosition = Preferences.shared.sidebarPosition
+
+        let windowX = sidebarPosition == .leading ? keyWindow.frame.minX : keyWindow.frame.maxX
         let cursorX = NSEvent.mouseLocation.x - windowX
         
         // Inside window threshold
         let threshold = currentSidebarWidth != 0 ? currentSidebarWidth + 25 : 50
-        let inRange = sidebarPosition == "leading" ?
+        let inRange = sidebarPosition == .leading ?
                             cursorX >= -50 && cursorX <= threshold :
                             cursorX <= 50 && cursorX >= -threshold
         
         withAnimation(.smooth(duration: 0.2)) {
             if inRange {
                 currentSidebarWidth = lastSidebarWidth
-                if sidebarPosition == "leading" {
+                if sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: false)
                 }
             } else {
-                if sidebarPosition == "leading" {
+                if sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: true)
                 }
                 currentSidebarWidth = 0

@@ -35,7 +35,7 @@ final class BrowserTab: Identifiable, Comparable {
         self.type = type
     }
     
-    @Transient var webview: MyWKWebView? = nil
+    @Transient weak var webview: MyWKWebView? = nil
     @Attribute(.ephemeral) var webviewErrorDescription: String? = nil
     @Attribute(.ephemeral) var webviewErrorCode: Int? = nil
     

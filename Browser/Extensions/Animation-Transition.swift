@@ -12,13 +12,13 @@ extension Animation {
     /// Depends of the `disable_animations` key saved in `UserDefaults`
     /// - Returns .bouncy of nil
     static var browserDefault: Animation? {
-        UserDefaults.standard.bool(forKey: "disable_animations") ? nil : .bouncy
+        Preferences.shared.disableAnimations ? nil : .bouncy
     }
 }
 
 extension View {
     /// Apply a transition to the view depending of the `disable_animations` key saved in `UserDefaults`
     func browserTransition(_ transition: AnyTransition) -> some View {
-        self.transition(UserDefaults.standard.bool(forKey: "disable_animations") ? .identity : transition)
+        self.transition(Preferences.shared.disableAnimations ? .identity : transition)
     }
 }
