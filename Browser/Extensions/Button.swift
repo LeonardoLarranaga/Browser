@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-/// Extension to create a button with an optional action
-/// This is used for the menu bar commands
 extension Button where Label == Text {
+    /// Extension to create a button with an optional action
+    /// This is used for the menu bar commands
     init(_ titleKey: LocalizedStringKey, action: (@MainActor () -> Void)?) {
         self.init(titleKey) {
             action?()

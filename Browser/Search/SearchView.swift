@@ -44,9 +44,12 @@ struct SearchView: View {
                 searchManager.fetchSearchSuggestions(newValue)
             }
         }
-        .onChange(of: browserWindowState.searchOpenLocation) { oldValue, newValue in
+        .onChange(of: browserWindowState.searchOpenLocation) {
             if browserWindowState.searchOpenLocation != .none {
                 searchManager.setInitialValuesFromWindowState(browserWindowState)
+            } else {
+                searchManager.isUsingWebsiteSearcher = false
+                searchManager.activeWebsiteSearcher = SearchEngine.google.searcher
             }
         }
     }
