@@ -33,6 +33,7 @@ struct WebView: View {
                     .overlay(alignment: .bottomLeading) {
                         if showHoverURL {
                             Text(hoverURL)
+                                .lineLimit(1)
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .padding(5)
