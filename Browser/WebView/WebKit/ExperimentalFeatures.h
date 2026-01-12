@@ -9,13 +9,26 @@
 #define ExperimentalFeatures_h
 
 #import <Foundation/Foundation.h>
-#import <WebKit/WKPreferencesPrivate.h>
-#import <WebKit/_WKExperimentalFeature.h>
-#import <WebKit/_WKFeature.h>
+#import <WebKit/WebKit.h>
 
-#import <Foundation/Foundation.h>
-#import <WebKit/WKPreferencesPrivate.h>
-#import <WebKit/_WKExperimentalFeature.h>
+// Forward declare the class
+@class _WKExperimentalFeature;
+
+// Declare the private _WKExperimentalFeature class
+@interface _WKExperimentalFeature : NSObject
+@property (nonatomic, readonly, copy) NSString *key;
+@property (nonatomic, readonly, copy) NSString *name;
+@property (nonatomic, readonly, copy) NSString *details;
+@property (nonatomic, readonly) BOOL defaultValue;
+@property (nonatomic, readonly) BOOL hidden;
+@end
+
+// Declare the private WKPreferences methods
+@interface WKPreferences (Private)
++ (NSArray<_WKExperimentalFeature *> *)_experimentalFeatures;
+- (BOOL)_isEnabledForFeature:(_WKExperimentalFeature *)feature;
+- (void)_setEnabled:(BOOL)enabled forFeature:(_WKExperimentalFeature *)feature;
+@end
 
 @interface ExperimentalFeatures : NSObject
 

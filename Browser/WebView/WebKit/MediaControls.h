@@ -8,13 +8,8 @@
 #ifndef MediaControls_h
 #define MediaControls_h
 
-#import <WebKit/WKWebViewPrivate.h>
-
-typedef NS_OPTIONS(NSInteger, WKMediaMutedState) {
-    WKMediaNoneMuted = 0,
-    WKMediaAudioMuted = 1 << 0,
-    WKMediaCaptureDevicesMuted = 1 << 1,
-};
+#include "BrowserWKWebView.h"
+#import <WebKit/WebKit.h>
 
 @interface MediaControls : NSObject
 

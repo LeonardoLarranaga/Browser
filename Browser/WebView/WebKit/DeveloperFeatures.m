@@ -6,10 +6,6 @@
 //
 
 #import "DeveloperFeatures.h"
-#import <WebKit/WKWebViewPrivate.h>
-#import <WebKit/_WKInspector.h>
-
-#pragma GCC diagnostic ignored "-Wundeclared-selector"
 
 @implementation DeveloperFeatures
 

@@ -11,11 +11,13 @@
 		4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4A62F7192D5349EE0084D3A2 /* SymbolPicker */; };
 		4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AC77A852D573849005BEF25 /* KeyboardShortcuts */; };
 		4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */; };
+		4AE511572F148E4700BCE2D0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE511562F148E4700BCE2D0 /* WebKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4A3CCDB52D5C94BD00D7C8CE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		4AC596AD2D3C6DC400FF0326 /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AE511562F148E4700BCE2D0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = ../../../../System/Volumes/Preboot/Cryptexes/OS/System/Library/Frameworks/WebKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -44,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AE511572F148E4700BCE2D0 /* WebKit.framework in Frameworks */,
 				4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */,
 				4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */,
 				4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */,
@@ -56,6 +59,7 @@
 		4A8400332D433D3400E0B7DD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4AE511562F148E4700BCE2D0 /* WebKit.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

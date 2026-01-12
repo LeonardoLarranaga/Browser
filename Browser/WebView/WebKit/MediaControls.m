@@ -11,7 +11,7 @@
 
 + (void)setPageMuted:(WKMediaMutedState)mutedState forWebView:(WKWebView *)webView {
     if ([webView respondsToSelector:@selector(_setPageMuted:)]) {
-        _WKMediaMutedState internalMutedState = (_WKMediaMutedState)mutedState;
+        WKMediaMutedState internalMutedState = (WKMediaMutedState)mutedState;
         [webView _setPageMuted:internalMutedState];
     }
 }
