@@ -105,4 +105,9 @@ extension WebsiteSearcher {
         }
         searchManager.searchTask?.resume()
     }
+
+  func equals(_ other: WebsiteSearcher) -> Bool {
+    self.title == other.title &&
+    self.itemURL(for: "").absoluteString == other.itemURL(for: "").absoluteString
+  }
 }

@@ -54,7 +54,10 @@ class Preferences {
 
   var automaticPageSuspension = true
 
-  var customWebsiteSearchers = [BrowserCustomSearcher]()
+  var customWebsiteSearchers = [
+    BrowserCustomSearcher(website: "ChatGPT", queryURL: "https://chatgpt.com/?q=%s", hexColor: "#74AA9C"),
+    BrowserCustomSearcher(website: "Claude AI", queryURL: "https://claude.ai/new?q=%s", hexColor: "#C7785A")
+  ]
 
   var showHoverURL = true
 
