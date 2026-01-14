@@ -19,7 +19,8 @@ class WKWebViewController: NSViewController {
     let configuration: WKWebViewConfiguration
     
     weak var coordinator: WKWebViewControllerRepresentable.Coordinator!
-    
+    var weakScriptMessageHandler: WeakScriptMessageHandler?
+
     var activeDownloads: [(download: WKDownload, bookmarkData: Data, fileName: String)] = []
     
     private var suspendTimer: DispatchSourceTimer?
@@ -65,17 +66,29 @@ class WKWebViewController: NSViewController {
     
     deinit {
         print("🔵 WKWebViewController deinit \(tab.title)")
-        cleanup()
     }
     
     func cleanup() {
         // Only deinit if the tab is not loaded or was closed
         if !browserSpace.loadedTabs.contains(tab) {
+            print("🧹 WKWebViewController cleanup \(tab.title)")
+            cancelSuspendTimer()
+            
+            // Break delegate retain cycles
+            webView.navigationDelegate = nil
+            webView.uiDelegate = nil
+
             webView.stopLoading()
-            webView.loadHTMLString("", baseURL: nil)
             webView.removeFromSuperview()
-            webView._stopMediaCapture()
-            coordinator.stopObservingWebView()
+
+            // Clear closure references
+            webView.searchWebAction = nil
+            webView.openLinkInNewTabAction = nil
+            webView.presentActionAlert = nil
+            
+            coordinator?.stopObservingWebView()
+
+            weakScriptMessageHandler = nil
         }
     }
     
@@ -107,7 +120,12 @@ class WKWebViewController: NSViewController {
     func resetSuspendTimer() {
         startSuspendTimer()
     }
-    
+
+    func cancelSuspendTimer() {
+        suspendTimer?.cancel()
+        suspendTimer = nil
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

@@ -127,6 +127,7 @@ extension WKWebViewControllerRepresentable {
         func stopObservingWebView() {
             cancellables.forEach { $0.cancel() }
             cancellables.removeAll()
+            self.parent.tab.webview = nil
         }
         
         func setHoverURL(to url: String) {

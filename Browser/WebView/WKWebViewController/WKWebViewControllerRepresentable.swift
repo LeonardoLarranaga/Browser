@@ -39,7 +39,12 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
                                             || tab.webviewErrorCode != nil
         nsViewController.webView.findBarView?.isHidden = nsViewController.webView.isHidden
     }
-    
+
+    static func dismantleNSViewController(_ nsViewController: WKWebViewController, coordinator: Coordinator) {
+        print("🟡 Dismantling WKWebViewController for tab: \(nsViewController.tab.title)")
+        nsViewController.cleanup()
+    }
+
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
     }
