@@ -21,7 +21,7 @@ struct MainFrame: View {
     var isImmersive: Bool {
         browserWindowState.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.shared.immersiveViewOnFullscreen
     }
-    
+
     var body: some View {
         @Bindable var browserWindowState = browserWindowState
         
@@ -34,7 +34,7 @@ struct MainFrame: View {
             }
             
             PageWebView(browserSpaces: browserSpaces)
-                .clipShape(.rect(cornerRadius: isImmersive ? 0 : Preferences.shared.roundedCorners ? 8 : 0))
+                .clipShape(.rect(corners: isImmersive ? .fixed(0) : Preferences.shared.roundedCorners ? .concentric(minimum: 8) : .fixed(0)))
                 .shadow(radius: isImmersive ? 0 : Preferences.shared.enableShadow ? 3 : 0)
                 .padding([.top, .bottom], isImmersive ? 0 : Preferences.shared.enablePadding ? 10 : 0)
                 .padding(
