@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DuckDuckGoSearcher: WebsiteSearcher {
     var title = "DuckDuckGo"
-    var color = Color(hex: "#E37151")!
+    var hexColor = "#E37151"
 
     func queryURL(for query: String) -> URL? {
         URL(string: "https://duckduckgo.com/ac/?q=\(query)&type=list")!

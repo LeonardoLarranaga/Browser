@@ -8,11 +8,11 @@
 import SwiftUI
 
 /// Protocol to define a website searcher, used to fetch search suggestions directly from a website.
-protocol WebsiteSearcher {
+protocol WebsiteSearcher: Codable {
     /// The title of the website searcher, example: "Google"
     var title: String { get }
-    /// The color of the website searcher, used to display the search suggestions
-    var color: Color { get }
+    /// The hex color representation of the website searcher, example: "#4285F4"
+    var hexColor: String { get }
     /// The URL to query the search suggestions, example: "https://suggestqueries.google.com/complete/search?client=safari&q="
     func queryURL(for query: String) -> URL?
     /// An optional URL to fetch the item, example: "https://www.google.com/search?q="
@@ -24,6 +24,9 @@ protocol WebsiteSearcher {
 }
 
 extension WebsiteSearcher {
+    /// The color of the website searcher, used to display the search suggestions
+    var color: Color { Color(hex: hexColor)! }
+
     /// Empty implementation for searches without suggestions.
     func queryURL(for query: String) -> URL? {
         nil

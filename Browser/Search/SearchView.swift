@@ -49,7 +49,7 @@ struct SearchView: View {
                 searchManager.setInitialValuesFromWindowState(browserWindowState)
             } else {
                 searchManager.isUsingWebsiteSearcher = false
-                searchManager.activeWebsiteSearcher = SearchEngine.google.searcher
+                searchManager.activeWebsiteSearcher = Preferences.shared.defaultWebsiteSearcher
             }
         }
     }

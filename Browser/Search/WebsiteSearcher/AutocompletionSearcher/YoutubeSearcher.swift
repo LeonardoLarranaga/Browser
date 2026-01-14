@@ -9,8 +9,8 @@ import SwiftUI
 
 /// Searcher for YouTube
 struct YouTubeSearcher: WebsiteSearcher {
-    var title = "Youtube"
-    var color = Color.red
+    var title = "YouTube"
+    var hexColor = Color.red.hexString()
     
     func queryURL(for query: String) -> URL? {
         URL(string: "https://suggestqueries-clients6.youtube.com/complete/search?ds=yt&client=youtube&q=\(query)")

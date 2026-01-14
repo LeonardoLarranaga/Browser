@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SearchEngine: CaseIterable {
+enum SearchEngine: String, CaseIterable {
 
     case google, bing, wikipedia, youtube, duckduckgo
 

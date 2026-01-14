@@ -10,7 +10,7 @@ import SwiftUI
 /// Searcher for Wikipedia
 struct WikipediaSearcher: WebsiteSearcher {
     var title = "Wikipedia"
-    var color = Color(hex: "#A3A9B0")!
+    var hexColor = "#A3A9B0"
     
     func queryURL(for query: String) -> URL? {
         URL(string: "https://en.wikipedia.org/w/rest.php/v1/search/title?q=\(query)&limit=10")!

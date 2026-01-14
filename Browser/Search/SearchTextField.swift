@@ -42,7 +42,7 @@ struct SearchTextField: View {
             Spacer()
             
             Group {
-              if !searchManager.isUsingWebsiteSearcher && !searchManager.matchedWebsiteSearcher.equals(GoogleSearcher()) {
+              if !searchManager.isUsingWebsiteSearcher && !searchManager.matchedWebsiteSearcher.equals(Preferences.shared.defaultWebsiteSearcher) {
                     Text("Search with \(searchManager.matchedWebsiteSearcher.title)")
                     
                     Text("Tab")

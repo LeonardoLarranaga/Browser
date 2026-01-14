@@ -10,7 +10,7 @@ import SwiftUI
 /// Searcher for Google
 struct GoogleSearcher: WebsiteSearcher {
     var title = "Google"
-    var color = Color(hex: "#5383EC")!
+    var hexColor = "#5383EC"
     
     func queryURL(for query: String) -> URL? {
         URL(string: "https://suggestqueries.google.com/complete/search?client=safari&q=\(query)")
