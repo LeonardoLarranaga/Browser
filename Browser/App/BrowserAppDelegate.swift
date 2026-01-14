@@ -85,8 +85,6 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
         
         window.backgroundColor = .clear
-        window.isReleasedWhenClosed = true
-        window.delegate = self
         window.toolbar?.allowsDisplayModeCustomization = false
         
         if Preferences.shared.sidebarPosition == .trailing {
@@ -101,9 +99,12 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         saveWindowPositionAndSize(window)
     }
     
-    func windowShouldClose(_ sender: NSWindow) -> Bool {
+    @objc func windowWillClose(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow,
+              NSWindow.hasPrefix("Browser", in: window)
+        else { return }
+        
         windowWasClosed = NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("Browser") == true }.count - 1 == 0
-        return true
     }
     
     @objc func checkForNewWindows(_ sender: NSWindow) {
