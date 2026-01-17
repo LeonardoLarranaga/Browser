@@ -33,8 +33,6 @@ struct MyWKWebViewErrorView: View {
             Button("Reload", action: tab.reload)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background {
-            VisualEffectView(material: .fullScreenUI, blendingMode: .withinWindow)
-        }
+        .glassEffect(in: .rect)
     }
 }

@@ -97,7 +97,7 @@ struct MainFrame: View {
                             SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
                         }
                     }
-                    .background(.ultraThinMaterial)
+                    .glassEffect(in: .rect)
                     .padding(Preferences.shared.sidebarPosition == .leading ? .trailing : .leading, .sidebarPadding)
                     .browserTransition(.move(edge: Preferences.shared.sidebarPosition == .leading ? .leading : .trailing))
             }

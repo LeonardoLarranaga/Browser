@@ -23,7 +23,7 @@ struct WebViewStack: View {
                     }
                 }
             } else {
-                VisualEffectView(material: .fullScreenUI, blendingMode: .withinWindow)
+                Rectangle().glassEffect(in: .rect)
             }
         }
         .transaction { $0.animation = nil }

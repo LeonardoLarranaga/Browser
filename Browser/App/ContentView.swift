@@ -12,8 +12,8 @@ struct ContentView: View {
     @State var browserWindowState = BrowserWindowState()
     var body: some View {
         MainFrame()
+            .glassEffect(in: .rect)
             .ignoresSafeArea(.container, edges: .top)
-            .background(.ultraThinMaterial)
             .focusedSceneValue(\.browserActiveWindowState, browserWindowState)
             .environment(browserWindowState)
             .sheet(isPresented: $browserWindowState.showURLQRCode) {

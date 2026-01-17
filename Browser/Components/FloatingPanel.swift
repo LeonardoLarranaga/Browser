@@ -23,7 +23,15 @@ extension EnvironmentValues {
 class FloatingPanel<Content: View>: NSPanel {
     @Binding var isPresented: Bool
     
-    init(isPresented: Binding<Bool>, contentRect: NSRect, backing: NSWindow.BackingStoreType = .buffered, defer flag: Bool = false, view: () -> Content) {
+    init(
+        isPresented: Binding<Bool>,
+        contentRect: NSRect,
+        backing: NSWindow.BackingStoreType = .buffered,
+        defer flag: Bool = false,
+        glassStyle: NSGlassEffectView.Style,
+        glassTintColor: Color? = nil,
+        view: () -> Content
+    ) {
         self._isPresented = isPresented
         
         super.init(
@@ -59,7 +67,7 @@ class FloatingPanel<Content: View>: NSPanel {
         // Set the content view
         // The safe area is ignored because the title bar still interferes with the geometry
         contentView = NSHostingView(rootView: view()
-            .background(VisualEffectView(material: .fullScreenUI, blendingMode: .withinWindow))
+            .background(GlassEffectView(style: glassStyle, tintColor: glassTintColor))
             .ignoresSafeArea()
             .environment(\.floatingPanel, self)
         )
@@ -118,7 +126,11 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     
     /// Determines if the panel should be centered in the key window
     var shouldCenter: Bool
-    
+
+    /// The liquid glass style of the panel's background
+    var glassStyle: NSGlassEffectView.Style
+    var glassTintColor: Color?
+
     /// Holds the panel content's view closure
     @ViewBuilder let view: () -> PanelContent
     
@@ -128,7 +140,13 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .onAppear {
-                panel = FloatingPanel(isPresented: $isPresented, contentRect: CGRect(origin: origin, size: size), view: view)
+                panel = FloatingPanel(
+                    isPresented: $isPresented,
+                    contentRect: CGRect(origin: origin, size: size),
+                    glassStyle: glassStyle,
+                    glassTintColor: glassTintColor,
+                    view: view
+                )
                 if isPresented {
                     present()
                 }
@@ -170,14 +188,26 @@ extension View {
     /// - Parameter origin: The origin to present the panel in relation to the key window
     /// - Parameter size: The content panel's size
     /// - Parameter shouldCenter: Determines if the panel should be centered in the key window
+    /// - Parameter glassStyle: The liquid glass style of the panel's background
+    /// - Parameter glassTintColor: An optional tint color for the glass effect
     /// - Parameter content: The displayed content
     func floatingPanel<PanelContent: View>(
         isPresented: Binding<Bool>,
         origin: CGPoint = .zero,
         size: CGSize,
         shouldCenter: Bool = true,
+        glassStyle: NSGlassEffectView.Style = .regular,
+        glassTintColor: Color? = nil,
         @ViewBuilder content: @escaping () -> PanelContent
     ) -> some View {
-        modifier(FloatingPanelModifier(isPresented: isPresented, origin: origin, size: size, shouldCenter: shouldCenter, view: content))
+        modifier(FloatingPanelModifier(
+            isPresented: isPresented,
+            origin: origin,
+            size: size,
+            shouldCenter: shouldCenter,
+            glassStyle: glassStyle,
+            glassTintColor: glassTintColor,
+            view: content
+        ))
     }
 }

@@ -9,11 +9,11 @@ import SwiftUI
 
 /// An alert that displays an action that was performed by the user
 struct ActionAlert: ViewModifier {
-    
+
     @Environment(BrowserWindowState.self) var browserWindowState
-    
+
     @State var dismissTimer: Timer?
-    
+
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
@@ -33,9 +33,8 @@ struct ActionAlert: ViewModifier {
                             .background {
                                 if let currentSpace = browserWindowState.currentSpace, !currentSpace.colors.isEmpty {
                                     SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
-                                        .background(.ultraThinMaterial)
                                 } else {
-                                    VisualEffectView(material: .fullScreenUI, blendingMode: .withinWindow)
+                                    Rectangle().glassEffect(in: .rect)
                                 }
                             }
                             .clipShape(.rect(cornerRadius: 12))

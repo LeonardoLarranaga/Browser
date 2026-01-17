@@ -35,10 +35,8 @@ struct WebView: View {
                             Text(hoverURL)
                                 .lineLimit(1)
                                 .font(.caption)
-                                .foregroundStyle(.secondary)
                                 .padding(5)
-                                .background(.ultraThinMaterial)
-                                .clipShape(.rect(cornerRadius: 6))
+                                .glassEffect()
                                 .padding(5)
                         }
                     }

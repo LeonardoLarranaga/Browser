@@ -41,7 +41,6 @@ struct Acknowledgments: View {
             }
             .scrollContentBackground(.hidden)
         }
-        .background(VisualEffectView(material: .fullScreenUI, blendingMode: .behindWindow))
     }
     
     @ViewBuilder
@@ -69,7 +68,6 @@ struct Acknowledgments: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(10)
-        .background(VisualEffectView(material: .popover, blendingMode: .withinWindow))
         .clipShape(.rect(cornerRadius: 10))
         .padding(5)
     }
