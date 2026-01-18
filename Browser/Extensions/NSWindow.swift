@@ -16,4 +16,8 @@ extension NSWindow {
         }
         return true
     }
+
+    static var mainBrowserWindows: [NSWindow] {
+        NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("BrowserWindow") == true }
+    }
 }
