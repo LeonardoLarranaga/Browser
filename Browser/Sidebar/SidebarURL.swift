@@ -8,21 +8,25 @@
 import SwiftUI
 
 struct SidebarURL: View {
-    
+
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindowState.self) var browserWindowState
-    
+
     @State var hover = false
-    
+
     var body: some View {
         HStack {
             if let currentTab = browserWindowState.currentSpace?.currentTab {
                 Text(currentTab.url.cleanHost)
                     .padding(.leading, .sidebarPadding)
-                
+
                 Spacer()
-                
+
                 if hover {
+                    Button("Refresh", systemImage: "arrow.clockwise", action: browserWindowState.refreshButtonAction)
+                        .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
+                        .browserTransition(.opacity)
+
                     Button("Copy URL To Clipboard", systemImage: "link", action: browserWindowState.copyURLToClipboard)
                         .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
                         .padding(.trailing, .sidebarPadding)

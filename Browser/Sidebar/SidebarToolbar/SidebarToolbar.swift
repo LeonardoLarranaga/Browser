@@ -7,46 +7,80 @@
 
 import SwiftUI
 
-/// Toolbar with buttons (traffic lights, web navigation) for the sidebar
-struct SidebarToolbar: View {
-    
+/// Sidebar toolbar using Liquid Glass.
+/// Contains the sidebar toggle button and web navigation buttons (back, forward).
+///
+/// ToolbarItem/ToolbarItemGroup doesn't conform to View,
+/// so the current implementation is very repetitive.
+struct SidebarToolbar: ViewModifier {
+
     @Environment(\.modelContext) var modelContext
-    
+
     @Environment(SidebarModel.self) var sidebarModel
     @Environment(BrowserWindowState.self) var browserWindowState
-    
+
     let browserSpaces: [BrowserSpace]
-    
+
     var currentTab: BrowserTab? {
         browserWindowState.currentSpace?.currentTab
     }
-    
-    var body: some View {
-        LazyVStack(alignment: .leading) {
-            HStack {
-                SidebarToolbarButton(Preferences.shared.sidebarPosition == .leading ? "sidebar.left" : "sidebar.right", action: sidebarModel.toggleSidebar)
-                    .padding(.leading, Preferences.shared.sidebarPosition == .trailing ? 5 : 0)
-                // Only add padding if the sidebar is on the leading side
-                    .padding(.leading, Preferences.shared.sidebarPosition == .leading ? 85 : 0)
 
-                Spacer()
-                
-                if Preferences.shared.urlBarPosition == .onSidebar {
+    private var placement: ToolbarItemPlacement {
+        .navigation
+    }
 
-                    SidebarToolbarButton("arrow.left", disabled: currentTab == nil || currentTab?.canGoBack == false, action: browserWindowState.backButtonAction)
-                    
-                    SidebarToolbarButton("arrow.right", disabled: currentTab == nil || currentTab?.canGoForward == false, action: browserWindowState.forwardButtonAction)
-                    
-                    SidebarToolbarButton("arrow.trianglehead.clockwise", disabled: currentTab == nil, action: browserWindowState.refreshButtonAction)
+    private var sidebarPosition: Preferences.SidebarPosition {
+        Preferences.shared.sidebarPosition
+    }
+
+    private var sidebarIcon: String {
+        switch sidebarPosition {
+        case .leading: "sidebar.left"
+        case .trailing: "sidebar.right"
+        }
+    }
+
+    func body(content: Content) -> some View {
+        content
+            .toolbar {
+                if sidebarPosition == .leading {
+                    ToolbarItemGroup(placement: .navigation) {
+                        SidebarButton()
+                        BackButton()
+                        ForwardButton()
+                    }
                 }
             }
-            .padding(.top, .approximateTrafficLightsTopPadding)
-            .padding(.trailing, .sidebarPadding)
-        }
-//        .frame(height: 38)
-        .background {
-            Rectangle()
-                .fill(.black.opacity(0.0001))
-        }
+            .toolbar {
+                if sidebarPosition == .trailing {
+                    Spacer()
+                    SidebarButton()
+                    BackButton()
+                    ForwardButton()
+                }
+            }
+    }
+
+    func SidebarButton() -> some View {
+        Button("Toggle Sidebar", systemImage: sidebarIcon, action: sidebarModel.toggleSidebar)
+            .labelStyle(.iconOnly)
+    }
+
+    func BackButton() -> some View {
+        Button("Go Back", systemImage: "chevron.left", action: browserWindowState.backButtonAction)
+            .labelStyle(.iconOnly)
+            .disabled(currentTab == nil || currentTab?.canGoBack == false)
+    }
+
+    func ForwardButton() -> some View {
+        Button("Go Forward", systemImage: "chevron.right", action: browserWindowState.forwardButtonAction)
+            .labelStyle(.iconOnly)
+            .disabled(currentTab == nil || currentTab?.canGoForward == false)
+    }
+}
+
+extension View {
+    func sidebarToolbar(browserSpaces: [BrowserSpace]) -> some View {
+        modifier(SidebarToolbar(browserSpaces: browserSpaces))
     }
 }
