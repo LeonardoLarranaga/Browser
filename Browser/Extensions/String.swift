@@ -6,7 +6,8 @@
 //
 
 extension String {
-  var isReallyEmpty: Bool {
-    self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-  }
+    /// A Boolean value indicating whether a string has no characters (including whitespace and newlines).
+    var isReallyEmpty: Bool {
+        self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }

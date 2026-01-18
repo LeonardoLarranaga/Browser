@@ -102,6 +102,7 @@ extension WKWebViewControllerRepresentable {
             webview.publisher(for: \.title)
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] title in
+                    guard self?.parent.tab.customTitle == nil else { return }
                     if let title, !title.isEmpty {
                         self?.parent.tab.title = title
                     } else {

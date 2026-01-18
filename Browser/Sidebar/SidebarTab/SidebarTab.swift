@@ -12,100 +12,77 @@ struct SidebarTab: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
-    
+
+    @Environment(BrowserWindowState.self) var browserWindowState
+
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
     
     let dragging: Bool
-    
-    @State var backgroundColor: Color = .clear
-    @State var isHoveringTab: Bool = false
-    @State var isHoveringCloseButton: Bool = false
-    @State var isPressed: Bool = false
-        
+
+    @State var viewModel: SidebarTabViewModel
+    init(browserSpace: BrowserSpace, browserTab: BrowserTab, dragging: Bool = false) {
+        self.browserSpace = browserSpace
+        self.browserTab = browserTab
+        self.dragging = dragging
+        self.viewModel = SidebarTabViewModel(browserTab: browserTab)
+    }
+
+    @FocusState var isTextFieldFocused: Bool
+
     var body: some View {
         HStack {
-            faviconImage
-            
-            if browserTab.webview?.hasActiveNowPlayingSession == true {
-                Button("Mute Tab", systemImage: browserTab.webview?.mediaMutedState != .audioMuted ? "speaker.wave.2" : "speaker.slash") {
-                    browserTab.webview?.toggleMute()
-                }
-                .buttonStyle(.sidebarHover())
-                .browserTransition(.move(edge: .leading))
+            viewModel.faviconImage
+
+            if viewModel.hasActiveNowPlayingSession {
+                viewModel.muteButton
             }
-            
-            Text(browserTab.title)
-                .lineLimit(1)
-                .truncationMode(.tail)
-            
+
+            if viewModel.isEditingTitle {
+                TextField("", text: $viewModel.customTitle, onCommit: {
+                    viewModel.isEditingTitle = false
+                    if viewModel.customTitle.isReallyEmpty {
+                        browserTab.customTitle = nil
+                    } else {
+                        browserTab.customTitle = viewModel.customTitle
+                    }
+                })
+                .focused($isTextFieldFocused)
+                .onAppear {
+                    viewModel.customTitle = browserTab.displayTitle
+                    isTextFieldFocused = true
+                    DispatchQueue.main.async {
+                        NSApplication.shared.sendAction(#selector(NSResponder.selectAll(_:)), to: nil, from: nil)
+                    }
+                }
+            } else {
+                Text(browserTab.displayTitle)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+            }
+
             Spacer()
-            
-            if isHoveringTab {
-                closeTabButton
+
+            if viewModel.isHovering {
+                viewModel.closeTabButton
             }
         }
+        .onAppear { viewModel.modelContext = modelContext }
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 30)
         .padding(3)
-        .background(dragging ? .white.opacity(0.1) : browserSpace.currentTab == browserTab ? browserSpace.textColor(in: colorScheme) == .black ? .white : .white.opacity(0.2) : isHoveringTab ? .white.opacity(0.1) : .clear)
+        .background(dragging ? .white.opacity(0.1) : browserSpace.currentTab == browserTab ? browserSpace.textColor(in: colorScheme) == .black ? .white : .white.opacity(0.2) : viewModel.isHovering ? .white.opacity(0.1) : .clear)
         .clipShape(.rect(cornerRadius: 10))
-        .onTapGesture(perform: selectTab)
+        .onTapGesture(perform: viewModel.selectTab)
+        .onTapGesture(count: 2, perform: viewModel.startEditingTitle)
         .onHover { hover in
-            self.isHoveringTab = hover
+            viewModel.isHovering = hover
         }
         .contextMenu {
-            SidebarTabContextMenu(browserTab: browserTab)
+            SidebarTabContextMenu()
         }
-        .scaleEffect(isPressed ? 0.98 : 1.0)
-    }
-    
-    var faviconImage: some View {
-        Group {
-            if Preferences.shared.loadingIndicatorPosition == .onTab && browserTab.isLoading {
-                ProgressView()
-                    .controlSize(.small)
-            } else if let favicon = browserTab.favicon, let nsImage = NSImage(data: favicon) {
-                Image(nsImage: nsImage)
-                    .resizable()
-                    .scaledToFit()
-                    .clipShape(.rect(cornerRadius: 4))
-            } else {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color(.systemGray))
-            }
-        }
-        .frame(width: 16, height: 16)
-        .padding(.leading, 5)
-    }
-    
-    var closeTabButton: some View {
-        Button("Close Tab", systemImage: "xmark", action: closeTab)
-            .font(.title3)
-            .buttonStyle(.plain)
-            .labelStyle(.iconOnly)
-            .padding(4)
-            .background(isHoveringCloseButton ? AnyShapeStyle(.ultraThinMaterial.opacity(0.4)) : AnyShapeStyle(.clear))
-            .clipShape(.rect(cornerRadius: 6))
-            .onHover { hover in
-                self.isHoveringCloseButton = hover
-            }
-            .padding(.trailing, 5)
-    }
-    
-    func selectTab() {
-        browserSpace.currentTab = browserTab
-        
-        if !Preferences.shared.disableAnimations {
-            // Scale bounce effect
-            withAnimation(.bouncy(duration: 0.15, extraBounce: 0.0)) {
-                isPressed = true
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                    isPressed = false
-                }
-            }
-        }
+        .scaleEffect(viewModel.isButtonPressed ? 0.98 : 1.0)
+        .environment(viewModel)
     }
     
     /// Close (delete) the tab
