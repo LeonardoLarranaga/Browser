@@ -84,7 +84,9 @@ extension WebsiteSearcher {
         guard let queryURL = queryURL(for: query) else { return }
         searchManager.searchTask = URLSession.shared.dataTask(with: queryURL) { data, response, error in
             guard let data = data, error == nil else {
-                print("🔍📡 Error fetching search \"\(query)\" suggestions: \(error?.localizedDescription ?? "Unknown error")")
+                if let error = error as? URLError, error.code != .cancelled {
+                    print("🔍📡 Error fetching search \"\(query)\" suggestions: \(error.localizedDescription)")
+                }
                 return
             }
 
