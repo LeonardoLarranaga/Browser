@@ -13,40 +13,59 @@ struct SidebarResizer: View {
     @Environment(SidebarModel.self) var sidebarModel
     
     @State var isDragging = false
-    
+    @State var isHovering = false
+    @State var hoverTask: Task<Void, Never>? = nil
+
     var body: some View {
         // View base
         Color.clear
             .frame(width: 0.1)
             .overlay(alignment: .top) {
                 // Visual dragger
-                Color.secondary.opacity(isDragging && sidebarModel.currentSidebarWidth != 0 ? 0.2 : 0)
-                    .animation(.browserDefault, value: isDragging)
+                Color.secondary.opacity(isDragging || isHovering && sidebarModel.currentSidebarWidth != 0 ? 0.5 : 0)
+                    .animation(.browserDefault, value: isDragging || isHovering)
                     .clipShape(.rect(cornerRadius: 12))
                     .frame(width: 5)
                     .padding(.vertical)
             }
             .overlay(alignment: .top) {
                 // Actual dragger
-                Color.clear
+                Rectangle()
+                    .fill(.clear)
+                    .contentShape(.rect)
                     .frame(width: 15)
-                    .onHover { hover in
-                        if hover {
-                            setResizeLeftRightNSCursor()
-                        } else {
-                            if !isDragging {
-                                setArrowNSCursor()
-                            }
-                        }
-                    }
+                    .onHover(perform: onHoverChange)
                     .gesture(
                         DragGesture()
                             .onChanged(resizeSidebar)
                             .onEnded(endDragging)
                     )
             }
+            .onDisappear {
+                hoverTask?.cancel()
+                hoverTask = nil
+            }
     }
-    
+
+    /// On hover change handler
+    /// Shows the resize dragger after a delay
+    private func onHoverChange(_ hovering: Bool) {
+        hoverTask?.cancel()
+        if hovering {
+            hoverTask = Task { @MainActor in
+                try? await Task.sleep(for: .milliseconds(300))
+                if Task.isCancelled { return }
+                isHovering = true
+                setResizeLeftRightNSCursor()
+            }
+        } else {
+            isHovering = false
+            if !isDragging {
+                setArrowNSCursor()
+            }
+        }
+    }
+
     /// Resize the sidebar depending on the drag gesture value
     private func resizeSidebar(with value: DragGesture.Value) {
         // Save the last sidebar width before dragging
