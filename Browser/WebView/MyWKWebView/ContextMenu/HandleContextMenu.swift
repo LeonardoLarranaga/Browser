@@ -31,6 +31,8 @@ extension MyWKWebView {
             handleTextContextMenu(menu)
         case .link:
             handleLinkContextMenu(menu)
+        case .image:
+            handleImageContextMenu(menu)
         default:
             break
         }
@@ -40,5 +42,11 @@ extension MyWKWebView {
         } else {
             print("🖥️📚 Context menu type: \(contextMenuType.rawValue)")
         }
+    }
+
+    /// Capture click location for context-menu actions.
+    override func rightMouseDown(with event: NSEvent) {
+        rightMouseDownPosition = convert(event.locationInWindow, from: nil)
+        super.rightMouseDown(with: event)
     }
 }

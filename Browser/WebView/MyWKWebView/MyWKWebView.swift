@@ -168,4 +168,5 @@ class MyWKWebView: WKWebView {
     
     //MARK: - Variables for Context Menus
     weak var currentNSSavePanel: NSSavePanel?
+    var rightMouseDownPosition = CGPoint.zero
 }

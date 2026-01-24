@@ -147,7 +147,11 @@ final class BrowserSpace: Identifiable {
     ///  - modelContext: The model context to save the changes
     func openNewTab(_ browserTab: BrowserTab, using modelContext: ModelContext, select: Bool = true) {
         do {
-            tabs.insert(browserTab, at: browserTab.order)
+            if browserTab.order > tabs.count {
+                tabs.append(browserTab)
+            } else {
+                tabs.insert(browserTab, at: browserTab.order)
+            }
             try modelContext.save()
             if select {
                 currentTab = browserTab
