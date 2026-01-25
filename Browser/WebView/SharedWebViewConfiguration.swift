@@ -10,19 +10,19 @@ import WebKit
 /// Shared configuration for WKWebView instances
 class SharedWebViewConfiguration {
     // Singleton to ensure a single shared configuration across tabs
-    static let shared = SharedWebViewConfiguration()
-    
+    static var shared: SharedWebViewConfiguration { .init() }
+
     // Shared configuration with cache, cookies, and other settings
     let configuration: WKWebViewConfiguration
-    
+
     private init() {
         configuration = WKWebViewConfiguration()
-        
+
         configuration.allowsInlinePredictions = true
         configuration.allowsAirPlayForMediaPlayback = true
         configuration.websiteDataStore = .default()
         configuration.mediaTypesRequiringUserActionForPlayback = []
-        
+
         // Configure content blockers
         do {
             if let adawayURL = Bundle.main.url(forResource: "adaway", withExtension: "json") {
@@ -31,27 +31,26 @@ class SharedWebViewConfiguration {
                     if let error {
                         print("🚫 Error compiling content blockers:", error)
                     } else if let list {
-                         self.configuration.userContentController.add(list)
+                        self.configuration.userContentController.add(list)
                     }
                 }
             }
         } catch {
             print("🚫 Error loading content blockers:", error)
         }
-        
+
         // Configure shared preferences
         let preferences = WKPreferences()
         preferences.isElementFullscreenEnabled = true
-        
+
         preferences._developerExtrasEnabled = true
         preferences._applePayEnabled = true
         preferences._applePayCapabilityDisclosureAllowed = true
         preferences._allowsPictureInPictureMediaPlayback = true
-        
-        ExperimentalFeatures.toggleExperimentalFeature("PreferPageRenderingUpdatesNear60FPSEnabled", enabled: false, preferences: preferences)
-        
+
+        FeatureFlags.applyFeatureFlags(to: preferences)
         configuration.preferences = preferences
-        
+
         let webPagePreferences = WKWebpagePreferences()
         webPagePreferences.allowsContentJavaScript = true
         configuration.defaultWebpagePreferences = webPagePreferences

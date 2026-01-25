@@ -135,4 +135,7 @@ class Preferences {
             defaultCustomSearcherId = nil
         }
     }
+
+    var shouldShowFeatureFlagSettings = false
+    var configuredFeatureFlags: [String: Bool] = [:]
 }

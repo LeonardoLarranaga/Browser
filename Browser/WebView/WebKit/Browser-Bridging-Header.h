@@ -5,6 +5,8 @@
 
 #import "BrowserWKPreferences.h"
 #import "BrowserWKWebView.h"
-#import "ExperimentalFeatures.h"
 #import "DeveloperFeatures.h"
 #import "MediaControls.h"
+
+// Private WebKit implementations
+#include "WKFeature.h"

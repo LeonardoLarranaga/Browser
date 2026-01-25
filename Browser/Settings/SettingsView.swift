@@ -21,6 +21,12 @@ struct SettingsView: View {
             Tab("Keyboard Shortcuts", systemImage: "command") {
                 SettingsShortcutsView()
             }
+
+            if Preferences.shared.shouldShowFeatureFlagSettings {
+                Tab("Feature Flags", systemImage: "flag.2.crossed.fill") {
+                    SettingsFeatureFlagsView()
+                }
+            }
         }
     }
 }

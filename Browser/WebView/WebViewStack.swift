@@ -23,7 +23,8 @@ struct WebViewStack: View {
                     }
                 }
             } else {
-                Rectangle().glassEffect(in: .rect)
+                Rectangle()
+                    .fill(.ultraThinMaterial)
             }
         }
         .transaction { $0.animation = nil }
