@@ -15,16 +15,22 @@ extension NSApplication {
             window.standardWindowButton(.zoomButton)?.isHidden = hidden
         }
     }
-    
+
     func closeAllWindows() {
         windows.forEach { $0.close() }
     }
-    
+
     var isKeyWindowOfTypeMain: Bool {
         keyWindow?.identifier?.rawValue.hasPrefix("BrowserWindow") == true
     }
-    
+
     var isKeyWindowSettings: Bool {
         keyWindow?.identifier?.rawValue == "com_apple_SwiftUI_Settings_window"
+    }
+
+    func selectAllText() {
+        DispatchQueue.main.async {
+            self.sendAction(#selector(NSResponder.selectAll(_:)), to: nil, from: nil)
+        }
     }
 }

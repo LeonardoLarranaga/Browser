@@ -57,9 +57,7 @@ struct SearchTextField: View {
         .onChange(of: browserWindowState.searchOpenLocation) { _, newValue in
             focusedField = newValue != .none ? .search : .unfocused
             if newValue == .fromURLBar {
-                DispatchQueue.main.async {
-                    NSApplication.shared.sendAction(#selector(NSResponder.selectAll(_:)), to: nil, from: nil)
-                }
+                NSApp.selectAllText()
             } else {
                 searchManager.searchText = ""
             }

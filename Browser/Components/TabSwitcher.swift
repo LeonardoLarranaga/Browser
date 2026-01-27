@@ -52,7 +52,7 @@ struct TabSwitcher: View {
                     upEvent = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
                         if !event.modifierFlags.contains(modifiers) {
                             if let selectedTab = allLoadedTabs[safe: selectedTabIndex] {
-                                browserWindowState.goToSpace(selectedTab.browserSpace)
+                                selectedTab.activateSpace(in: browserWindowState)
                                 browserWindowState.currentSpace?.currentTab = selectedTab
                                 browserWindowState.showTabSwitcher = false
                             }
@@ -66,7 +66,7 @@ struct TabSwitcher: View {
                     closeEvent = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                         if event.keyCode == closeKey {
                             if let selectedTab = allLoadedTabs[safe: selectedTabIndex] {
-                                selectedTab.browserSpace?.closeTab(selectedTab, using: modelContext)
+                                browserSpaces.first(where: { $0.loadedTabs.contains(selectedTab) })?.closeTab(selectedTab, using: modelContext)
                                 selectNextTab()
                             }
                         }
@@ -96,12 +96,13 @@ struct TabSwitcher: View {
     func TabView(_ index: Int, _ tab: BrowserTab) -> some View {
         VStack {
             Group {
-                if tab.type == .web {
-                    TabSnapshotView(tab: tab)
-                        .shadow(radius: 10)
-                } else if tab.type == .history {
+                switch tab.contentType {
+                case .web:
                     Image(systemName: "arrow.counterclockwise.square.fill")
                         .font(.system(size: 50))
+                case .history:
+                    TabSnapshotView(tab: tab)
+                        .shadow(radius: 10)
                 }
             }
             .clipShape(.rect(cornerRadius: 10))

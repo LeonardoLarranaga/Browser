@@ -7,9 +7,15 @@
 
 import SwiftData
 
-enum BrowserTabType: String, Codable {
+enum TabContentType: String, Codable {
     case web
     case history
+}
+
+enum TabPinState: String, Codable {
+    case normal
+    case pinned
+    case favorite
 }
 
 /// A model that represents a tab in the browser
@@ -21,20 +27,22 @@ final class BrowserTab: Identifiable, Comparable {
     var favicon: Data?
     var url: URL
     var order: Int
-    var type: BrowserTabType
+    var pinState: TabPinState
+    var contentType: TabContentType
 
     var customTitle: String? = nil
 
-    @Relationship var browserSpace: BrowserSpace?
+    @Relationship private var browserSpace: BrowserSpace
 
-    init(title: String, favicon: Data? = nil, url: URL, order: Int = 0, browserSpace: BrowserSpace?, type: BrowserTabType = .web) {
+    init(title: String, favicon: Data? = nil, url: URL, order: Int = 0, browserSpace: BrowserSpace, contentType: TabContentType = .web) {
         self.id = UUID()
         self.title = title
         self.favicon = favicon
         self.url = url
         self.browserSpace = browserSpace
         self.order = order
-        self.type = type
+        self.pinState = .normal
+        self.contentType = contentType
     }
 
     @Transient weak var webview: MyWKWebView? = nil
@@ -86,6 +94,12 @@ final class BrowserTab: Identifiable, Comparable {
     func copyLink() {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(url.absoluteString, forType: .string)
+    }
+
+    /// Activates the space that contains this tab in the given window state
+    func activateSpace(in browserWindowState: BrowserWindowState) {
+        browserWindowState.goToSpace(browserSpace)
+        browserSpace.currentTab = self
     }
 
     // MARK: - Comparable

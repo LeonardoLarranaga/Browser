@@ -48,7 +48,7 @@ struct SidebarSpaceView: View {
             ScrollView {
                 VStack {
                     if browserSpace.pinnedTabsVisible {
-                        SidebarTabList(browserSpace: browserSpace, tabs: $browserSpace.pinnedTabs)
+                        SidebarTabList(browserSpace: browserSpace, tabs: browserSpace.pinnedTabs)
                             .padding(.top, 5)
                             .padding(.bottom, -5)
                             .browserTransition(.move(edge: .top).combined(with: .opacity))
@@ -59,7 +59,7 @@ struct SidebarSpaceView: View {
                     SidebarTabNewButton(browserSpace: browserSpace)
                         .padding(.vertical, -3)
                     
-                    SidebarTabList(browserSpace: browserSpace, tabs: $browserSpace.tabs)
+                    SidebarTabList(browserSpace: browserSpace, tabs: browserSpace.normalTabs)
                 }
             }
         }

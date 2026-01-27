@@ -11,82 +11,58 @@ import SwiftUI
 struct SidebarTab: View {
     
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.modelContext) var modelContext
 
     @Environment(BrowserWindowState.self) var browserWindowState
 
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
-    
-    let dragging: Bool
 
-    @State var viewModel: SidebarTabViewModel
-    init(browserSpace: BrowserSpace, browserTab: BrowserTab, dragging: Bool = false) {
-        self.browserSpace = browserSpace
-        self.browserTab = browserTab
-        self.dragging = dragging
-        self.viewModel = SidebarTabViewModel(browserTab: browserTab)
-    }
-
-    @FocusState var isTextFieldFocused: Bool
+    @State var isEditingTitle = false
+    @State var isHovering = false
+    @State var isPressed = false
 
     var body: some View {
         HStack {
-            viewModel.faviconImage
+            SidebarTabFaviconImage()
 
-            if viewModel.hasActiveNowPlayingSession {
-                viewModel.muteButton
-            }
-
-            if viewModel.isEditingTitle {
-                TextField("", text: $viewModel.customTitle, onCommit: {
-                    viewModel.isEditingTitle = false
-                    if viewModel.customTitle.isReallyEmpty {
-                        browserTab.customTitle = nil
-                    } else {
-                        browserTab.customTitle = viewModel.customTitle
-                    }
-                })
-                .focused($isTextFieldFocused)
-                .onAppear {
-                    viewModel.customTitle = browserTab.displayTitle
-                    isTextFieldFocused = true
-                    DispatchQueue.main.async {
-                        NSApplication.shared.sendAction(#selector(NSResponder.selectAll(_:)), to: nil, from: nil)
-                    }
+            if browserTab.webview?.hasActiveNowPlayingSession == true {
+                Button("Mute Tab", systemImage: browserTab.webview?.mediaMutedState != .audioMuted ? "speaker.wave.2" : "speaker.slash") {
+                    self.browserTab.webview?.toggleMute()
                 }
-            } else {
-                Text(browserTab.displayTitle)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
+                .buttonStyle(.sidebarHover())
+                .browserTransition(.move(edge: .leading))
             }
+
+            SidebarTabTitle(isEditingTitle: $isEditingTitle)
 
             Spacer()
 
-            if viewModel.isHovering {
-                viewModel.closeTabButton
+            if isHovering {
+                SidebarTabCloseButton()
             }
         }
-        .onAppear { viewModel.modelContext = modelContext }
         .frame(maxWidth: .infinity, alignment: .leading)
         .frame(height: 30)
         .padding(3)
-        .background(dragging ? .white.opacity(0.1) : browserSpace.currentTab == browserTab ? browserSpace.textColor(in: colorScheme) == .black ? .white : .white.opacity(0.2) : viewModel.isHovering ? .white.opacity(0.1) : .clear)
+        .background(browserSpace.currentTab == browserTab ? .white : isHovering ? .white.opacity(0.5) : .clear)
         .clipShape(.rect(cornerRadius: 10))
-        .onTapGesture(perform: viewModel.selectTab)
-        .onTapGesture(count: 2, perform: viewModel.startEditingTitle)
-        .onHover { hover in
-            viewModel.isHovering = hover
-        }
-        .contextMenu {
-            SidebarTabContextMenu()
-        }
-        .scaleEffect(viewModel.isButtonPressed ? 0.98 : 1.0)
-        .environment(viewModel)
+        .onTapGesture(perform: selectTab)
+        .onHover { isHovering = $0 }
+        .contextMenu { SidebarTabContextMenu(isEditingTitle: $isEditingTitle) }
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .animation(.bouncy(duration: 0.15), value: isPressed)
+        .environment(browserTab)
+        .environment(browserSpace)
     }
-    
-    /// Close (delete) the tab
-    func closeTab() {
-        browserSpace.closeTab(browserTab, using: modelContext)
+
+    func selectTab() {
+        browserSpace.currentTab = browserTab
+        if Preferences.shared.disableAnimations { return }
+        // Scale bounce effect
+        Task {
+            isPressed = true
+            try? await Task.sleep(for: .milliseconds(100))
+            isPressed = false
+        }
     }
 }

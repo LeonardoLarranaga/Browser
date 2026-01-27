@@ -102,16 +102,17 @@ class SearchManager {
     /// - Parameters: browserWindowState: The current `BrowserWindowState`
     /// - Parameters: modelContext: The current `ModelContext`
     private func openNewTab(_ searchSuggestion: SearchSuggestion, browserWindowState: BrowserWindowState, using modelContext: ModelContext) {
-        let newTab = BrowserTab(title: searchSuggestion.title, url: searchSuggestion.suggestedURL, order: 0, browserSpace: browserWindowState.currentSpace)
+        guard let currentSpace = browserWindowState.currentSpace else { return }
+        let newTab = BrowserTab(title: searchSuggestion.title, url: searchSuggestion.suggestedURL, order: 0, browserSpace: currentSpace)
 
         do {
-            browserWindowState.currentSpace?.tabs.append(newTab)
+            currentSpace.tabs.append(newTab)
             try modelContext.save()
         } catch {
             print("Error opening new tab: \(error)")
         }
 
-        browserWindowState.currentSpace?.currentTab = newTab
+        currentSpace.currentTab = newTab
     }
 
     /// Opens the search suggestion in the current tab

@@ -21,33 +21,25 @@ final class BrowserSpace: Identifiable {
     var colorOpacity: Double
     var colorScheme: String
 
-    @Relationship(deleteRule: .cascade, inverse: \BrowserTab.browserSpace) private var unorderedTabs: [BrowserTab]?
-    @Relationship(deleteRule: .cascade) private var unorderedPinnedTabs: [BrowserTab]?
+    @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
 
     var tabs: [BrowserTab] {
         get {
-            (unorderedTabs ?? []).sorted()
+            _tabs.sorted()
         } set {
             newValue.enumerated().forEach { index, tab in
                 tab.order = index
             }
-            unorderedTabs = newValue
+            _tabs = newValue
         }
+    }
+
+    var normalTabs: [BrowserTab] {
+        tabs.filter { $0.pinState == .normal }
     }
 
     var pinnedTabs: [BrowserTab] {
-        get {
-            (unorderedPinnedTabs ?? []).sorted()
-        } set {
-            newValue.enumerated().forEach { index, tab in
-                tab.order = index
-            }
-            unorderedPinnedTabs = newValue
-        }
-    }
-
-    var allTabs: [BrowserTab] {
-        tabs + pinnedTabs
+        tabs.filter { $0.pinState == .pinned }
     }
 
     var pinnedTabsVisible: Bool = true
@@ -65,8 +57,8 @@ final class BrowserSpace: Identifiable {
         self.colorOpacity = colorOpacity
         self.order = order
         self.colorScheme = colorScheme
-        self.unorderedTabs = []
         self.currentTab = nil
+        self._tabs = []
     }
 
     /// Returns the text color of the space based on the colors of the space and the color scheme
@@ -127,7 +119,7 @@ final class BrowserSpace: Identifiable {
     }
 
     func clear(using modelContext: ModelContext) {
-        let deletedTabs = tabs.filter {
+        let deletedTabs = normalTabs.filter {
             Preferences.shared.clearSelectedTab ? true : $0 != currentTab
         }
 
@@ -165,8 +157,7 @@ final class BrowserSpace: Identifiable {
 
     func pinTab(_ browserTab: BrowserTab, using modelContext: ModelContext) {
         do {
-            guard let index = tabs.firstIndex(of: browserTab) else { return }
-            pinnedTabs.append(tabs.remove(at: index))
+            browserTab.pinState = .pinned
             try modelContext.save()
         } catch {
             print("Error pinning tab: \(error)")
@@ -175,9 +166,7 @@ final class BrowserSpace: Identifiable {
 
     func unpinTab(_ browserTab: BrowserTab, using modelContext: ModelContext) {
         do {
-            guard let index = pinnedTabs.firstIndex(of: browserTab) else { return }
-            tabs.append(pinnedTabs.remove(at: index))
-            tabs.last?.browserSpace = self
+            browserTab.pinState = .normal
             try modelContext.save()
         } catch {
             print(error.localizedDescription)

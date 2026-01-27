@@ -21,7 +21,7 @@ struct WebView: View {
     
     var body: some View {
         Group {
-            switch tab.type {
+            switch tab.contentType {
             case .web:
                 WKWebViewControllerRepresentable(tab: tab, browserSpace: browserSpace, noTrace: browserWindowState.isNoTraceWindow, hoverURL: $hoverURL)
                     .opacity(tab.webviewErrorCode != nil ? 0 : 1)
@@ -71,7 +71,7 @@ struct WebView: View {
                     ProgressView(value: tab.estimatedProgress)
                         .progressViewStyle(.linear)
                         .frame(height: 3)
-                        .tint(tab.browserSpace?.getColors.first ?? .primary)
+                        .tint(browserWindowState.currentSpace?.getColors.first ?? .primary)
                 }
             }
         }

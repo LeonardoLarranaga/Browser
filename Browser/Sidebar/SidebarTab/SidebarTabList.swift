@@ -13,16 +13,16 @@ struct SidebarTabList: View {
     @Environment(SidebarModel.self) var sidebarModel
     
     @Bindable var browserSpace: BrowserSpace
-    @Binding var tabs: [BrowserTab]
+    var tabs: [BrowserTab]
     
     @State var draggingTab: BrowserTab?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
             ForEach(tabs) { browserTab in
-                SidebarTab(browserSpace: browserSpace, browserTab: browserTab, dragging: false)
+                SidebarTab(browserSpace: browserSpace, browserTab: browserTab)
                     .draggable(browserSpace.id.uuidString) {
-                       SidebarTab(browserSpace: browserSpace, browserTab: browserTab, dragging: true)
+                       SidebarTab(browserSpace: browserSpace, browserTab: browserTab)
                             .opacity(0.65)
                     }
                 // Using simultaneousGesture because onAppear is causing unexpected behavior
@@ -42,7 +42,7 @@ struct SidebarTabList: View {
                         return false
                     } isTargeted: { status in
                         if status {
-                            moveTab(to: browserTab)
+//                            moveTab(to: browserTab)
                         }
                     }
             }
@@ -52,15 +52,15 @@ struct SidebarTabList: View {
         .padding(.trailing, Preferences.shared.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
     }
     
-    func moveTab(to destination: BrowserTab) {
-        if let draggingTab, draggingTab != destination {
-            if let sourceIndex = tabs.firstIndex(of: draggingTab),
-               let destinationIndex = tabs.firstIndex(of: destination) {
-                withAnimation(.browserDefault) {
-                    let sourceItems = tabs.remove(at: sourceIndex)
-                    tabs.insert(sourceItems, at: destinationIndex)
-                }
-            }
-        }
-    }
+//    func moveTab(to destination: BrowserTab) {
+//        if let draggingTab, draggingTab != destination {
+//            if let sourceIndex = tabs.firstIndex(of: draggingTab),
+//               let destinationIndex = tabs.firstIndex(of: destination) {
+//                withAnimation(.browserDefault) {
+//                    let sourceItems = tabs.remove(at: sourceIndex)
+//                    tabs.insert(sourceItems, at: destinationIndex)
+//                }
+//            }
+//        }
+//    }
 }

@@ -73,7 +73,8 @@ struct Acknowledgments: View {
     }
     
     fileprivate func visit(_ a: Acknowledgment) {
-        let newTab = BrowserTab(title: a.title, url: URL(string: a.url)!, browserSpace: browserWindowState.currentSpace)
+        guard let currentSpace = browserWindowState.currentSpace else { return }
+        let newTab = BrowserTab(title: a.title, url: URL(string: a.url)!, browserSpace: currentSpace)
         browserWindowState.currentSpace?.openNewTab(newTab, using: modelContext)
         browserWindowState.showAcknowledgements = false
     }

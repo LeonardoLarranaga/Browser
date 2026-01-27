@@ -13,7 +13,7 @@ struct WebViewStack: View {
     var body: some View {
         ZStack {
             if let currentTab = browserSpace.currentTab {
-                ForEach(browserSpace.allTabs.filter { browserSpace.loadedTabs.contains($0) || $0 == currentTab }) { tab in
+                ForEach(browserSpace.tabs.filter { browserSpace.loadedTabs.contains($0) || $0 == currentTab }) { tab in
                     WebView(tab: tab, browserSpace: browserSpace)
                     .zIndex(tab == currentTab ? 1 : 0)
                     .onAppear {

@@ -42,13 +42,15 @@ struct HistoryCommands: Commands {
     }
     
     func showHistory() {
+        guard let currentSpace = browserWindowState?.currentSpace else { return }
+
         let favicon = ImageRenderer(content: Image(systemName: "arrow.counterclockwise.square.fill").resizable().frame(width: 32, height: 32).scaledToFit().foregroundStyle(.gray)).nsImage?.pngData
-        let historyTab = BrowserTab(title: "History", favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: browserWindowState?.currentSpace, type: .history)
-        
+        let historyTab = BrowserTab(title: "History", favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: currentSpace, contentType: .history)
+
         do {
-            browserWindowState?.currentSpace?.tabs.append(historyTab)
+            currentSpace.tabs.append(historyTab)
             try modelContext.save()
-            browserWindowState?.currentSpace?.currentTab = historyTab
+            currentSpace.currentTab = historyTab
         } catch {
             print("Error saving history tab: \(error)")
         }
