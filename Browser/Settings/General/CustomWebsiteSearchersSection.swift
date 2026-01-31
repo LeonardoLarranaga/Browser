@@ -61,7 +61,7 @@ struct CustomWebsiteSearchersSection: View {
         } header: {
             Text("Custom Website Searchers")
         } footer: {
-            Text("Note: This searchers will not have autosuggestions.")
+            Text("Note: Custom searchers will not have autosuggestions.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
