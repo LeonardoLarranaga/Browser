@@ -24,8 +24,12 @@ struct SettingsAppearanceView: View {
                 
                 Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $preferences.reverseColorsOnTrailingSidebar)
                 
-                LoadingPlacePicker()
-                
+                Picker("Loading Indicator Position", systemImage: "progress.indicator", selection: $preferences.loadingIndicatorPosition) {
+                    ForEach(Preferences.LoadingIndicatorPosition.allCases, id: \.self) { position in
+                        Label(position.localizedStringKey, systemImage: position.systemImage).tag(position)
+                    }
+                }
+
                 Picker("URL Bar Position", systemImage: "link", selection: $preferences.urlBarPosition) {
                     Label("On Sidebar", systemImage: "sidebar.left").tag(Preferences.URLBarPosition.onSidebar)
                     Label("On Toolbar", systemImage: "menubar.rectangle").tag(Preferences.URLBarPosition.onToolbar)
