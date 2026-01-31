@@ -11,17 +11,17 @@ import SwiftUI
 struct SidebarSpaceIcon: View {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     @Bindable var browserSpace: BrowserSpace
     
     var body: some View {
         Button(browserSpace.name, systemImage: browserSpace.systemImage) {
-            browserWindowState.goToSpace(browserSpace)
+            browserWindow.goToSpace(browserSpace)
         }
         .buttonStyle(.sidebarHover(hoverColor: browserSpace.getColors.first ?? .primary))
-        .opacity(browserWindowState.currentSpace == browserSpace ? 0.7 : 0.3)
+        .opacity(browserWindow.currentSpace == browserSpace ? 0.7 : 0.3)
         .sidebarSpaceContextMenu(browserSpaces: browserSpaces, browserSpace: browserSpace)
     }
 }

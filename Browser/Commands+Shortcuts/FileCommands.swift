@@ -13,11 +13,11 @@ struct FileCommands: Commands {
     @Environment(\.openWindow) var openWindow
     @Environment(\.modelContext) var modelContext
     
-    @FocusedValue(\.browserActiveWindowState) var browserWindowState
+    @FocusedValue(\.browserActiveWindowState) var browserWindow
     
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
-            Button("New Tab", action: browserWindowState?.toggleNewTabSearch)
+            Button("New Tab", action: browserWindow?.toggleNewTabSearch)
                 .globalKeyboardShortcut(.newTab)
 
             Button("New Window") { openWindow(id: "BrowserWindow") }
@@ -35,8 +35,8 @@ struct FileCommands: Commands {
         }
         
         CommandGroup(replacing: .saveItem) {
-            if let currentTab = browserWindowState?.currentSpace?.currentTab {
-                Button("Close Tab") { browserWindowState?.currentSpace?.closeTab(currentTab, using: modelContext) }
+            if let currentTab = browserWindow?.currentSpace?.currentTab {
+                Button("Close Tab") { browserWindow?.currentSpace?.closeTab(currentTab, using: modelContext) }
                     .globalKeyboardShortcut(.closeTab)
             }
             
@@ -49,8 +49,8 @@ struct FileCommands: Commands {
         }
         
         CommandGroup(after: .saveItem) {
-            if let url = browserWindowState?.currentSpace?.currentTab?.url {
-                Button("Create QR Code") { browserWindowState?.showURLQRCode.toggle() }
+            if let url = browserWindow?.currentSpace?.currentTab?.url {
+                Button("Create QR Code") { browserWindow?.showURLQRCode.toggle() }
                     .globalKeyboardShortcut(.createQRCode)
                 
                 ShareLink("Share", item: url)
@@ -63,12 +63,12 @@ struct FileCommands: Commands {
                 
                 Divider()
                 
-                Button("Save Page As...", action: browserWindowState?.currentSpace?.currentTab?.webview?.savePageAs)
+                Button("Save Page As...", action: browserWindow?.currentSpace?.currentTab?.webview?.savePageAs)
                     .globalKeyboardShortcut(.savePageAs)
                 
                 Divider()
                 
-                Button("Print", action: browserWindowState?.currentSpace?.currentTab?.webview?.printPage)
+                Button("Print", action: browserWindow?.currentSpace?.currentTab?.webview?.printPage)
                     .globalKeyboardShortcut(.print)
             }
         }
@@ -76,18 +76,18 @@ struct FileCommands: Commands {
     
     private func copyCurrentPagePortion() {
         let temporaryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("temp.png")
-        browserWindowState?.currentSpace?.currentTab?.webview?.savePageAsPNG(temporaryURL)
+        browserWindow?.currentSpace?.currentTab?.webview?.savePageAsPNG(temporaryURL)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects([temporaryURL as NSPasteboardWriting])
-        browserWindowState?.presentActionAlert(message: "Current Page Portion Snapshot Copied!", systemImage: "camera.viewfinder")
+        browserWindow?.presentActionAlert(message: "Current Page Portion Snapshot Copied!", systemImage: "camera.viewfinder")
     }
     
     private func copyFullPage() {
         let temporaryURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("temp.png")
-        browserWindowState?.currentSpace?.currentTab?.webview?.saveFullPageAsPNG(temporaryURL)
+        browserWindow?.currentSpace?.currentTab?.webview?.saveFullPageAsPNG(temporaryURL)
         NSPasteboard.general.clearContents()
         NSPasteboard.general.writeObjects([temporaryURL as NSPasteboardWriting])
-        browserWindowState?.presentActionAlert(message: "Full Page Snapshot Copied!", systemImage: "camera.viewfinder")
+        browserWindow?.presentActionAlert(message: "Full Page Snapshot Copied!", systemImage: "camera.viewfinder")
     }
 }
 

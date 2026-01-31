@@ -9,7 +9,7 @@ import SwiftUI
 
 /// Key to store the active window state
 struct BrowserActiveWindowKey: FocusedValueKey {
-    typealias Value = BrowserWindowState
+    typealias Value = BrowserWindow
 }
 
 struct SidebarModelActiveWindowKey: FocusedValueKey {
@@ -17,7 +17,7 @@ struct SidebarModelActiveWindowKey: FocusedValueKey {
 }
 
 extension FocusedValues {
-    var browserActiveWindowState: BrowserWindowState? {
+    var browserActiveWindowState: BrowserWindow? {
         get { self[BrowserActiveWindowKey.self] }
         set { self[BrowserActiveWindowKey.self] = newValue }
     }

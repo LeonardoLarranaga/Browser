@@ -12,7 +12,7 @@ import KeyboardShortcuts
 struct TabSwitcher: View {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     var browserSpaces: [BrowserSpace]
     var allLoadedTabs: [BrowserTab] {
@@ -26,7 +26,7 @@ struct TabSwitcher: View {
     
     var body: some View {
         ScrollView(.horizontal) {
-            if browserWindowState.showTabSwitcher {
+            if browserWindow.showTabSwitcher {
                 LazyHStack(spacing: 0) {
                     ForEach(Array(zip(allLoadedTabs.indices, allLoadedTabs)), id: \.0) { index, tab in
                         TabView(index, tab)
@@ -52,9 +52,9 @@ struct TabSwitcher: View {
                     upEvent = NSEvent.addLocalMonitorForEvents(matching: .flagsChanged) { event in
                         if !event.modifierFlags.contains(modifiers) {
                             if let selectedTab = allLoadedTabs[safe: selectedTabIndex] {
-                                selectedTab.activateSpace(in: browserWindowState)
-                                browserWindowState.currentSpace?.currentTab = selectedTab
-                                browserWindowState.showTabSwitcher = false
+                                selectedTab.activateSpace(in: browserWindow)
+                                browserWindow.currentSpace?.currentTab = selectedTab
+                                browserWindow.showTabSwitcher = false
                             }
                         }
                         return event
@@ -126,7 +126,7 @@ struct TabSwitcher: View {
         }
         .frame(width: 155)
         .padding()
-        .background(index == selectedTabIndex ? browserWindowState.currentSpace?.getColors.first ?? .accentColor : .clear)
+        .background(index == selectedTabIndex ? browserWindow.currentSpace?.getColors.first ?? .accentColor : .clear)
         .clipShape(.rect(cornerRadius: 10))
         .onHover { isHovered in
             if isHovered {

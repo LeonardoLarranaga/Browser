@@ -10,7 +10,7 @@ import KeyboardShortcuts
 
 struct ViewCommands: Commands {
     
-    @FocusedValue(\.browserActiveWindowState) var browserWindowState
+    @FocusedValue(\.browserActiveWindowState) var browserWindow
     @FocusedValue(\.sidebarModel) var sidebarModel
     
     var body: some Commands {
@@ -21,13 +21,13 @@ struct ViewCommands: Commands {
             Divider()
             
             Button("Show Tab Switcher") {
-                browserWindowState?.showTabSwitcher = true
+                browserWindow?.showTabSwitcher = true
             }
             .globalKeyboardShortcut(.showTabSwitcher)
             
             Divider()
             
-            if let tab = browserWindowState?.currentSpace?.currentTab, let webView = tab.webview {
+            if let tab = browserWindow?.currentSpace?.currentTab, let webView = tab.webview {
                 Button("Stop Loading") { webView.stopLoading() }
                     .globalKeyboardShortcut(.stopLoading)
                     .disabled(!webView.isLoading)

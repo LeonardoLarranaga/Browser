@@ -26,7 +26,7 @@ fileprivate struct Acknowledgment: Identifiable {
 struct Acknowledgments: View {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     var body: some View {
         VStack {
@@ -73,9 +73,9 @@ struct Acknowledgments: View {
     }
     
     fileprivate func visit(_ a: Acknowledgment) {
-        guard let currentSpace = browserWindowState.currentSpace else { return }
+        guard let currentSpace = browserWindow.currentSpace else { return }
         let newTab = BrowserTab(title: a.title, url: URL(string: a.url)!, browserSpace: currentSpace)
-        browserWindowState.currentSpace?.openNewTab(newTab, using: modelContext)
-        browserWindowState.showAcknowledgements = false
+        browserWindow.currentSpace?.openNewTab(newTab, using: modelContext)
+        browserWindow.showAcknowledgements = false
     }
 }

@@ -1,5 +1,5 @@
 //
-//  BrowserWindowState.swift
+//  BrowserWindow.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 1/28/25.
@@ -8,8 +8,8 @@
 import SwiftUI
 import SwiftData
 
-/// The BrowserWindowState is an Observable class that holds the current state of the browser window
-@Observable class BrowserWindowState {
+/// The BrowserWindow is an Observable class that holds the current state of the browser window
+@Observable class BrowserWindow {
     
     var currentSpace: BrowserSpace? = nil {
         didSet {

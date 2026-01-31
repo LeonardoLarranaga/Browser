@@ -12,11 +12,11 @@ import SwiftData
 struct PageWebView: View {
     
     @Environment(\.scenePhase) var scenePhase
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     
-    // UUID to scroll to the current space (using browserWindowState.viewScrollState doesn't work)
+    // UUID to scroll to the current space (using browserWindow.viewScrollState doesn't work)
     @State var scrollState: UUID?
     
     var body: some View {
@@ -40,12 +40,12 @@ struct PageWebView: View {
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .scrollTargetBehavior(.paging)
-        .onChange(of: browserWindowState.currentSpace) { _, newValue in
+        .onChange(of: browserWindow.currentSpace) { _, newValue in
             scrollState = newValue?.id
         }
         .transaction { $0.disablesAnimations = true }
         // Try to enter Picture in Picture of current tab when tab changes or app goes to background
-        .onChange(of: browserWindowState.currentSpace?.currentTab) { oldValue, newValue in
+        .onChange(of: browserWindow.currentSpace?.currentTab) { oldValue, newValue in
             if Preferences.shared.openPipOnTabChange {
                 if let oldValue {
                     oldValue.webview?.togglePictureInPicture()
@@ -58,12 +58,12 @@ struct PageWebView: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
             if Preferences.shared.openPipOnTabChange {
-                browserWindowState.currentSpace?.currentTab?.webview?.togglePictureInPicture()
+                browserWindow.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willBecomeActiveNotification)) { _ in
             if Preferences.shared.openPipOnTabChange {
-                browserWindowState.currentSpace?.currentTab?.webview?.togglePictureInPicture()
+                browserWindow.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }
     }

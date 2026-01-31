@@ -10,7 +10,7 @@ import SwiftUI
 /// View that represents the webview of a tab, it can be a webview or a history view
 struct WebView: View {
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     @Bindable var tab: BrowserTab
     @Bindable var browserSpace: BrowserSpace
@@ -23,7 +23,7 @@ struct WebView: View {
         Group {
             switch tab.contentType {
             case .web:
-                WKWebViewControllerRepresentable(tab: tab, browserSpace: browserSpace, noTrace: browserWindowState.isNoTraceWindow, hoverURL: $hoverURL)
+                WKWebViewControllerRepresentable(tab: tab, browserSpace: browserSpace, noTrace: browserWindow.isNoTraceWindow, hoverURL: $hoverURL)
                     .opacity(tab.webviewErrorCode != nil ? 0 : 1)
                     .overlay {
                         if tab.webviewErrorDescription != nil, let errorCode = tab.webviewErrorCode, errorCode != -999 {
@@ -62,16 +62,16 @@ struct WebView: View {
                     }
             case .history:
                 HistoryView(browserTab: tab)
-                    .opacity(browserWindowState.currentSpace?.currentTab == tab ? 1 : 0)
+                    .opacity(browserWindow.currentSpace?.currentTab == tab ? 1 : 0)
             }
         }
         .overlay(alignment: .top) {
-            if Preferences.shared.loadingIndicatorPosition == .onWebView && browserWindowState.currentSpace?.currentTab == tab {
+            if Preferences.shared.loadingIndicatorPosition == .onWebView && browserWindow.currentSpace?.currentTab == tab {
                 if tab.isLoading {
                     ProgressView(value: tab.estimatedProgress)
                         .progressViewStyle(.linear)
                         .frame(height: 3)
-                        .tint(browserWindowState.currentSpace?.getColors.first ?? .primary)
+                        .tint(browserWindow.currentSpace?.getColors.first ?? .primary)
                 }
             }
         }

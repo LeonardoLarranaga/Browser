@@ -11,7 +11,7 @@ import SwiftData
 /// Main frame of the browser.
 struct MainFrame: View {
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     @Environment(\.colorScheme) var colorScheme
     
     @State var sidebarModel = SidebarModel()
@@ -19,11 +19,11 @@ struct MainFrame: View {
     @Query(sort: \BrowserSpace.order) var browserSpaces: [BrowserSpace]
     
     var isImmersive: Bool {
-        browserWindowState.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.shared.immersiveViewOnFullscreen
+        browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.shared.immersiveViewOnFullscreen
     }
 
     var body: some View {
-        @Bindable var browserWindowState = browserWindowState
+        @Bindable var browserWindow = browserWindow
         
         HStack(spacing: 0) {
             if Preferences.shared.sidebarPosition == .leading {
@@ -47,12 +47,12 @@ struct MainFrame: View {
                 )
                 .onReceive(NotificationCenter.default.publisher(for: NSWindow.willEnterFullScreenNotification)) { _ in
                     withAnimation(.browserDefault) {
-                        browserWindowState.isFullScreen = true
+                        browserWindow.isFullScreen = true
                     }
                 }
                 .onReceive(NotificationCenter.default.publisher(for: NSWindow.willExitFullScreenNotification)) { _ in
                     withAnimation(.browserDefault) {
-                        browserWindowState.isFullScreen = false
+                        browserWindow.isFullScreen = false
                     }
                 }
                 .actionAlert()
@@ -68,32 +68,32 @@ struct MainFrame: View {
         .toolbar { Text("") }
         .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .background {
-            if let currentSpace = browserWindowState.currentSpace {
+            if let currentSpace = browserWindow.currentSpace {
                 SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: false)
             }
         }
         // Show the search view
         .floatingPanel(isPresented: .init(get: {
-            browserWindowState.searchOpenLocation != .none
+            browserWindow.searchOpenLocation != .none
         }, set: { newValue in
             if !newValue {
-                browserWindowState.searchOpenLocation = .none
+                browserWindow.searchOpenLocation = .none
             }
-        }), origin: browserWindowState.searchPanelOrigin, size: browserWindowState.searchPanelSize, shouldCenter: browserWindowState.searchOpenLocation == .fromNewTab || Preferences.shared.urlBarPosition == .onToolbar) {
+        }), origin: browserWindow.searchPanelOrigin, size: browserWindow.searchPanelSize, shouldCenter: browserWindow.searchOpenLocation == .fromNewTab || Preferences.shared.urlBarPosition == .onToolbar) {
             SearchView()
-                .environment(browserWindowState)
+                .environment(browserWindow)
         }
         // Show the tab switcher
-        .floatingPanel(isPresented: $browserWindowState.showTabSwitcher, size: CGSize(width: 700, height: 200)) {
+        .floatingPanel(isPresented: $browserWindow.showTabSwitcher, size: CGSize(width: 700, height: 200)) {
             TabSwitcher(browserSpaces: browserSpaces)
-                .environment(browserWindowState)
+                .environment(browserWindow)
         }
         // Show the sidebar by hovering the mouse on the edge of the screen
         .overlay(alignment: Preferences.shared.sidebarPosition == .leading ? .topLeading : .topTrailing) {
             if sidebarModel.sidebarCollapsed && sidebarModel.currentSidebarWidth > 0 {
                 sidebar
                     .background {
-                        if let currentSpace = browserWindowState.currentSpace {
+                        if let currentSpace = browserWindow.currentSpace {
                             SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
                         }
                     }
@@ -109,7 +109,7 @@ struct MainFrame: View {
         }
         .environment(sidebarModel)
         .focusedSceneValue(\.sidebarModel, sidebarModel)
-        .foregroundStyle(browserWindowState.currentSpace?.textColor(in: colorScheme) ?? .primary)
+        .foregroundStyle(browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary)
     }
     
     var sidebar: some View {

@@ -14,7 +14,7 @@ struct Sidebar: View {
 
     @Environment(SidebarModel.self) var sidebarModel
 
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
 
     let browserSpaces: [BrowserSpace]
 
@@ -44,9 +44,9 @@ struct Sidebar: View {
             guard NSWindow.hasPrefix("Browser", in: notification.object as? NSWindow) else { return }
 
             // If the window is not the main browser window, delete the window temporary space
-            if !browserWindowState.isMainBrowserWindow {
+            if !browserWindow.isMainBrowserWindow {
                 do {
-                    guard let space = browserWindowState.currentSpace else { return }
+                    guard let space = browserWindow.currentSpace else { return }
                     space.tabs.forEach { modelContext.delete($0) }
                     modelContext.delete(space)
                     try modelContext.save()
@@ -66,13 +66,13 @@ struct Sidebar: View {
 
     func createSpace() {
         do {
-            let nextIndex = browserSpaces.firstIndex(where: { $0.id == browserWindowState.currentSpace?.id }) ?? -1 + 1
+            let nextIndex = browserSpaces.firstIndex(where: { $0.id == browserWindow.currentSpace?.id }) ?? -1 + 1
 
             var newSpace: BrowserSpace
 
-            if browserWindowState.isMainBrowserWindow {
+            if browserWindow.isMainBrowserWindow {
                 newSpace = BrowserSpace(name: "", systemImage: "circle.fill", order: nextIndex, colors: [], colorScheme: "system")
-            } else if browserWindowState.isNoTraceWindow {
+            } else if browserWindow.isNoTraceWindow {
                 newSpace = BrowserSpace(name: "No-Trace Window", systemImage: "sunglasses.fill", order: 0, colors: [.black], colorScheme: "system")
             } else {
                 newSpace = BrowserSpace(name: "Temporary Window", systemImage: "circle.fill", order: 0, colors: [], colorScheme: "system")
@@ -83,7 +83,7 @@ struct Sidebar: View {
 
             // Select the new space
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                browserWindowState.goToSpace(newSpace)
+                browserWindow.goToSpace(newSpace)
             }
 
             if browserSpaces.count > 1 {

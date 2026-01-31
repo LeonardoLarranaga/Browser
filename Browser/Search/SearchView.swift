@@ -12,7 +12,7 @@ struct SearchView: View {
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     @State var searchManager = SearchManager()
     
@@ -33,7 +33,7 @@ struct SearchView: View {
             return .handled
         }
         .onKeyPress(.return) {
-            searchManager.searchAction(searchManager.searchSuggestions[searchManager.highlightedSearchSuggestionIndex], browserWindowState: browserWindowState, using: modelContext)
+            searchManager.searchAction(searchManager.searchSuggestions[searchManager.highlightedSearchSuggestionIndex], browserWindow: browserWindow, using: modelContext)
             return .handled
         }
         .onKeyPress(.upArrow, action: searchManager.handleUpArrow)
@@ -44,9 +44,9 @@ struct SearchView: View {
                 searchManager.fetchSearchSuggestions(newValue)
             }
         }
-        .onChange(of: browserWindowState.searchOpenLocation) {
-            if browserWindowState.searchOpenLocation != .none {
-                searchManager.setInitialValuesFromWindowState(browserWindowState)
+        .onChange(of: browserWindow.searchOpenLocation) {
+            if browserWindow.searchOpenLocation != .none {
+                searchManager.setInitialValuesFromWindowState(browserWindow)
             } else {
                 searchManager.isUsingWebsiteSearcher = false
                 searchManager.activeWebsiteSearcher = Preferences.shared.defaultWebsiteSearcher
@@ -56,7 +56,7 @@ struct SearchView: View {
     
     func closeSearchView() {
         DispatchQueue.main.async {
-            browserWindowState.searchOpenLocation = .none
+            browserWindow.searchOpenLocation = .none
         }
     }
 }

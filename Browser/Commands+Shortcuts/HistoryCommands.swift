@@ -14,11 +14,11 @@ struct HistoryCommands: Commands {
     
     @Environment(\.modelContext) var modelContext
     
-    @FocusedValue(\.browserActiveWindowState) var browserWindowState: BrowserWindowState?
+    @FocusedValue(\.browserActiveWindowState) var browserWindow: BrowserWindow?
     
     var body: some Commands {
         CommandMenu("History") {
-            if let webView = browserWindowState?.currentSpace?.currentTab?.webview {
+            if let webView = browserWindow?.currentSpace?.currentTab?.webview {
                 
                 Button("Go Back") { webView.goBack() }
                     .disabled(!webView.canGoBack)
@@ -42,7 +42,7 @@ struct HistoryCommands: Commands {
     }
     
     func showHistory() {
-        guard let currentSpace = browserWindowState?.currentSpace else { return }
+        guard let currentSpace = browserWindow?.currentSpace else { return }
 
         let favicon = ImageRenderer(content: Image(systemName: "arrow.counterclockwise.square.fill").resizable().frame(width: 32, height: 32).scaledToFit().foregroundStyle(.gray)).nsImage?.pngData
         let historyTab = BrowserTab(title: "History", favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: currentSpace, contentType: .history)

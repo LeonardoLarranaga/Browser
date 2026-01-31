@@ -23,7 +23,7 @@ extension WKWebViewControllerRepresentable {
         
         /// Presents an alert with a message and a system image
         func presentActionAlert(message: String, systemImage: String) {
-            self.parent.browserWindowState.presentActionAlert(message: message, systemImage: systemImage)
+            self.parent.browserWindow.presentActionAlert(message: message, systemImage: systemImage)
         }
         
         /// Starts a Google search with the query in a new tab

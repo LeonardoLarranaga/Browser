@@ -13,7 +13,7 @@ struct SidebarSpaceCreateView: View {
     
     @Environment(\.modelContext) var modelContext
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     @Bindable var browserSpace: BrowserSpace
@@ -147,7 +147,7 @@ struct SidebarSpaceCreateView: View {
                         try? modelContext.save()
                         
                         if let newSelection {
-                            browserWindowState.goToSpace(newSelection)
+                            browserWindow.goToSpace(newSelection)
                         }
                     }
                 } else {

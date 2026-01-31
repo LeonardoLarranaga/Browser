@@ -11,7 +11,7 @@ import SwiftUI
 struct SidebarToolbarButton: View {
     
     @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let systemImage: String
     let action: () -> Void
@@ -24,7 +24,7 @@ struct SidebarToolbarButton: View {
     }
     
     var color: Color {
-        browserWindowState.currentSpace?.textColor(in: colorScheme) ?? .primary
+        browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary
     }
     
     var body: some View {

@@ -12,7 +12,7 @@ import SwiftUI
 struct HistoryEntryRowContextMenu: ViewModifier {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
 
     let entry: BrowserHistoryEntry
     let browserTab: BrowserTab
@@ -27,7 +27,7 @@ struct HistoryEntryRowContextMenu: ViewModifier {
             }
             
             Button("Open in New Tab") {
-                if let currentSpace = browserWindowState.currentSpace {
+                if let currentSpace = browserWindow.currentSpace {
                     currentSpace.openNewTab(BrowserTab(title: entry.title, favicon: entry.favicon, url: entry.url, order: browserTab.order + 1, browserSpace: currentSpace, contentType: .web), using: modelContext)
                 }
             }

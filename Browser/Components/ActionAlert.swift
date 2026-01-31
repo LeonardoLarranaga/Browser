@@ -10,28 +10,28 @@ import SwiftUI
 /// An alert that displays an action that was performed by the user
 struct ActionAlert: ViewModifier {
 
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
 
     @State var dismissTimer: Timer?
 
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
-                if browserWindowState.showActionAlert {
+                if browserWindow.showActionAlert {
                     LazyVStack {
                         ScrollView {
                             LazyHStack(spacing: 10) {
-                                Text(browserWindowState.actionAlertMessage)
+                                Text(browserWindow.actionAlertMessage)
                                     .lineLimit(1)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Image(systemName: browserWindowState.actionAlertSystemImage)
+                                Image(systemName: browserWindow.actionAlertSystemImage)
                                     .fontWeight(.bold)
                                     .frame(width: 20)
                             }
                             .font(.system(size: 14, weight: .medium))
                             .padding()
                             .background {
-                                if let currentSpace = browserWindowState.currentSpace, !currentSpace.colors.isEmpty {
+                                if let currentSpace = browserWindow.currentSpace, !currentSpace.colors.isEmpty {
                                     SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
                                 } else {
                                     Rectangle().glassEffect(in: .rect)
@@ -47,14 +47,14 @@ struct ActionAlert: ViewModifier {
                     .onScrollPhaseChange { oldPhase, newPhase in
                         withAnimation(.browserDefault) {
                             if newPhase == .interacting {
-                                browserWindowState.showActionAlert = false
+                                browserWindow.showActionAlert = false
                             }
                         }
                     }
                     .onAppear {
                         dismissTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
                             withAnimation(.browserDefault) {
-                                browserWindowState.showActionAlert = false
+                                browserWindow.showActionAlert = false
                             }
                         }
                     }

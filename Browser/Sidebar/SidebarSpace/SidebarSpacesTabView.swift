@@ -12,7 +12,7 @@ import SwiftData
 struct SidebarSpacesTabView: View {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     
@@ -35,10 +35,10 @@ struct SidebarSpacesTabView: View {
             .scrollTargetLayout()
         }
         .scrollPosition(id: .init(get: {
-            browserWindowState.viewScrollState
+            browserWindow.viewScrollState
         }, set: { position in
-            if browserWindowState.viewScrollState != position {   
-                browserWindowState.goToSpace(browserSpaces.first { $0.id == position })
+            if browserWindow.viewScrollState != position {   
+                browserWindow.goToSpace(browserSpaces.first { $0.id == position })
             }
         }), anchor: .center)
         .scrollContentBackground(.hidden)
@@ -46,16 +46,16 @@ struct SidebarSpacesTabView: View {
         .scrollTargetBehavior(.paging)
         .scrollDisabled(browserSpaces.count < 2)
         // Scroll to the selected space when the viewScrollState changes
-        .onChange(of: browserWindowState.viewScrollState) { oldValue, newValue in
+        .onChange(of: browserWindow.viewScrollState) { oldValue, newValue in
             if let newValue {
                 withAnimation(appeared ? .browserDefault : nil) {
-                    browserWindowState.viewScrollState = newValue
-                    browserWindowState.currentSpace = browserSpaces.first { $0.id == newValue }
+                    browserWindow.viewScrollState = newValue
+                    browserWindow.currentSpace = browserSpaces.first { $0.id == newValue }
                 }
             }
             
             // Delete browserSpaces with empty names if they are not the one selected
-            if let currentSpace = browserWindowState.currentSpace, !currentSpace.name.isEmpty {
+            if let currentSpace = browserWindow.currentSpace, !currentSpace.name.isEmpty {
                 for space in browserSpaces where space.name.isEmpty {
                     modelContext.delete(space)
                 }
@@ -70,8 +70,8 @@ struct SidebarSpacesTabView: View {
         // This is a workaround to prevent the animation when the view first appears
         .transaction { $0.disablesAnimations = !appeared }
         .task {
-            if browserWindowState.currentSpace == nil && browserWindowState.isMainBrowserWindow {
-                browserWindowState.loadCurrentSpace(browserSpaces: browserSpaces)
+            if browserWindow.currentSpace == nil && browserWindow.isMainBrowserWindow {
+                browserWindow.loadCurrentSpace(browserSpaces: browserSpaces)
             }
                         
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

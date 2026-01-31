@@ -12,7 +12,7 @@ struct SidebarTab: View {
     
     @Environment(\.colorScheme) var colorScheme
 
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
 
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab

@@ -97,8 +97,8 @@ final class BrowserTab: Identifiable, Comparable {
     }
 
     /// Activates the space that contains this tab in the given window state
-    func activateSpace(in browserWindowState: BrowserWindowState) {
-        browserWindowState.goToSpace(browserSpace)
+    func activateSpace(in browserWindow: BrowserWindow) {
+        browserWindow.goToSpace(browserSpace)
         browserSpace.currentTab = self
     }
 

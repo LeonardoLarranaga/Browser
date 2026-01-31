@@ -11,7 +11,7 @@ import SwiftUI
 struct SearchSuggestionResultsView: View {
     
     @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     var searchManager: SearchManager
     
@@ -21,10 +21,10 @@ struct SearchSuggestionResultsView: View {
                 LazyVStack(spacing: 5) {
                     // Based on index for the highlighted search suggestion
                     ForEach(Array(zip(searchManager.searchSuggestions.indices, searchManager.searchSuggestions)), id: \.0) { index, searchSuggestion in
-                        SearchSuggestionResultItem(searchManager: searchManager, index: index, searchSuggestion: searchSuggestion, searchOpenLocation: browserWindowState.searchOpenLocation)
+                        SearchSuggestionResultItem(searchManager: searchManager, index: index, searchSuggestion: searchSuggestion, searchOpenLocation: browserWindow.searchOpenLocation)
                             .id(index)
                             .onTapGesture {
-                                searchManager.searchAction(searchSuggestion, browserWindowState: browserWindowState, using: modelContext)
+                                searchManager.searchAction(searchSuggestion, browserWindow: browserWindow, using: modelContext)
                             }
                     }
                 }

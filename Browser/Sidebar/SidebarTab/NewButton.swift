@@ -12,7 +12,7 @@ struct SidebarTabNewButton: View {
     
     @Environment(\.modelContext) var modelContext
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     @Bindable var browserSpace: BrowserSpace
     @State var isHovering = false
@@ -35,6 +35,6 @@ struct SidebarTabNewButton: View {
     }
     
     func openNewTabSearch() {
-        browserWindowState.searchOpenLocation = .fromNewTab
+        browserWindow.searchOpenLocation = .fromNewTab
     }
 }

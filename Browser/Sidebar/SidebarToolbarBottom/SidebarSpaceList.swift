@@ -11,7 +11,7 @@ import SwiftData
 /// List of spaces in the sidebar
 struct SidebarSpaceList: View {
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     
@@ -25,7 +25,7 @@ struct SidebarSpaceList: View {
             .scrollTargetLayout()
         }
         .scrollPosition(id: .init(get: {
-            browserWindowState.viewScrollState
+            browserWindow.viewScrollState
         }, set: { _ in }), anchor: .center)
         .scrollIndicators(.hidden)
         .frame(height: 25)

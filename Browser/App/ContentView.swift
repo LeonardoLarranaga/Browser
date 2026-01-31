@@ -9,21 +9,21 @@ import SwiftUI
 import SwiftData
 
 struct ContentView: View {
-    @State var browserWindowState = BrowserWindowState()
+    @State var browserWindow = BrowserWindow()
     var body: some View {
         MainFrame()
             .glassEffect(in: .rect)
             .ignoresSafeArea(.container, edges: .top)
-            .focusedSceneValue(\.browserActiveWindowState, browserWindowState)
-            .environment(browserWindowState)
-            .sheet(isPresented: $browserWindowState.showURLQRCode) {
-                if let currentTab = browserWindowState.currentSpace?.currentTab {
+            .focusedSceneValue(\.browserActiveWindowState, browserWindow)
+            .environment(browserWindow)
+            .sheet(isPresented: $browserWindow.showURLQRCode) {
+                if let currentTab = browserWindow.currentSpace?.currentTab {
                     URLQRCodeView(browserTab: currentTab)
                 }
             }
-            .floatingPanel(isPresented: $browserWindowState.showAcknowledgements, size: CGSize(width: 500, height: 300)) {
+            .floatingPanel(isPresented: $browserWindow.showAcknowledgements, size: CGSize(width: 500, height: 300)) {
                 Acknowledgments()
-                    .environment(browserWindowState)
+                    .environment(browserWindow)
             }
     }
 }

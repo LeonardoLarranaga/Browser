@@ -17,12 +17,12 @@ struct SidebarToolbar: ViewModifier {
     @Environment(\.modelContext) var modelContext
 
     @Environment(SidebarModel.self) var sidebarModel
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
 
     let browserSpaces: [BrowserSpace]
 
     var currentTab: BrowserTab? {
-        browserWindowState.currentSpace?.currentTab
+        browserWindow.currentSpace?.currentTab
     }
 
     private var placement: ToolbarItemPlacement {
@@ -67,13 +67,13 @@ struct SidebarToolbar: ViewModifier {
     }
 
     func BackButton() -> some View {
-        Button("Go Back", systemImage: "chevron.left", action: browserWindowState.backButtonAction)
+        Button("Go Back", systemImage: "chevron.left", action: browserWindow.backButtonAction)
             .labelStyle(.iconOnly)
             .disabled(currentTab == nil || currentTab?.canGoBack == false)
     }
 
     func ForwardButton() -> some View {
-        Button("Go Forward", systemImage: "chevron.right", action: browserWindowState.forwardButtonAction)
+        Button("Go Forward", systemImage: "chevron.right", action: browserWindow.forwardButtonAction)
             .labelStyle(.iconOnly)
             .disabled(currentTab == nil || currentTab?.canGoForward == false)
     }

@@ -12,7 +12,7 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     
     @Environment(\.modelContext) var modelContext
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     @Environment(SidebarModel.self) var sidebarModel
         
     @Bindable var browserSpace: BrowserSpace

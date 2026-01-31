@@ -13,13 +13,13 @@ struct SidebarBottomToolbar: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme
     @Environment(SidebarModel.self) var sidebarModel
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     
     let browserSpaces: [BrowserSpace]
     let createSpace: () -> Void
     
     var foregroundColor: Color {
-        browserWindowState.currentSpace?.textColor(in: colorScheme) ?? .primary
+        browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary
     }
         
     var body: some View {
@@ -69,7 +69,7 @@ struct SidebarBottomToolbar: View {
             
             Spacer()
             
-            if browserWindowState.isMainBrowserWindow {
+            if browserWindow.isMainBrowserWindow {
                 SidebarSpaceList(browserSpaces: browserSpaces)
                 
                 Button("New Space", systemImage: "plus.circle.dashed", action: createSpace)

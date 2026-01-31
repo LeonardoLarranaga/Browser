@@ -9,26 +9,26 @@ import SwiftUI
 
 struct SidebarURLToolbar: View {
     
-    @Environment(BrowserWindowState.self) var browserWindowState
+    @Environment(BrowserWindow.self) var browserWindow
     @Environment(\.colorScheme) var colorScheme
     
     var currentTab: BrowserTab? {
-        browserWindowState.currentSpace?.currentTab
+        browserWindow.currentSpace?.currentTab
     }
     
     var foregroundColor: Color {
-        browserWindowState.currentSpace?.textColor(in: colorScheme) ?? .primary
+        browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary
     }
     
     @State var hoveringURL = false
     
     var body: some View {
         HStack {
-            SidebarToolbarButton("arrow.left", disabled: currentTab == nil || currentTab?.canGoBack == false, action: browserWindowState.backButtonAction)
+            SidebarToolbarButton("arrow.left", disabled: currentTab == nil || currentTab?.canGoBack == false, action: browserWindow.backButtonAction)
             
-            SidebarToolbarButton("arrow.right", disabled: currentTab == nil || currentTab?.canGoForward == false, action: browserWindowState.forwardButtonAction)
+            SidebarToolbarButton("arrow.right", disabled: currentTab == nil || currentTab?.canGoForward == false, action: browserWindow.forwardButtonAction)
             
-            SidebarToolbarButton("arrow.trianglehead.clockwise", disabled: currentTab == nil, action: browserWindowState.refreshButtonAction)
+            SidebarToolbarButton("arrow.trianglehead.clockwise", disabled: currentTab == nil, action: browserWindow.refreshButtonAction)
             
             Spacer()
             
@@ -41,13 +41,13 @@ struct SidebarURLToolbar: View {
                     .clipShape(.rect(cornerRadius: 6))
                     .onHover { hoveringURL = $0 }
                     .onTapGesture {
-                        browserWindowState.searchOpenLocation = .fromURLBar
+                        browserWindow.searchOpenLocation = .fromURLBar
                     }
             }
 
             Spacer()
             
-            SidebarToolbarButton("link", disabled: currentTab == nil, action: browserWindowState.copyURLToClipboard)
+            SidebarToolbarButton("link", disabled: currentTab == nil, action: browserWindow.copyURLToClipboard)
                 .padding(.trailing)
         }
         .background(.ultraThinMaterial)
