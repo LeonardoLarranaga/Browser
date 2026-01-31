@@ -11,9 +11,8 @@ import SwiftUI
 struct WebView: View {
     
     @Environment(BrowserWindow.self) var browserWindow
-    
-    @Bindable var tab: BrowserTab
-    @Bindable var browserSpace: BrowserSpace
+    @Environment(BrowserTab.self) var tab
+    @Environment(BrowserSpace.self) var browserSpace
     
     @State var hoverURL = ""
     @State var showHoverURL = false
@@ -23,7 +22,7 @@ struct WebView: View {
         Group {
             switch tab.contentType {
             case .web:
-                WKWebViewControllerRepresentable(tab: tab, browserSpace: browserSpace, noTrace: browserWindow.isNoTraceWindow, hoverURL: $hoverURL)
+                WKWebViewControllerRepresentable(hoverURL: $hoverURL)
                     .opacity(tab.webviewErrorCode != nil ? 0 : 1)
                     .overlay {
                         if tab.webviewErrorDescription != nil, let errorCode = tab.webviewErrorCode, errorCode != -999 {
@@ -61,7 +60,7 @@ struct WebView: View {
                         }
                     }
             case .history:
-                HistoryView(browserTab: tab)
+                HistoryView()
                     .opacity(browserWindow.currentSpace?.currentTab == tab ? 1 : 0)
             }
         }

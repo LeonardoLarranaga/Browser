@@ -13,22 +13,20 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     @Environment(\.modelContext) var modelContext
     
     @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserSpace.self) var browserSpace
+    @Environment(BrowserTab.self) var tab
     @Environment(SidebarModel.self) var sidebarModel
-        
-    @Bindable var browserSpace: BrowserSpace
-    @Bindable var tab: BrowserTab
-    let noTrace: Bool
+
+    var noTrace: Bool { browserWindow.isNoTraceWindow }
     var hoverURL: Binding<String>
-    
-    init(tab: BrowserTab, browserSpace: BrowserSpace, noTrace: Bool = false, hoverURL: Binding<String>) {
-        self.tab = tab
-        self.browserSpace = browserSpace
-        self.noTrace = noTrace
-        self.hoverURL = hoverURL
-    }
-    
+
     func makeNSViewController(context: Context) -> WKWebViewController {
-        let wkWebViewController = WKWebViewController(tab: tab, browserSpace: browserSpace, noTrace: noTrace, using: modelContext)
+        let wkWebViewController = WKWebViewController(
+            tab: tab,
+            browserSpace: browserSpace,
+            noTrace: noTrace,
+            using: modelContext
+        )
         wkWebViewController.coordinator = context.coordinator
         return wkWebViewController
     }

@@ -28,7 +28,8 @@ struct PageWebView: View {
             ScrollView(.horizontal) {
                 LazyHStack(spacing: .zero) {
                     ForEach(browserSpaces) { browserSpace in
-                        WebViewStack(browserSpace: browserSpace)
+                        WebViewStack()
+                            .environment(browserSpace)
                             .containerRelativeFrame(.horizontal, count: 1, spacing: 0)
                     }
                 }

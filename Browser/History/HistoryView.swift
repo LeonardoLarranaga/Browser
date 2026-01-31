@@ -9,7 +9,9 @@ import SwiftUI
 import SwiftData
 
 struct HistoryView: View {
-    @Bindable var browserTab: BrowserTab
+
+    @Environment(BrowserTab.self) var browserTab
+
     var body: some View {
         TabView {
             Tab("Closed Tabs", systemImage: "xmark.app.fill") {
@@ -18,7 +20,7 @@ struct HistoryView: View {
             }
             
             Tab("All History", systemImage: "clock.fill") {
-                HistoryEntryList(browserTab: browserTab)
+                HistoryEntryList()
             }
         }
     }
