@@ -76,7 +76,17 @@ extension WKWebViewController: WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping @MainActor (WKNavigationActionPolicy) -> Void) {
         resetSuspendTimer()
-        decisionHandler(.allow)
+        
+        // Check if Command key is pressed and this is a link click
+        if navigationAction.modifierFlags.contains(.command),
+           navigationAction.navigationType == .linkActivated,
+           let url = navigationAction.request.url {
+            // Open in new tab
+            coordinator.openLinkInNewTabAction(url)
+            decisionHandler(.cancel)
+        } else {
+            decisionHandler(.allow)
+        }
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
