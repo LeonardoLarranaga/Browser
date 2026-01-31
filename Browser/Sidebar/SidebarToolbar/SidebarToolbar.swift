@@ -45,37 +45,56 @@ struct SidebarToolbar: ViewModifier {
             .toolbar {
                 if sidebarPosition == .leading {
                     ToolbarItemGroup(placement: .navigation) {
-                        SidebarButton()
-                        BackButton()
-                        ForwardButton()
+                        Toolbar()
                     }
                 }
             }
             .toolbar {
                 if sidebarPosition == .trailing {
-                    Spacer()
-                    SidebarButton()
-                    BackButton()
-                    ForwardButton()
+                    Toolbar(addSpacer: true)
                 }
             }
     }
 
     func SidebarButton() -> some View {
         Button("Toggle Sidebar", systemImage: sidebarIcon, action: sidebarModel.toggleSidebar)
-            .labelStyle(.iconOnly)
     }
 
     func BackButton() -> some View {
         Button("Go Back", systemImage: "chevron.left", action: browserWindow.backButtonAction)
-            .labelStyle(.iconOnly)
             .disabled(currentTab == nil || currentTab?.canGoBack == false)
     }
 
     func ForwardButton() -> some View {
         Button("Go Forward", systemImage: "chevron.right", action: browserWindow.forwardButtonAction)
-            .labelStyle(.iconOnly)
             .disabled(currentTab == nil || currentTab?.canGoForward == false)
+    }
+
+    func SmallToolbar() -> some View {
+        Menu("Sidebar Options", systemImage: "ellipsis") {
+            SidebarButton()
+                .labelStyle(.titleAndIcon)
+            BackButton()
+                .labelStyle(.titleAndIcon)
+            ForwardButton()
+                .labelStyle(.titleAndIcon)
+        }
+        .labelStyle(.iconOnly)
+    }
+
+    func Toolbar(addSpacer: Bool = false) -> some View {
+        Group {
+            if sidebarModel.currentSidebarWidth < 205 {
+                SmallToolbar()
+            } else {
+                if addSpacer { Spacer() }
+                SidebarButton()
+                BackButton()
+                ForwardButton()
+            }
+        }
+        .labelStyle(.iconOnly)
+        .menuIndicator(.hidden)
     }
 }
 
