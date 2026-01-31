@@ -17,8 +17,9 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     @Environment(BrowserTab.self) var tab
     @Environment(SidebarModel.self) var sidebarModel
 
+    @Bindable var hover: HoverState
+
     var noTrace: Bool { browserWindow.isNoTraceWindow }
-    var hoverURL: Binding<String>
 
     func makeNSViewController(context: Context) -> WKWebViewController {
         let wkWebViewController = WKWebViewController(
@@ -35,7 +36,6 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
         nsViewController.webView.isHidden = tab != browserSpace.currentTab
                                             || tab.webviewErrorDescription != nil
                                             || tab.webviewErrorCode != nil
-        nsViewController.webView.findBarView?.isHidden = nsViewController.webView.isHidden
     }
 
     static func dismantleNSViewController(_ nsViewController: WKWebViewController, coordinator: Coordinator) {

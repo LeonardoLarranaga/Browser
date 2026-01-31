@@ -9,54 +9,23 @@ import SwiftUI
 
 /// View that represents the webview of a tab, it can be a webview or a history view
 struct WebView: View {
-    
+
     @Environment(BrowserWindow.self) var browserWindow
     @Environment(BrowserTab.self) var tab
     @Environment(BrowserSpace.self) var browserSpace
-    
-    @State var hoverURL = ""
-    @State var showHoverURL = false
-    @State var hoverURLTimer: Timer?
-    
+
+    @State var hover = HoverState()
+
     var body: some View {
         Group {
             switch tab.contentType {
             case .web:
-                WKWebViewControllerRepresentable(hoverURL: $hoverURL)
+                WKWebViewControllerRepresentable(hover: hover)
                     .opacity(tab.webviewErrorCode != nil ? 0 : 1)
-                    .overlay {
-                        if tab.webviewErrorDescription != nil, let errorCode = tab.webviewErrorCode, errorCode != -999 {
-                            MyWKWebViewErrorView(tab: tab)
-                        }
-                    }
-                    .overlay(alignment: .bottomLeading) {
-                        if showHoverURL {
-                            Text(hoverURL)
-                                .lineLimit(1)
-                                .font(.caption)
-                                .padding(5)
-                                .glassEffect()
-                                .padding(5)
-                        }
-                    }
+                    .webViewOverlays(hover: hover)
                     .onAppear {
                         if tab.favicon == nil {
                             tab.updateFavicon(with: tab.url)
-                        }
-                    }
-                    .onChange(of: hoverURL) {
-                        guard !hoverURL.isEmpty else { return }
-                        hoverURLTimer?.invalidate()
-                        
-                        withAnimation(.browserDefault) {
-                            showHoverURL = true
-                        }
-                        
-                        hoverURLTimer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { _ in
-                            withAnimation(.browserDefault) {
-                                showHoverURL = false
-                                hoverURL = ""
-                            }
                         }
                     }
             case .history:

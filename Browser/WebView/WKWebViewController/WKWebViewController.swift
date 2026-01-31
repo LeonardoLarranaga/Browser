@@ -55,6 +55,7 @@ class WKWebViewController: NSViewController {
         webView.searchWebAction = coordinator.searchWebAction(_:)
         webView.openLinkInNewTabAction = coordinator.openLinkInNewTabAction(_:)
         webView.presentActionAlert = coordinator.presentActionAlert(message:systemImage:)
+        webView.toggleFindUI = coordinator.toggleFindUI
 
         webView._usePlatformFindUI = false
 

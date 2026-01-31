@@ -49,10 +49,14 @@ final class BrowserTab: Identifiable, Comparable {
     @Attribute(.ephemeral) var webviewErrorDescription: String? = nil
     @Attribute(.ephemeral) var webviewErrorCode: Int? = nil
 
+    @Transient var findInPageManager: FindInPageManager? = nil
+
     @Attribute(.ephemeral) var canGoBack: Bool = false
     @Attribute(.ephemeral) var canGoForward: Bool = false
     @Attribute(.ephemeral) var estimatedProgress: Double = 0.0
     @Attribute(.ephemeral) var isLoading: Bool = false
+
+    @Attribute(.ephemeral) var showFindUI = false
 
     var displayTitle: String {
         customTitle ?? title

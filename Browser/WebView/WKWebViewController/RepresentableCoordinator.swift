@@ -31,7 +31,13 @@ extension WKWebViewControllerRepresentable {
             let newTab = BrowserTab(title: query, url: URL(string: "https://www.google.com/search?q=\(query)")!, order: self.parent.tab.order + 1, browserSpace: self.parent.browserSpace)
             self.parent.browserSpace.openNewTab(newTab, using: self.parent.modelContext)
         }
-        
+
+        func toggleFindUI() {
+            withAnimation(.browserDefault) {
+                self.parent.browserSpace.currentTab?.showFindUI.toggle()
+            }
+        }
+
         /// Opens a link in a new tab
         func openLinkInNewTabAction(_ url: URL) {
             let newTab = BrowserTab(title: url.cleanHost, url: url, order: self.parent.tab.order + 1, browserSpace: self.parent.browserSpace)
@@ -132,7 +138,7 @@ extension WKWebViewControllerRepresentable {
         }
         
         func setHoverURL(to url: String) {
-            self.parent.hoverURL.wrappedValue = url
+            self.parent.hover.url = url
         }
     }
 }

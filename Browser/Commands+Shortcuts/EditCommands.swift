@@ -40,16 +40,54 @@ struct EditCommands: Commands {
         
         CommandGroup(before: .textEditing) {
             Menu("Find") {
-                Button("Find...", action: webView?.toggleTextFinder)
+                Button("Find...", action: webView?.toggleFindUI)
                     .globalKeyboardShortcut(.find)
-                Button("Find Next") { webView?.triggerTextFinderAction(.nextMatch) }
+                Button("Find Next", action: findNext)
                     .globalKeyboardShortcut(.findNext)
-                Button("Find Previous") { webView?.triggerTextFinderAction(.previousMatch) }
+                    .disabled(currentTab?.findInPageManager?.totalMatches == 0)
+                Button("Find Previous", action: findPrevious)
                     .globalKeyboardShortcut(.findPrevious)
-                Button("Use Selection For Find") { webView?.triggerTextFinderAction(.setSearchString) }
+                    .disabled(currentTab?.findInPageManager?.totalMatches == 0)
+                Button("Use Selection For Find", action: useSelectionForFind)
                     .globalKeyboardShortcut(.useSelectionForFind)
             }
             .id("BrowserFindMenu")
+        }
+    }
+
+    var currentTab: BrowserTab? {
+        browserWindow?.currentSpace?.currentTab
+    }
+
+    func findNext() {
+        Task {
+            await currentTab?.findInPageManager?.goToNextMatch()
+        }
+    }
+
+    func findPrevious() {
+        Task {
+            await currentTab?.findInPageManager?.goToPreviousMatch()
+        }
+    }
+
+    func useSelectionForFind() {
+        guard let tab = currentTab, let webView = tab.webview else { return }
+
+        Task {
+            // Get selected text from the page
+            guard let selectedText = await webView.getSelectedText(), !selectedText.isEmpty else { return }
+
+            // Ensure find manager exists
+            if tab.findInPageManager == nil {
+                tab.findInPageManager = FindInPageManager(webView: webView)
+            }
+
+            // Show the find UI
+            tab.showFindUI = true
+
+            // Search for the selected text
+            await tab.findInPageManager?.search(selectedText)
         }
     }
 }

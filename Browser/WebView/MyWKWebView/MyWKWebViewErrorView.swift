@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct MyWKWebViewErrorView: View {
-    
+
+    @Environment(BrowserTab.self) var tab
+
     private struct DisplayedError {
         let title: String
         let systemImage: String
     }
-    
-    let tab: BrowserTab
     
     private var displayedError: DisplayedError {
         switch tab.webviewErrorCode ?? 0 {

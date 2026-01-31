@@ -23,6 +23,13 @@ extension WKWebViewController: WKNavigationDelegate {
         if Preferences.shared.showHoverURL {
             addHoverURLListener()
         }
+
+        // Clear find in page state when navigating to a new page
+        if let findManager = self.tab.findInPageManager {
+            Task {
+                await findManager.clear()
+            }
+        }
     }
     
     /// Called when the web view finishes loading a page

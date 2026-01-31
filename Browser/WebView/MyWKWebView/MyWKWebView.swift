@@ -19,10 +19,8 @@ class MyWKWebView: WKWebView {
     var openLinkInNewTabAction: ((URL) -> Void)? = nil
     /// Present an action alert from the WKWebView (passed from the WKWebViewController)
     var presentActionAlert: ((String, String) -> Void)? = nil
-
-    var textFinder: WKWebViewTextFinder!
-    var textFindBarView: NSView?
-    var textFindBarVisible: Bool = false
+    /// Toggle the Find UI action (passed from the WKWebViewController)
+    var toggleFindUI: (() -> Void)? = nil
 
     override var isEditable: Bool {
         get {
@@ -35,18 +33,6 @@ class MyWKWebView: WKWebView {
 
     override init(frame: CGRect, configuration: WKWebViewConfiguration) {
         super.init(frame: frame, configuration: configuration)
-
-        textFinder = WKWebViewTextFinder()
-        textFinder.isIncrementalSearchingEnabled = true
-        textFinder.incrementalSearchingShouldDimContentView = true
-        textFinder.client = self
-        textFinder.findBarContainer = self
-
-        weak var wkwebview = self
-        textFinder.hideInterfaceCallback = {
-            let webView = wkwebview
-            webView?._hideFindUI()
-        }
     }
 
     required init?(coder: NSCoder) {
@@ -144,6 +130,16 @@ class MyWKWebView: WKWebView {
     func togglePictureInPicture() {
         guard let pipScript = String.javascriptScript("TogglePictureInPicture") else { return }
         evaluateJavaScript(pipScript)
+    }
+
+    /// Gets the currently selected text on the page
+    func getSelectedText() async -> String? {
+        do {
+            let result = try await evaluateJavaScript("window.getSelection().toString()")
+            return result as? String
+        } catch {
+            return nil
+        }
     }
 
     //MARK: - Variables for Context Menus
