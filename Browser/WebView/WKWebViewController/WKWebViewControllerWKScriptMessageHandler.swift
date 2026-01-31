@@ -32,9 +32,8 @@ extension WKWebViewController: WKScriptMessageHandler {
     }
     
     func addHoverURLListener() {
-        guard let hoverURLListenerScriptURL = Bundle.main.url(forResource: "HoverURLListener", withExtension: "js"),
-              let script = try? String(contentsOf: hoverURLListenerScriptURL, encoding: .utf8) else { return }
-        
+        guard let hoverScript = String.javascriptScript("HoverURLListener") else { return }
+
         let controller = configuration.userContentController
 
         if weakScriptMessageHandler == nil {
@@ -44,7 +43,7 @@ extension WKWebViewController: WKScriptMessageHandler {
         controller.removeScriptMessageHandler(forName: "hoverURL")
         controller.add(weakScriptMessageHandler!, name: "hoverURL")
 
-        let scriptMessage = WKUserScript(source: script, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
+        let scriptMessage = WKUserScript(source: hoverScript, injectionTime: .atDocumentEnd, forMainFrameOnly: true)
         controller.addUserScript(scriptMessage)
     }
     

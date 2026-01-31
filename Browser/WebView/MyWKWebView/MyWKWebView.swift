@@ -142,9 +142,8 @@ class MyWKWebView: WKWebView {
     }
 
     func togglePictureInPicture() {
-        guard let pictureInPictureScriptURL = Bundle.main.url(forResource: "TogglePictureInPicture", withExtension: "js"),
-              let pictureInPictureScript = try? String(contentsOf: pictureInPictureScriptURL, encoding: .utf8) else { return }
-        evaluateJavaScript(pictureInPictureScript)
+        guard let pipScript = String.javascriptScript("TogglePictureInPicture") else { return }
+        evaluateJavaScript(pipScript)
     }
 
     //MARK: - Variables for Context Menus

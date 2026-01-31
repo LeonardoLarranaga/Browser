@@ -236,10 +236,8 @@ extension MyWKWebView {
         recentTranslatedLanguages.removeAll { $0["code"] == languageCode }
         recentTranslatedLanguages.insert(["name": language.0, "code": languageCode], at: 0)
         UserDefaults.standard.set(recentTranslatedLanguages, forKey: "RecentTranslatedLanguages")
-        
-        guard let getPageTextScriptURL = Bundle.main.url(forResource: "GetPageText", withExtension: "js"),
-              let getTextScript = try? String(contentsOf: getPageTextScriptURL, encoding: .utf8)
-        else { return }
+
+        guard let getTextScript = String.javascriptScript("GetPageText") else { return }
         
         evaluateJavaScript(getTextScript) { result, error in
             guard let texts = result as? [String] else { return }
