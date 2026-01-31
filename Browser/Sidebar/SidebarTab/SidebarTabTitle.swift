@@ -9,7 +9,9 @@ import SwiftUI
 
 struct SidebarTabTitle: View {
 
+    @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserTab.self) var browserTab
+    @Environment(BrowserSpace.self) var browserSpace
 
     @Binding var isEditingTitle: Bool
     @FocusState var isTextFieldFocused: Bool
@@ -36,6 +38,7 @@ struct SidebarTabTitle: View {
             Text(browserTab.displayTitle)
                 .lineLimit(1)
                 .truncationMode(.tail)
+                .foregroundStyle(colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary)
         }
     }
 }

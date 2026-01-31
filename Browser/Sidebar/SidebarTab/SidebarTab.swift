@@ -46,6 +46,7 @@ struct SidebarTab: View {
         .padding(3)
         .background(browserSpace.currentTab == browserTab ? .white : isHovering ? .white.opacity(0.5) : .clear)
         .clipShape(.rect(cornerRadius: 10))
+        .contentShape(.rect)
         .onTapGesture(perform: selectTab)
         .onHover { isHovering = $0 }
         .contextMenu { SidebarTabContextMenu(isEditingTitle: $isEditingTitle) }
