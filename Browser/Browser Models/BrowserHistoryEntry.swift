@@ -45,4 +45,10 @@ final class BrowserHistoryEntry: Identifiable {
             }
         }
     }
+
+    static var searchDescriptor: FetchDescriptor<BrowserHistoryEntry> {
+        var descriptor = FetchDescriptor(sortBy: [SortDescriptor(\BrowserHistoryEntry.date, order: .reverse)])
+        descriptor.fetchLimit = 100
+        return descriptor
+    }
 }

@@ -5,6 +5,7 @@
 //  Created by Leonardo Larrañaga on 2/3/25.
 //
 
+import SwiftData
 import SwiftUI
 
 /// View that displays the search view with a text field and search suggestion results
@@ -15,7 +16,8 @@ struct SearchView: View {
     @Environment(BrowserWindow.self) var browserWindow
     
     @State var searchManager = SearchManager()
-    
+    @Query(BrowserHistoryEntry.searchDescriptor) var historyEntries: [BrowserHistoryEntry]
+
     var body: some View {
         VStack(spacing: 0) {
             SearchTextField(searchManager: searchManager)
@@ -33,7 +35,18 @@ struct SearchView: View {
             return .handled
         }
         .onKeyPress(.return) {
-            searchManager.searchAction(searchManager.searchSuggestions[searchManager.highlightedSearchSuggestionIndex], browserWindow: browserWindow, using: modelContext)
+            // Use autocomplete suggestion if available and user is at the default (first) selection
+            let suggestionToUse: SearchSuggestion
+            if searchManager.highlightedSearchSuggestionIndex == 0,
+               let autocompleteSuggestion = searchManager.autocompleteSuggestion {
+                suggestionToUse = autocompleteSuggestion
+            } else if !searchManager.searchSuggestions.isEmpty {
+                suggestionToUse = searchManager.searchSuggestions[searchManager.highlightedSearchSuggestionIndex]
+            } else {
+                return .ignored
+            }
+            
+            searchManager.searchAction(suggestionToUse, browserWindow: browserWindow, using: modelContext)
             return .handled
         }
         .onKeyPress(.upArrow, action: searchManager.handleUpArrow)
@@ -41,7 +54,7 @@ struct SearchView: View {
         .onKeyPress(.tab, action: searchManager.handleTab)
         .onChange(of: searchManager.searchText) { _, newValue in
             if newValue.last != " " {
-                searchManager.fetchSearchSuggestions(newValue)
+                searchManager.fetchSearchSuggestions(newValue, historyEntries: historyEntries)
             }
         }
         .onChange(of: browserWindow.searchOpenLocation) {

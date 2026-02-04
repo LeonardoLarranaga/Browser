@@ -16,6 +16,23 @@ class SearchManager {
     var searchSuggestions: [SearchSuggestion] = []
     var highlightedSearchSuggestionIndex: Int = 0
     var favicon: Data?
+    
+    /// The autocomplete text from the first history suggestion
+    var autocompleteText: String {
+        guard !searchText.isEmpty,
+              let firstHistoryItem = searchSuggestions.first(where: { $0.isHistoryItem }),
+              firstHistoryItem.title.lowercased().hasPrefix(searchText.lowercased()) else {
+            return ""
+        }
+        let remainingText = String(firstHistoryItem.title.dropFirst(searchText.count))
+        return searchText + remainingText
+    }
+    
+    /// The autocomplete suggestion to use when Enter is pressed
+    var autocompleteSuggestion: SearchSuggestion? {
+        guard !autocompleteText.isEmpty else { return nil }
+        return searchSuggestions.first(where: { $0.isHistoryItem && $0.title.lowercased().hasPrefix(searchText.lowercased()) })
+    }
 
     private var _accentColor: Color?
     var accentColor: Color {
@@ -54,7 +71,8 @@ class SearchManager {
 
     /// Handles the search action
     /// - Parameters: searchText: The autocomplete text to search
-    func fetchSearchSuggestions(_ searchText: String) {
+    func fetchSearchSuggestions(_ searchText: String, historyEntries: [BrowserHistoryEntry]) {
+        searchInHistory(in: historyEntries, for: searchText)
         activeWebsiteSearcher.fetchSearchSuggestions(for: searchText, in: self)
     }
 
@@ -145,5 +163,21 @@ class SearchManager {
     func resetWebsiteSearcher() {
         isUsingWebsiteSearcher = false
         _activeWebsiteSearcher = nil
+    }
+
+    /// Adds history entries that match the search query to the search suggestions
+    private func searchInHistory(in historyEntries: [BrowserHistoryEntry], for query: String) {
+        guard !query.isReallyEmpty else {
+            searchSuggestions = []
+            return
+        }
+
+        let matchedEntries = historyEntries
+            .filter { "\($0.title)\($0.url)".localizedCaseInsensitiveContains(query) }
+
+        let suggestions = matchedEntries.map {
+            SearchSuggestion($0.title, itemURL: $0.url, favicon: $0.favicon)
+        }
+        searchSuggestions = suggestions
     }
 }

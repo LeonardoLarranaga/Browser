@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 private struct FloatingPanelKey: EnvironmentKey {
     static let defaultValue: NSPanel? = nil
@@ -30,6 +31,7 @@ class FloatingPanel<Content: View>: NSPanel {
         defer flag: Bool = false,
         glassStyle: NSGlassEffectView.Style,
         glassTintColor: Color? = nil,
+        modelContainer: ModelContainer? = nil,
         view: () -> Content
     ) {
         self._isPresented = isPresented
@@ -66,11 +68,16 @@ class FloatingPanel<Content: View>: NSPanel {
         
         // Set the content view
         // The safe area is ignored because the title bar still interferes with the geometry
-        contentView = NSHostingView(rootView: view()
+        let rootView = view()
             .background(GlassEffectView(style: glassStyle, tintColor: glassTintColor))
             .ignoresSafeArea()
             .environment(\.floatingPanel, self)
-        )
+        
+        if let modelContainer = modelContainer {
+            contentView = NSHostingView(rootView: rootView.modelContainer(modelContainer))
+        } else {
+            contentView = NSHostingView(rootView: rootView)
+        }
     }
     
     // Close automatically when out of focus, e.g. outside click
@@ -117,6 +124,10 @@ class FloatingPanel<Content: View>: NSPanel {
 
 /// Add a  ``FloatingPanel`` to a view hierarchy
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
+
+    /// The app model context for SwiftData support
+    @Environment(\.modelContext) var modelContext
+
     /// Determines wheter the panel should be presented or not
     @Binding var isPresented: Bool
     
@@ -145,6 +156,7 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
                     contentRect: CGRect(origin: origin, size: size),
                     glassStyle: glassStyle,
                     glassTintColor: glassTintColor,
+                    modelContainer: modelContext.container,
                     view: view
                 )
                 if isPresented {

@@ -10,21 +10,21 @@ import SwiftData
 
 /// Main frame of the browser.
 struct MainFrame: View {
-    
+
     @Environment(BrowserWindow.self) var browserWindow
     @Environment(\.colorScheme) var colorScheme
-    
+
     @State var sidebarModel = SidebarModel()
-    
+
     @Query(sort: \BrowserSpace.order) var browserSpaces: [BrowserSpace]
-    
+
     var isImmersive: Bool {
         browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.shared.immersiveViewOnFullscreen
     }
 
     var body: some View {
         @Bindable var browserWindow = browserWindow
-        
+
         HStack(spacing: 0) {
             if Preferences.shared.sidebarPosition == .leading {
                 if !sidebarModel.sidebarCollapsed {
@@ -32,7 +32,7 @@ struct MainFrame: View {
                     SidebarResizer()
                 }
             }
-            
+
             PageWebView(browserSpaces: browserSpaces)
                 .clipShape(.rect(corners: isImmersive ? .fixed(0) : Preferences.shared.roundedCorners ? .concentric(minimum: 8) : .fixed(0)))
                 .shadow(radius: isImmersive ? 0 : Preferences.shared.enableShadow ? 3 : 0)
@@ -56,7 +56,7 @@ struct MainFrame: View {
                     }
                 }
                 .actionAlert()
-            
+
             if Preferences.shared.sidebarPosition == .trailing {
                 if !sidebarModel.sidebarCollapsed {
                     SidebarResizer()
@@ -111,7 +111,7 @@ struct MainFrame: View {
         .focusedSceneValue(\.sidebarModel, sidebarModel)
         .foregroundStyle(browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary)
     }
-    
+
     var sidebar: some View {
         Sidebar(browserSpaces: browserSpaces)
             .frame(width: sidebarModel.currentSidebarWidth)

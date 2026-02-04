@@ -34,11 +34,21 @@ struct SearchTextField: View {
                     .clipShape(.rect(cornerRadius: 8))
             }
             
-            TextField("Where to?", text: $searchManager.searchText)
-                .focused($focusedField, equals: .search)
-                .textFieldStyle(.plain)
-                .font(browserWindow.searchOpenLocation == .fromNewTab ? .title2.weight(.semibold) : .body)
-            
+            ZStack(alignment: .leading) {
+                // Autocomplete overlay text
+                if !searchManager.autocompleteText.isEmpty {
+                    TextField("", text: .constant(searchManager.autocompleteText))
+                        .foregroundStyle(.secondary.opacity(0.5))
+                        .disabled(true)
+                }
+                
+                TextField("Where to?", text: $searchManager.searchText)
+                    .focused($focusedField, equals: .search)
+
+            }
+            .textFieldStyle(.plain)
+            .font(browserWindow.searchOpenLocation == .fromNewTab ? .title2.weight(.semibold) : .body)
+
             Spacer()
             
             Group {

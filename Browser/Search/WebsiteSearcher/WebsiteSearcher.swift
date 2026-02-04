@@ -75,11 +75,11 @@ extension WebsiteSearcher {
             return
         }
 
-        if !searchManager.searchSuggestions.isEmpty {
-            searchManager.searchSuggestions.removeFirst()
-        }
-
-        searchManager.searchSuggestions.insert(SearchSuggestion(query, itemURL: itemURL(for: query)), at: 0)
+        // Store history suggestions to preserve them
+        let historySuggestions = searchManager.searchSuggestions
+        
+        // Insert the query suggestion at the beginning
+        searchManager.searchSuggestions = [SearchSuggestion(query, itemURL: itemURL(for: query))] + historySuggestions
 
         guard let queryURL = queryURL(for: query) else { return }
         searchManager.searchTask = URLSession.shared.dataTask(with: queryURL) { data, response, error in
@@ -97,13 +97,10 @@ extension WebsiteSearcher {
 
             do {
                 let suggestions = try parseSearchSuggestions(from: resultString)
-                if !suggestions.isEmpty && !searchManager.searchSuggestions.isEmpty {
-                    if let first = searchManager.searchSuggestions.first {
-                        searchManager.searchSuggestions = [first]
-                    }
+                // Preserve the query suggestion (first item) and history suggestions, then append search results
+                if let first = searchManager.searchSuggestions.first {
+                    searchManager.searchSuggestions = [first] + historySuggestions + suggestions
                 }
-
-                searchManager.searchSuggestions.append(contentsOf: suggestions)
             } catch {
                 print("🔍📡 Error parsing search suggestions: \(error.localizedDescription)")
             }
