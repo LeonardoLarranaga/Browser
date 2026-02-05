@@ -38,7 +38,7 @@ enum FeatureFlags {
             return userConfigured
         }
         // Fall back to the actual WKPreferences state
-        return SharedWebViewConfiguration.shared.configuration.preferences._isEnabled(for: feature)
+        return SharedWebViewConfiguration.shared().configuration.preferences._isEnabled(for: feature)
     }
 
     static func getFeature(key: String) -> WKFeature? {

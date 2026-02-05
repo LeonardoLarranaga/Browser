@@ -30,7 +30,7 @@ class WKWebViewController: NSViewController {
         self.tab = tab
         self.browserSpace = browserSpace
 
-        self.configuration = SharedWebViewConfiguration.shared.configuration
+        self.configuration = SharedWebViewConfiguration.shared().configuration
         if noTrace {
             self.configuration.websiteDataStore = .nonPersistent()
         }
