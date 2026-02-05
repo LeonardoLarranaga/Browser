@@ -20,7 +20,6 @@ struct WebViewOverlays: ViewModifier {
                     MyWKWebViewErrorView()
                 }
             }
-        
             .overlay(alignment: .bottomLeading) {
                 if hover.show {
                     Text(hover.url)

@@ -10,7 +10,9 @@ import SwiftUI
 @Observable
 final class HoverState {
     var show = false
-    var url = ""
+    var url = "" {
+        didSet { handleChange() }
+    }
     var timer: Timer?
 
     func handleChange() {
