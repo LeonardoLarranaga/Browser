@@ -70,7 +70,7 @@ struct ViewCommands: Commands {
                     Button("Show JavaScript Console", action: webView.showJavaScriptConsole)
                         .globalKeyboardShortcut(.showJavaScriptConsole)
 
-                    Button("Show Page Reources", action: webView.showPageResources)
+                    Button("Show Page Resources", action: webView.showPageResources)
                         .globalKeyboardShortcut(.showPageResources)
                 }
 
