@@ -18,9 +18,6 @@ typedef NS_OPTIONS(NSInteger, WKMediaMutedState) {
 
 @interface WKWebView (Private)
 
-@property (nonatomic, setter=_setUsePlatformFindUI:) BOOL _usePlatformFindUI;
-- (void)_hideFindUI;
-
 - (void)_setPageMuted:(WKMediaMutedState)mutedState;
 - (WKMediaMutedState)_mediaMutedState;
 - (BOOL)_hasActiveNowPlayingSession;

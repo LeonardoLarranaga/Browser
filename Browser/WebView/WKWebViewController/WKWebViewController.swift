@@ -57,8 +57,6 @@ class WKWebViewController: NSViewController {
         webView.presentActionAlert = coordinator.presentActionAlert(message:systemImage:)
         webView.toggleFindUI = coordinator.toggleFindUI
 
-        webView._usePlatformFindUI = false
-
         coordinator.observeWebView(webView)
 
         webView.load(URLRequest(url: tab.url))

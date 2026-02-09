@@ -62,10 +62,18 @@ struct ViewCommands: Commands {
                     .globalKeyboardShortcut(.zoomOut)
                 
                 Divider()
-                
-                Button("Toggle Web Inspector", action: webView.toggleDeveloperTools)
-                    .globalKeyboardShortcut(.openDeveloperTools)
-                
+
+                Menu("Developer") {
+                    Button("Toggle Web Inspector", action: webView.toggleDeveloperTools)
+                        .globalKeyboardShortcut(.openDeveloperTools)
+
+                    Button("Show JavaScript Console", action: webView.showJavaScriptConsole)
+                        .globalKeyboardShortcut(.showJavaScriptConsole)
+
+                    Button("Show Page Reources", action: webView.showPageResources)
+                        .globalKeyboardShortcut(.showPageResources)
+                }
+
                 Divider()
             }
         }
@@ -89,8 +97,10 @@ extension KeyboardShortcuts.Name {
     static let zoomOut = Self("zoom_out", default: .init(.minus, modifiers: .command))
     
     static let openDeveloperTools = Self("open_developer_tools", default: .init(.i, modifiers: [.option, .command]))
+    static let showJavaScriptConsole = Self("show_javascript_console", default: .init(.c, modifiers: [.option, .command]))
+    static let showPageResources = Self("show_page_resources", default: .init(.u, modifiers: [.option, .command]))
 }
 
 extension [KeyboardShortcuts.Name] {
-    static let allViewCommands: [KeyboardShortcuts.Name] = [.toggleSidebar, .showTabSwitcher, .stopLoading, .reload, .clearCookiesAndReload, .clearCacheAndReload, .togglePictureInPicture, .zoomActualSize, .zoomIn, .zoomOut, .openDeveloperTools]
+    static let allViewCommands: [KeyboardShortcuts.Name] = [.toggleSidebar, .showTabSwitcher, .stopLoading, .reload, .clearCookiesAndReload, .clearCacheAndReload, .togglePictureInPicture, .zoomActualSize, .zoomIn, .zoomOut, .openDeveloperTools, .showJavaScriptConsole, .showPageResources]
 }

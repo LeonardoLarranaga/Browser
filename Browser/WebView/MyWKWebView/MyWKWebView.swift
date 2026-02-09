@@ -107,6 +107,14 @@ class MyWKWebView: WKWebView {
         DeveloperFeatures.toggleWebInspector(for: self)
     }
 
+    func showJavaScriptConsole() {
+        DeveloperFeatures.showJavaScriptConsole(for: self)
+    }
+
+    func showPageResources() {
+        DeveloperFeatures.showPageResources(for: self)
+    }
+
     /// Gets the current page's muted state
     var mediaMutedState: WKMediaMutedState {
         MediaControls.getPageMutedState(for: self)
