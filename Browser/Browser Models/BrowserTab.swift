@@ -70,8 +70,6 @@ final class BrowserTab: Identifiable, Comparable {
             let size = 256
             let faviconURL = URL(string: "https://www.google.com/s2/favicons?domain=\(host)&sz=\(size)")!
 
-            let data = try? await URLSession.shared.data(from: faviconURL)
-
             do {
                 let favicon = try await URLSession.shared.data(from: faviconURL).0
                 // Google's favicon service returns a 16x16 image when it can't find a favicon,
