@@ -68,17 +68,21 @@ final class BrowserTab: Identifiable, Comparable {
         Task {
             guard let host = url.host() else { return }
             let size = 256
-            let url = URL(string: "https://www.google.com/s2/favicons?domain=\(host)&sz=\(size)")!
+            let faviconURL = URL(string: "https://www.google.com/s2/favicons?domain=\(host)&sz=\(size)")!
+
+            let data = try? await URLSession.shared.data(from: faviconURL)
 
             do {
-                let favicon = try await URLSession.shared.data(from: url).0
-                if NSImage(data: favicon) != nil {
-                    self.favicon = favicon
-                } else {
-                    print("Invalid favicon image for: \(url.cleanHost)")
+                let favicon = try await URLSession.shared.data(from: faviconURL).0
+                // Google's favicon service returns a 16x16 image when it can't find a favicon,
+                // so we check and add a placeholder
+                guard let nsImage = NSImage(data: favicon), nsImage.size != CGSize(width: 16, height: 16) else {
+                    self.favicon = await FaviconPlaceholder.nsImage(url: url)?.pngData
+                    return
                 }
+                self.favicon = favicon
             } catch {
-                print("Error finding favicon: \(error.localizedDescription)")
+                self.favicon = await FaviconPlaceholder.nsImage(url: url)?.pngData
             }
         }
     }
