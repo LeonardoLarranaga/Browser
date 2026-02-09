@@ -10,12 +10,4 @@ extension String {
     var isReallyEmpty: Bool {
         self.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
-    /// Get a JavaScript script from the main bundle in WebView/JavaScript directory
-    static func javascriptScript(_ script: String) -> String? {
-        guard let url = Bundle.main.url(forResource: script, withExtension: "js"),
-              let script = try? String(contentsOf: url, encoding: .utf8)
-        else { return nil }
-        return script
-    }
 }

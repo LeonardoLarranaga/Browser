@@ -237,7 +237,7 @@ extension MyWKWebView {
         recentTranslatedLanguages.insert(["name": language.0, "code": languageCode], at: 0)
         UserDefaults.standard.set(recentTranslatedLanguages, forKey: "RecentTranslatedLanguages")
 
-        guard let getTextScript = String.javascriptScript("GetPageText") else { return }
+        guard let getTextScript = JavaScript.getBundled("GetPageText") else { return }
         
         evaluateJavaScript(getTextScript) { result, error in
             guard let texts = result as? [String] else { return }

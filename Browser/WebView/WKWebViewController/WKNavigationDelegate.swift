@@ -23,6 +23,10 @@ extension WKWebViewController: WKNavigationDelegate {
         if Preferences.shared.showHoverURL {
             addHoverURLListener()
         }
+        
+        if Preferences.shared.injectOpenPasswordsApp {
+            addPasswordTextFieldShortcut()
+        }
 
         // Clear find in page state when navigating to a new page
         if let findManager = self.tab.findInPageManager {

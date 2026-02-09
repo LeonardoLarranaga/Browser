@@ -154,4 +154,19 @@ class Preferences {
 
     var shouldShowFeatureFlagSettings = false
     var configuredFeatureFlags: [String: Bool] = [:]
+
+    var injectOpenPasswordsApp = true
+    private var passwordAppBundleIdentifier = "com.apple.Passwords"
+    @Ignore
+    var selectedPasswordApp: URL? {
+        get {
+            NSWorkspace.shared.urlForApplication(withBundleIdentifier: passwordAppBundleIdentifier)
+        } set {
+            if let newValue,
+               let bundle = Bundle(url: newValue),
+               let identifier = bundle.bundleIdentifier {
+                passwordAppBundleIdentifier = identifier
+            }
+        }
+    }
 }

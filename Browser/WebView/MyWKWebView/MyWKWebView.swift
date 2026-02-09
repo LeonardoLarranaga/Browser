@@ -128,7 +128,7 @@ class MyWKWebView: WKWebView {
     }
 
     func togglePictureInPicture() {
-        guard let pipScript = String.javascriptScript("TogglePictureInPicture") else { return }
+        guard let pipScript = JavaScript.getBundled("TogglePictureInPicture") else { return }
         evaluateJavaScript(pipScript)
     }
 

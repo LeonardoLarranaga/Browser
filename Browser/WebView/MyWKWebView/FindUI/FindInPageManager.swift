@@ -46,7 +46,7 @@ final class FindInPageManager {
         let isInjected = try await webView.evaluateJavaScript(checkScript) as? Bool ?? false
 
         if !isInjected {
-            guard let script = String.javascriptScript("FindInPage") else {
+            guard let script = JavaScript.getBundled("FindInPage") else {
                 print("FindInPageManager: Could not load FindInPage.js")
                 return
             }

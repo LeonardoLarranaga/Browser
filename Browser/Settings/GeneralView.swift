@@ -18,7 +18,7 @@ struct GeneralSettingsView: View {
             Toggle("Show Hover URL", systemImage: "dot.circle.and.cursorarrow", isOn: $preferences.showHoverURL)
 
             DownloadFolderSection()
-
+            PasswordsAppSection()
             CustomWebsiteSearchersSection()
 
             Toggle("Show Feature Flags for Web Developers", systemImage: "flag.2.crossed.fill", isOn: $preferences.shouldShowFeatureFlagSettings)
