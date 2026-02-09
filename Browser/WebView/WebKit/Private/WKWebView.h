@@ -1,5 +1,5 @@
 //
-//  BrowserWKWebView.h
+//  WKWebView.h
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 11/1/26.
@@ -13,8 +13,6 @@ typedef NS_OPTIONS(NSInteger, WKMediaMutedState) {
     WKMediaCaptureDevicesMuted = 1 << 1,
     WKMediaScreenCaptureMuted = 1 << 2,
 };
-
-@class _WKInspector;
 
 @interface WKWebView (Private)
 

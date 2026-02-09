@@ -26,10 +26,13 @@ struct SidebarTab: View {
             SidebarTabFaviconImage()
 
             if browserTab.webview?.hasActiveNowPlayingSession == true {
-                Button("Mute Tab", systemImage: browserTab.webview?.mediaMutedState != .audioMuted ? "speaker.wave.2" : "speaker.slash") {
+                Button("Mute Tab", systemImage: browserTab.webview?.isAudioMuted == true ? "speaker.slash" : "speaker.wave.2") {
                     self.browserTab.webview?.toggleMute()
                 }
-                .buttonStyle(.sidebarHover())
+                .buttonStyle(.sidebarHover(
+                    enabledColor: colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary,
+                    hoverColor: colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary
+                ))
                 .browserTransition(.move(edge: .leading))
             }
 

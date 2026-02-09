@@ -115,19 +115,13 @@ class MyWKWebView: WKWebView {
         DeveloperFeatures.showPageResources(for: self)
     }
 
-    /// Gets the current page's muted state
-    var mediaMutedState: WKMediaMutedState {
-        MediaControls.getPageMutedState(for: self)
-    }
-
-    /// Sets the page muted state
-    func setPageMuted(_ mutedState: WKMediaMutedState) {
-        MediaControls.setPageMuted(mutedState, for: self)
+    var isAudioMuted: Bool {
+        MediaControls.isAudioMuted(for: self)
     }
 
     /// Toggles the page muted state
     func toggleMute() {
-        setPageMuted(mediaMutedState == .audioMuted ? [] : .audioMuted)
+        MediaControls.toggleAudioMute(for: self)
     }
 
     /// Gets if the page has an active now playing session

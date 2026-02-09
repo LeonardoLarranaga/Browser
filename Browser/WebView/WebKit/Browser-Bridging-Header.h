@@ -3,9 +3,8 @@
 //
 
 #import "BrowserWKPreferences.h"
-#import "BrowserWKWebView.h"
-#import "MediaControls.h"
 
 // Private WebKit implementations
 #include "WKFeature.h"
 #include "WKInspector.h"
+#include "WKWebView.h"
