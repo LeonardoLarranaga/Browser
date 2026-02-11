@@ -16,8 +16,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "4AC596AC2D3C6DC400FF0326"
-               BuildableName = "Browser.app"
-               BlueprintName = "Browser"
+               BuildableName = "Eva.app"
+               BlueprintName = "Eva"
                ReferencedContainer = "container:Browser.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,8 +45,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4AC596AC2D3C6DC400FF0326"
-            BuildableName = "Browser.app"
-            BlueprintName = "Browser"
+            BuildableName = "Eva.app"
+            BlueprintName = "Eva"
             ReferencedContainer = "container:Browser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -62,8 +62,8 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "4AC596AC2D3C6DC400FF0326"
-            BuildableName = "Browser.app"
-            BlueprintName = "Browser"
+            BuildableName = "Eva.app"
+            BlueprintName = "Eva"
             ReferencedContainer = "container:Browser.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

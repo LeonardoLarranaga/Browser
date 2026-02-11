@@ -1,39 +1,122 @@
-# Browser
-### A very work-in-progress Arc-inspired browser for macOS.
+<div align="center">
 
-<img width="1512" alt="Browser Hero" src="https://github.com/user-attachments/assets/effe72a5-b0c4-40f6-83f1-fcc199e85369" />
+# Eva Browser
+<img alt="Eva Icon" src="https://github.com/user-attachments/assets/f745b25d-0688-42cc-93e8-ee383a70f548" width="200" height="200" alt="Eva Icon" />
 
-## Motivation
+### A modern, open source, experimental web browser for macOS.
+</div>
 
-This browser **—still without a name or icon—** is just a fun side project to sharpen my Swift and SwiftUI skills. It’s highly experimental and unstable, so it’s not meant for real use.
-## Technologies
+## About
 
-- _SwiftUI_: Powers the app's entire user interface.
-- _SwiftData_: Persists data such as Spaces and Tabs.
-- _WebKit_: The Browser's Engine.
+Eva is an open source personal project exploring the possibilities of building a native macOS browser in SwiftUI. It's a playground for experimenting with modern UI patterns, WebKit integration, and macOS-native features. While it's functional and improving daily, Eva is still in active development and not recommended for daily browsing. 
 
-<img width="1512" alt="Browser with No-Trace Window" src="https://github.com/user-attachments/assets/a761c164-ece6-4f6d-bba6-e012d307a670" />
+<img width="1512" height="981" alt="Eva Hero" src="https://github.com/user-attachments/assets/afe886a2-3343-4ef3-af4c-0732ba788667" />
+
+## Built With
+- **SwiftUI**: Powers the app's entire user interface.
+- **SwiftData**: Modern data persistence for Spaces, Tabs, and History.
+- **WebKit**: Apple's powerful web rendering engine.
 
 ## Features
 
-- [x] Multiples Spaces
-- [x] No-Trace Window
-- [x] Temporary Window
-- [x] Translate websites
-- [x] Web Inspector
-- [x] History
-- [x] Keyboard Shortcuts
-- [x] Ad Blocker
-- [x] **Website search with autosuggestions _on some websistes_**
+<table>
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+  
+https://github.com/user-attachments/assets/87b943f6-2ac1-40c0-93ad-859b44115721
 
-https://github.com/user-attachments/assets/90738982-651a-4991-8580-866325d1d128
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Multiple Spaces</b></h3>
+<p style="margin-top: 4px;">Organize tabs into separate spaces for different projects and contexts.</p>
+</div>
+</td>
+</tr>
 
-- [x] Picture-in-Picutre
-- [x] Search in Page
-- [x] Reorder Tabs By Dragging
-- [x] Export Page as PDF, Image, etc...       
-- [ ] Multiple Windows
-- [ ] Grid Layout
-- [ ] Pinned Tabs
-- [ ] Undo and Redo Closed Tabs
-- [ ] Page Suspension
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Search the web</b></h3>
+<p style="margin-top: 4px;">Integrated search with autosuggestions for supported websites.</p>
+</div>
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/7990ce44-e55a-41e8-a87b-24aea8e2def2
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/42b7a506-e3dc-4ed5-a355-2162b088b2e0
+
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>No-Trace Windows</b></h3>
+<p style="margin-top: 4px;">Private windows that auto-delete when closed.</p>
+</div>
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/cd6df2d9-da03-4853-aa46-24305d2a71b4
+
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Picture-in-Picture</b></h3>
+<p style="margin-top: 4px;">Watch videos while browsing other tabs.</p>
+</div>
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Page Translation</b></h3>
+<p style="margin-top: 4px;">Translate websites on the fly with built-in translation.</p>
+</div>
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/9a172116-c4fb-4508-acb8-aa593ebdeee0
+
+</td>
+</tr>
+
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/37864200-14d0-4244-ae6b-ffa0a3f3ad66
+
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Search in Page</b></h3>
+<p style="margin-top: 4px;">Quick text search within pages with keyboard shortcuts.</p>
+</div>
+</td>
+</tr>
+
+</table>
+
+### And More!
+
+- Export pages as PDF, images, and more.
+- Customizable keyboard shortcuts.
+- Support for WebKit feature flags.
+- Automatic tab suspension.
+- Pin tabs.
+- Open Passwords app from input fields.
+
+## RoadMap
+- [ ] Page grid layout.
+- [ ] Undo/Redo close tabs.
+- [ ] Favorite tabs.
+- [ ] Adblocker.

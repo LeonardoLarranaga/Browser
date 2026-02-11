@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A3CA3A72F3C017F009ACFF0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */; };
 		4A3CCDB62D5C94BD00D7C8CE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4A3CCDB52D5C94BD00D7C8CE /* .gitignore */; };
 		4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4A62F7192D5349EE0084D3A2 /* SymbolPicker */; };
 		4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AC77A852D573849005BEF25 /* KeyboardShortcuts */; };
@@ -15,18 +16,19 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		4A3CCDB52D5C94BD00D7C8CE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		4AC596AD2D3C6DC400FF0326 /* Browser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Browser.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4AC596AD2D3C6DC400FF0326 /* Eva.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eva.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE511562F148E4700BCE2D0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = ../../../../System/Volumes/Preboot/Cryptexes/OS/System/Library/Frameworks/WebKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		4AE4E5882D4F54A90083FB2C /* Exceptions for "Browser" folder in "Browser" target */ = {
+		4AE4E5882D4F54A90083FB2C /* Exceptions for "Browser" folder in "Eva" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = 4AC596AC2D3C6DC400FF0326 /* Browser */;
+			target = 4AC596AC2D3C6DC400FF0326 /* Eva */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -34,7 +36,7 @@
 		4AC596AF2D3C6DC400FF0326 /* Browser */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				4AE4E5882D4F54A90083FB2C /* Exceptions for "Browser" folder in "Browser" target */,
+				4AE4E5882D4F54A90083FB2C /* Exceptions for "Browser" folder in "Eva" target */,
 			);
 			path = Browser;
 			sourceTree = "<group>";
@@ -68,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				4A3CCDB52D5C94BD00D7C8CE /* .gitignore */,
+				4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */,
 				4AC596AF2D3C6DC400FF0326 /* Browser */,
 				4A8400332D433D3400E0B7DD /* Frameworks */,
 				4AC596AE2D3C6DC400FF0326 /* Products */,
@@ -77,7 +80,7 @@
 		4AC596AE2D3C6DC400FF0326 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				4AC596AD2D3C6DC400FF0326 /* Browser.app */,
+				4AC596AD2D3C6DC400FF0326 /* Eva.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -85,9 +88,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		4AC596AC2D3C6DC400FF0326 /* Browser */ = {
+		4AC596AC2D3C6DC400FF0326 /* Eva */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 4AC596BE2D3C6DC600FF0326 /* Build configuration list for PBXNativeTarget "Browser" */;
+			buildConfigurationList = 4AC596BE2D3C6DC600FF0326 /* Build configuration list for PBXNativeTarget "Eva" */;
 			buildPhases = (
 				4AC596A92D3C6DC400FF0326 /* Sources */,
 				4AC596AA2D3C6DC400FF0326 /* Frameworks */,
@@ -100,14 +103,14 @@
 			fileSystemSynchronizedGroups = (
 				4AC596AF2D3C6DC400FF0326 /* Browser */,
 			);
-			name = Browser;
+			name = Eva;
 			packageProductDependencies = (
 				4A62F7192D5349EE0084D3A2 /* SymbolPicker */,
 				4AC77A852D573849005BEF25 /* KeyboardShortcuts */,
 				4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */,
 			);
 			productName = Browser;
-			productReference = 4AC596AD2D3C6DC400FF0326 /* Browser.app */;
+			productReference = 4AC596AD2D3C6DC400FF0326 /* Eva.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -145,7 +148,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				4AC596AC2D3C6DC400FF0326 /* Browser */,
+				4AC596AC2D3C6DC400FF0326 /* Eva */,
 			);
 		};
 /* End PBXProject section */
@@ -156,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A3CCDB62D5C94BD00D7C8CE /* .gitignore in Resources */,
+				4A3CA3A72F3C017F009ACFF0 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -301,6 +305,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Browser/Browser.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -328,19 +333,20 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Browser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eva;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Browser needs access to use your camera in websites.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Eva needs access to use your camera in websites.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Leonardo Larrañaga";
-				INFOPLIST_KEY_NSLocationUsageDescription = "Browser needs access to use your location in websites.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Eva needs access to use your location in websites.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Browser needs access to use your location in websites.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Browser needs access to use your microphone on websites.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Eva needs access to use your microphone on websites.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = swift.leonardolarranaga.Browser;
+				PRODUCT_BUNDLE_IDENTIFIER = swift.eva.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Browser/WebView/WebKit/Browser-Bridging-Header.h";
@@ -354,6 +360,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Browser/Browser.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
@@ -381,19 +388,20 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Browser/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = Eva;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
-				INFOPLIST_KEY_NSCameraUsageDescription = "Browser needs access to use your camera in websites.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "Eva needs access to use your camera in websites.";
 				INFOPLIST_KEY_NSHumanReadableCopyright = "Leonardo Larrañaga";
-				INFOPLIST_KEY_NSLocationUsageDescription = "Browser needs access to use your location in websites.";
+				INFOPLIST_KEY_NSLocationUsageDescription = "Eva needs access to use your location in websites.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Browser needs access to use your location in websites.";
-				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Browser needs access to use your microphone on websites.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Eva needs access to use your microphone on websites.";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = swift.leonardolarranaga.Browser;
+				PRODUCT_BUNDLE_IDENTIFIER = swift.eva.browser;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Browser/WebView/WebKit/Browser-Bridging-Header.h";
@@ -413,7 +421,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		4AC596BE2D3C6DC600FF0326 /* Build configuration list for PBXNativeTarget "Browser" */ = {
+		4AC596BE2D3C6DC600FF0326 /* Build configuration list for PBXNativeTarget "Eva" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				4AC596BF2D3C6DC600FF0326 /* Debug */,

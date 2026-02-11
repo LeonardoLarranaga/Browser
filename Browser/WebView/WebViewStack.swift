@@ -28,6 +28,12 @@ struct WebViewStack: View {
             } else {
                 Rectangle()
                     .fill(.ultraThinMaterial)
+                Image(.evaEyes)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100, height: 100)
+                    .foregroundStyle(.gray.opacity(0.1))
+                    .shadow(radius: 10)
             }
         }
         .transaction { $0.animation = nil }
