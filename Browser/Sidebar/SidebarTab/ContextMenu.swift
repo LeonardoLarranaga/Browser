@@ -17,16 +17,23 @@ struct SidebarTabContextMenu: View {
     @Binding var isEditingTitle: Bool
 
     var canCloseTabsAbove: Bool {
-        if browserSpace.tabs.count > 1 {
-            return browserTab.order > 0
+        guard browserTab.pinState == .normal else { return false }
+
+        let normalTabs = browserSpace.normalTabs
+        if normalTabs.count > 1,
+           let index = normalTabs.firstIndex(where: { $0.id == browserTab.id }) {
+            return index > 0
         }
         return false
     }
 
     var canCloseTabsBelow: Bool {
-        let tabCount = browserSpace.tabs.count
-        if tabCount > 1 {
-            return browserTab.order < tabCount - 1
+        guard browserTab.pinState == .normal else { return false }
+
+        let normalTabs = browserSpace.normalTabs
+        if normalTabs.count > 1,
+           let index = normalTabs.firstIndex(where: { $0.id == browserTab.id }) {
+            return index < normalTabs.count - 1
         }
         return false
     }
@@ -103,11 +110,15 @@ struct SidebarTabContextMenu: View {
 
     /// Close (delete) the tabs below the current tab
     func closeTabsBelow() {
-        guard let index = browserSpace.tabs.firstIndex(where: { $0.id == browserTab.id })
+        let normalTabs = browserSpace.normalTabs
+        guard let index = normalTabs.firstIndex(where: { $0.id == browserTab.id })
         else { return }
 
+        // Collect tabs to delete first to avoid SwiftData invalidation issues
+        let tabsToDelete = Array(normalTabs.suffix(from: index + 1))
+
         withAnimation(.browserDefault) {
-            for tab in browserSpace.tabs.suffix(from: index + 1) {
+            for tab in tabsToDelete {
                 browserSpace.unloadTab(tab)
                 modelContext.delete(tab)
             }
@@ -117,11 +128,15 @@ struct SidebarTabContextMenu: View {
 
     /// Close (delete) the tabs above the current tab
     func closeTabsAbove() {
-        guard let index = browserSpace.tabs.firstIndex(where: { $0.id == browserTab.id })
+        let normalTabs = browserSpace.normalTabs
+        guard let index = normalTabs.firstIndex(where: { $0.id == browserTab.id })
         else { return }
 
+        // Collect tabs to delete first to avoid SwiftData invalidation issues
+        let tabsToDelete = Array(normalTabs.prefix(upTo: index))
+
         withAnimation(.browserDefault) {
-            for tab in browserSpace.tabs.prefix(upTo: index) {
+            for tab in tabsToDelete {
                 browserSpace.unloadTab(tab)
                 modelContext.delete(tab)
             }
