@@ -33,6 +33,8 @@ extension MyWKWebView {
             handleLinkContextMenu(menu)
         case .image:
             handleImageContextMenu(menu)
+        case .input:
+            handleInputContextMenu(menu)
         default:
             break
         }

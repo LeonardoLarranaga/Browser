@@ -14,5 +14,6 @@ enum ContextMenuType: String {
     case link = "WKMenuItemIdentifierOpenLink"
     case image = "WKMenuItemIdentifierCopyImage"
     case media = "WKMenuItemIdentifierShowHideMediaControls"
+    case input = "WKMenuItemIdentifierSpellingMenu"
     case unknown = "unknown"
 }
