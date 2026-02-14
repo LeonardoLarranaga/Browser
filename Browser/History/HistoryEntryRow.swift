@@ -15,7 +15,7 @@ struct HistoryEntryRow: View {
         HStack(spacing: 15) {
             Text(entry.date.formatted(date: .omitted, time: .shortened))
                 .bold()
-                .frame(width: 44)
+                .frame(width: 66)
                 .multilineTextAlignment(.leading)
             
             Group {
@@ -44,5 +44,6 @@ struct HistoryEntryRow: View {
                 .foregroundStyle(.secondary)
                 .font(.system(.callout, design: .monospaced))
         }
+        .padding(.vertical, 5)
     }
 }

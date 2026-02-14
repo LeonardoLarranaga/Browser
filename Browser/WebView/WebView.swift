@@ -30,6 +30,7 @@ struct WebView: View {
                     }
             case .history:
                 HistoryView()
+                    .background(.background)
                     .opacity(browserWindow.currentSpace?.currentTab == tab ? 1 : 0)
             }
         }
