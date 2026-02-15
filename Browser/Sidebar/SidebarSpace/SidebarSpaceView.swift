@@ -19,6 +19,7 @@ struct SidebarSpaceView: View {
 
     @State var isHovering = false
     @State var isHoveringClearButton = false
+    @State private var draggingTab: BrowserTab?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -47,7 +48,7 @@ struct SidebarSpaceView: View {
             ScrollView {
                 VStack {
                     if browserSpace.pinnedTabsVisible {
-                        SidebarTabList(tabs: browserSpace.pinnedTabs)
+                        SidebarTabList(tabs: browserSpace.pinnedTabs, pinState: .pinned, draggingTab: $draggingTab)
                             .padding(.top, 5)
                             .padding(.bottom, -5)
                             .browserTransition(.move(edge: .top).combined(with: .opacity))
@@ -58,7 +59,7 @@ struct SidebarSpaceView: View {
                     SidebarTabNewButton()
                         .padding(.vertical, -3)
 
-                    SidebarTabList(tabs: browserSpace.normalTabs)
+                    SidebarTabList(tabs: browserSpace.normalTabs, pinState: .normal, draggingTab: $draggingTab)
                 }
             }
         }

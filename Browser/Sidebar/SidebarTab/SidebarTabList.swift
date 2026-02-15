@@ -9,59 +9,45 @@ import SwiftUI
 
 /// List of tabs of a space in the sidebar
 struct SidebarTabList: View {
-    
-    @Environment(SidebarModel.self) var sidebarModel
 
     @Environment(BrowserSpace.self) var browserSpace
+    @Environment(\.modelContext) var modelContext
+    @Environment(SidebarModel.self) var sidebarModel
 
     var tabs: [BrowserTab]
-    
-    @State var draggingTab: BrowserTab?
-    
+    var pinState: TabPinState
+    @Binding var draggingTab: BrowserTab?
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 5) {
+        LazyVStack(alignment: .leading, spacing: 5) {
             ForEach(tabs) { browserTab in
-                SidebarTab(browserSpace: browserSpace, browserTab: browserTab)
-                    .draggable(browserSpace.id.uuidString) {
-                       SidebarTab(browserSpace: browserSpace, browserTab: browserTab)
-                            .opacity(0.65)
-                    }
-                // Using simultaneousGesture because onAppear is causing unexpected behavior
-                    .simultaneousGesture(
-                        DragGesture()
-                            .onChanged { _ in
-                                if draggingTab == nil {
-                                    draggingTab = browserTab
-                                }
-                            }
-                    )
-                    .dropDestination(for: String.self) { items, location in
-                        withAnimation(.browserDefault) {
+                SidebarTab(
+                    browserSpace: browserSpace,
+                    browserTab: browserTab,
+                    pinState: pinState,
+                    draggingTab: $draggingTab
+                )
+                .onDrag {
+                    draggingTab = browserTab
+                    let tabDropProvider = TabDropProvider(object: browserTab.id.uuidString as NSString)
+                    tabDropProvider.onEnd = {
+                        Task { @MainActor in
                             draggingTab = nil
-                            
-                        }
-                        return false
-                    } isTargeted: { status in
-                        if status {
-//                            moveTab(to: browserTab)
                         }
                     }
+                    return tabDropProvider
+                }
             }
         }
-        .frame(maxWidth: .infinity)
         .padding(.leading, .sidebarPadding)
         .padding(.trailing, Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
     }
-    
-//    func moveTab(to destination: BrowserTab) {
-//        if let draggingTab, draggingTab != destination {
-//            if let sourceIndex = tabs.firstIndex(of: draggingTab),
-//               let destinationIndex = tabs.firstIndex(of: destination) {
-//                withAnimation(.browserDefault) {
-//                    let sourceItems = tabs.remove(at: sourceIndex)
-//                    tabs.insert(sourceItems, at: destinationIndex)
-//                }
-//            }
-//        }
-//    }
+}
+
+class TabDropProvider: NSItemProvider {
+    var onEnd: (() -> Void)?
+
+    deinit {
+        onEnd?()
+    }
 }

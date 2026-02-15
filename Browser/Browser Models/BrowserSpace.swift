@@ -160,4 +160,38 @@ final class BrowserSpace: Identifiable {
             print(error.localizedDescription)
         }
     }
+
+    /// Reorders a tab by moving it from its current position to a new destination
+    /// - Parameters:
+    ///   - sourceTab: The tab to move
+    ///   - destinationTab: The tab to insert before
+    ///   - destinationPinState: The pin state of the destination area (pinned or normal)
+    ///   - modelContext: The model context to save the changes
+    func reorderTab(_ sourceTab: BrowserTab, to destinationTab: BrowserTab, destinationPinState: TabPinState, using modelContext: ModelContext) {
+        guard sourceTab.id != destinationTab.id else { return }
+
+        do {
+            // Change pin state if moving to a different section
+            if sourceTab.pinState != destinationPinState {
+                sourceTab.pinState = destinationPinState
+            }
+
+            // Get all tabs and find indices
+            var allTabs = tabs
+            guard let sourceIndex = allTabs.firstIndex(where: { $0.id == sourceTab.id }),
+                  let destinationIndex = allTabs.firstIndex(where: { $0.id == destinationTab.id })
+            else { return }
+
+            // Reorder in the array
+            allTabs.remove(at: sourceIndex)
+            let newDestinationIndex = sourceIndex < destinationIndex ? destinationIndex - 1 : destinationIndex
+            allTabs.insert(sourceTab, at: newDestinationIndex)
+
+            // Update tabs (this will automatically update order indices via setter)
+            tabs = allTabs
+            try modelContext.save()
+        } catch {
+            print("Error reordering tab: \(error)")
+        }
+    }
 }
