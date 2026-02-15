@@ -11,9 +11,10 @@ import SwiftUI
 struct SidebarSpaceClearDivider: View {
     
     @Environment(\.modelContext) var modelContext
+
+    @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserWindow.self) var browserWindow
 
-    let browserSpace: BrowserSpace
     let isHovering: Bool
     
     @State var isHoveringClearButton = false

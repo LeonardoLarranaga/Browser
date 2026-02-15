@@ -11,8 +11,9 @@ import SwiftUI
 struct SidebarTabList: View {
     
     @Environment(SidebarModel.self) var sidebarModel
-    
-    @Bindable var browserSpace: BrowserSpace
+
+    @Environment(BrowserSpace.self) var browserSpace
+
     var tabs: [BrowserTab]
     
     @State var draggingTab: BrowserTab?
