@@ -7,8 +7,30 @@
 
 import SwiftUI
 
+struct ActionAlert {
+    private(set) var message: String
+    private(set) var systemImage: String
+    private(set) var isPresented: Bool
+
+    init() {
+        self.message = ""
+        self.systemImage = ""
+        self.isPresented = false
+    }
+
+    mutating func present(message: String, systemImage: String) {
+        self.message = message
+        self.systemImage = systemImage
+        isPresented = true
+    }
+
+    mutating func dismiss() {
+        isPresented = false
+    }
+}
+
 /// An alert that displays an action that was performed by the user
-struct ActionAlert: ViewModifier {
+fileprivate struct ActionAlertView: ViewModifier {
 
     @Environment(BrowserWindow.self) var browserWindow
 
@@ -17,14 +39,14 @@ struct ActionAlert: ViewModifier {
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
-                if browserWindow.showActionAlert {
+                if browserWindow.actionAlert.isPresented {
                     LazyVStack {
                         ScrollView {
                             LazyHStack(spacing: 10) {
-                                Text(browserWindow.actionAlertMessage)
+                                Text(browserWindow.actionAlert.message)
                                     .lineLimit(1)
                                     .fixedSize(horizontal: false, vertical: true)
-                                Image(systemName: browserWindow.actionAlertSystemImage)
+                                Image(systemName: browserWindow.actionAlert.systemImage)
                                     .fontWeight(.bold)
                                     .frame(width: 20)
                             }
@@ -44,30 +66,36 @@ struct ActionAlert: ViewModifier {
                         .scrollIndicators(.hidden)
                     }
                     .browserTransition(.scale.combined(with: .move(edge: .top)))
-                    .onScrollPhaseChange { oldPhase, newPhase in
-                        withAnimation(.browserDefault) {
-                            if newPhase == .interacting {
-                                browserWindow.showActionAlert = false
-                            }
+                    .onScrollPhaseChange { _, newPhase in
+                        if newPhase == .interacting {
+                            dismiss()
                         }
                     }
-                    .onAppear {
-                        dismissTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
-                            withAnimation(.browserDefault) {
-                                browserWindow.showActionAlert = false
-                            }
-                        }
-                    }
+                    .onAppear(perform: startDismissTimer)
+                    .onChange(of: browserWindow.actionAlert.message, startDismissTimer)
                     .onDisappear {
                         dismissTimer?.invalidate()
                     }
                 }
             }
     }
+
+    func dismiss() {
+        withAnimation(.browserDefault) {
+            browserWindow.actionAlert.dismiss()
+        }
+    }
+
+    func startDismissTimer() {
+        dismissTimer?.invalidate()
+        dismissTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
+            dismiss()
+        }
+    }
 }
 
 extension View {
     func actionAlert() -> some View {
-        modifier(ActionAlert())
+        modifier(ActionAlertView())
     }
 }

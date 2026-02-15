@@ -36,7 +36,13 @@ struct FileCommands: Commands {
         
         CommandGroup(replacing: .saveItem) {
             if let currentTab = browserWindow?.currentSpace?.currentTab {
-                Button("Close Tab") { browserWindow?.currentSpace?.closeTab(currentTab, using: modelContext) }
+                Button("Close Tab") {
+                    browserWindow?.currentSpace?.closeTab(
+                        currentTab,
+                        using: modelContext,
+                        tabUndoManager: browserWindow?.tabUndoManager
+                    )
+                }
                     .globalKeyboardShortcut(.closeTab)
             }
             

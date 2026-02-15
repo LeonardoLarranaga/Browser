@@ -66,7 +66,9 @@ struct TabSwitcher: View {
                     closeEvent = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { event in
                         if event.keyCode == closeKey {
                             if let selectedTab = allLoadedTabs[safe: selectedTabIndex] {
-                                browserSpaces.first(where: { $0.loadedTabs.contains(selectedTab) })?.closeTab(selectedTab, using: modelContext)
+                                browserSpaces
+                                    .first(where: { $0.loadedTabs.contains(selectedTab) })?
+                                    .closeTab(selectedTab, using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
                                 selectNextTab()
                             }
                         }

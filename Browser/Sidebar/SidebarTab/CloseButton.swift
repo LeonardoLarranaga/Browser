@@ -12,12 +12,13 @@ struct SidebarTabCloseButton: View {
     @Environment(\.modelContext) var modelContext
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
+    @Environment(BrowserWindow.self) var browserWindow
 
     @State var isHovering = false
 
     var body: some View {
         Button("Close Tab", systemImage: "xmark") {
-            browserSpace.closeTab(browserTab, using: modelContext)
+            browserSpace.closeTab(browserTab, using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
         }
         .font(.title3)
         .buttonStyle(.plain)

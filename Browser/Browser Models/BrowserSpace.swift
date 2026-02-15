@@ -99,38 +99,28 @@ final class BrowserSpace: Identifiable {
     }
 
     /// Closes (deletes) a tab from the space and selects the next tab
-    func closeTab(_ tab: BrowserTab, using modelContext: ModelContext) {
-        let index = loadedTabs.firstIndex(of: tab) ?? 0
-        let newTab = loadedTabs[safe: index == 0 ? 1 : index - 1]
-
-        unloadTab(tab)
-
-        do {
-            tabs.removeAll(where: { $0.id == tab.id })
-            modelContext.delete(tab)
-            try modelContext.save()
-        } catch {
-            print("Error deleting tab: \(error)")
-        }
-
-        withAnimation(.browserDefault) {
-            currentTab = newTab
-        }
+    func closeTab(_ tab: BrowserTab, using modelContext: ModelContext, tabUndoManager: TabUndoManager?) {
+        guard let tabUndoManager else { return }
+        let command = CloseTabCommand(tab: tab, space: self, modelContext: modelContext)
+        tabUndoManager.execute(command)
     }
 
-    func clear(using modelContext: ModelContext) {
+    func clear(using modelContext: ModelContext, tabUndoManager: TabUndoManager?) {
+        guard let tabUndoManager,
+              normalTabs.count >= (Preferences.shared.clearSelectedTab ? 1 : 2)
+        else { return }
+
         let deletedTabs = normalTabs.filter {
             Preferences.shared.clearSelectedTab ? true : $0 != currentTab
         }
 
-        withAnimation(.browserDefault) {
-            deletedTabs.forEach { unloadTab($0) }
-            let uuids = deletedTabs.map(\.id)
-            try? modelContext.delete(model: BrowserTab.self, where: #Predicate {
-                uuids.contains($0.id)
-            })
-            try? modelContext.save()
-        }
+        let command = CloseMultipleTabsCommand(
+            tabs: deletedTabs,
+            space: self,
+            modelContext: modelContext,
+            commandType: .clear
+        )
+        tabUndoManager.execute(command)
     }
 
     /// Opens a new tab in the space

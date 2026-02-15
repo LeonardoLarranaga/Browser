@@ -104,6 +104,20 @@ https://github.com/user-attachments/assets/37864200-14d0-4244-ae6b-ffa0a3f3ad66
 </td>
 </tr>
 
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Undo + Redo</b></h3>
+<p style="margin-top: 4px;">Restore accidentally closed tabs with simple keyboard shortcuts.</p>
+</div>
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/9ddad9bc-0f08-4626-bbd2-043cb6bb1593
+
+</td>
+</tr>
+
 </table>
 
 ### And More!
@@ -117,6 +131,5 @@ https://github.com/user-attachments/assets/37864200-14d0-4244-ae6b-ffa0a3f3ad66
 
 ## RoadMap
 - [ ] Page grid layout.
-- [ ] Undo/Redo close tabs.
 - [ ] Favorite tabs.
 - [ ] Adblocker.

@@ -9,25 +9,33 @@ import SwiftUI
 import KeyboardShortcuts
 
 struct EditCommands: Commands {
-    
-    @Environment(\.undoManager) var undoManager
-    
+
     @FocusedValue(\.browserActiveWindowState) var browserWindow
-    
+
     @State var isEditable = false
-    
+
     var body: some Commands {
         let webView = browserWindow?.currentSpace?.currentTab?.webview
+
         CommandGroup(replacing: .undoRedo) {
-            
+            let tabUndoManager = browserWindow?.tabUndoManager
+            Button("\(tabUndoManager?.undoDescription ?? "")", action: tabUndoManager?.undo)
+                .disabled(tabUndoManager?.canUndo == false)
+                .globalKeyboardShortcut(.undoCloseTab)
+
+            Button("\(tabUndoManager?.redoDescription ?? "")", action: tabUndoManager?.redo)
+                .disabled(tabUndoManager?.canRedo == false)
+                .globalKeyboardShortcut(.redoCloseTab)
+
+            Divider()
         }
-        
+
         CommandGroup(after: .undoRedo) {
             Button("Copy Current URL", action: browserWindow?.copyURLToClipboard)
                 .globalKeyboardShortcut(.copyCurrentURL)
-            
+
             Divider()
-            
+
             if let webView {
                 Button(isEditable ? "Stop Editing Text On Page" : "Edit Text On Page") {
                     isEditable.toggle()
@@ -37,7 +45,7 @@ struct EditCommands: Commands {
                 .globalKeyboardShortcut(.toggleEditing)
             }
         }
-        
+
         CommandGroup(before: .textEditing) {
             Menu("Find") {
                 Button("Find...", action: webView?.toggleFindUI)
@@ -93,10 +101,13 @@ struct EditCommands: Commands {
 }
 
 extension KeyboardShortcuts.Name {
+    static let undoCloseTab = Self("undo_close_tab", default: .init(.z, modifiers: [.command]))
+    static let redoCloseTab = Self("redo_close_tab", default: .init(.z, modifiers: [.command, .shift]))
+
     static let copyCurrentURL = Self("copy_current_url", default: .init(.c, modifiers: [.command, .shift]))
-    
+
     static let toggleEditing = Self("toggle_editing")
-    
+
     static let find = Self("find", default: .init(.f, modifiers: [.command]))
     static let findNext = Self("find_next", default: .init(.g, modifiers: [.command]))
     static let findPrevious = Self("find_previous", default: .init(.g, modifiers: [.command, .shift]))
@@ -105,6 +116,7 @@ extension KeyboardShortcuts.Name {
 
 extension [KeyboardShortcuts.Name] {
     static let allEditCommands: [KeyboardShortcuts.Name] = [
+        .undoCloseTab, .redoCloseTab,
         .copyCurrentURL, .toggleEditing,
         .find, .findNext, .findPrevious, .useSelectionForFind
     ]

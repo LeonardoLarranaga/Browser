@@ -11,7 +11,8 @@ import SwiftUI
 struct SidebarSpaceClearDivider: View {
     
     @Environment(\.modelContext) var modelContext
-    
+    @Environment(BrowserWindow.self) var browserWindow
+
     let browserSpace: BrowserSpace
     let isHovering: Bool
     
@@ -25,7 +26,7 @@ struct SidebarSpaceClearDivider: View {
             
             if !browserSpace.tabs.isEmpty && isHovering {
                 Button("Clear") {
-                    browserSpace.clear(using: modelContext)
+                    browserSpace.clear(using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
                 }
                 .font(.caption.weight(.semibold))
                 .buttonStyle(.plain)

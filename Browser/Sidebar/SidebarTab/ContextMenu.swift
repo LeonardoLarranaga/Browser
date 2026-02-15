@@ -13,6 +13,7 @@ struct SidebarTabContextMenu: View {
     @Environment(\.modelContext) var modelContext
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
+    @Environment(BrowserWindow.self) var browserWindow
 
     @Binding var isEditingTitle: Bool
 
@@ -105,7 +106,7 @@ struct SidebarTabContextMenu: View {
 
     /// Close (delete) the tab and selects the next tab
     func closeTab() {
-        browserSpace.closeTab(browserTab, using: modelContext)
+        browserSpace.closeTab(browserTab, using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
     }
 
     /// Close (delete) the tabs below the current tab
@@ -117,13 +118,13 @@ struct SidebarTabContextMenu: View {
         // Collect tabs to delete first to avoid SwiftData invalidation issues
         let tabsToDelete = Array(normalTabs.suffix(from: index + 1))
 
-        withAnimation(.browserDefault) {
-            for tab in tabsToDelete {
-                browserSpace.unloadTab(tab)
-                modelContext.delete(tab)
-            }
-            try? modelContext.save()
-        }
+        let command = CloseMultipleTabsCommand(
+            tabs: tabsToDelete,
+            space: browserSpace,
+            modelContext: modelContext,
+            commandType: .closeTabsBelow
+        )
+        browserWindow.tabUndoManager.execute(command)
     }
 
     /// Close (delete) the tabs above the current tab
@@ -135,12 +136,13 @@ struct SidebarTabContextMenu: View {
         // Collect tabs to delete first to avoid SwiftData invalidation issues
         let tabsToDelete = Array(normalTabs.prefix(upTo: index))
 
-        withAnimation(.browserDefault) {
-            for tab in tabsToDelete {
-                browserSpace.unloadTab(tab)
-                modelContext.delete(tab)
-            }
-            try? modelContext.save()
-        }
+        let command = CloseMultipleTabsCommand(
+            tabs: tabsToDelete,
+            space: browserSpace,
+            modelContext: modelContext,
+            commandType: .closeTabsAbove
+        )
+
+        browserWindow.tabUndoManager.execute(command)
     }
 }

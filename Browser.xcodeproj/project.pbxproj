@@ -10,6 +10,7 @@
 		4A3CA3A72F3C017F009ACFF0 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */; };
 		4A3CCDB62D5C94BD00D7C8CE /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 4A3CCDB52D5C94BD00D7C8CE /* .gitignore */; };
 		4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4A62F7192D5349EE0084D3A2 /* SymbolPicker */; };
+		4AA1C0BC2F414EF20056B8DA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4AA1C0BB2F414EF20056B8DA /* README.md */; };
 		4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AC77A852D573849005BEF25 /* KeyboardShortcuts */; };
 		4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */; };
 		4AE511572F148E4700BCE2D0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE511562F148E4700BCE2D0 /* WebKit.framework */; };
@@ -18,6 +19,7 @@
 /* Begin PBXFileReference section */
 		4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		4A3CCDB52D5C94BD00D7C8CE /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
+		4AA1C0BB2F414EF20056B8DA /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		4AC596AD2D3C6DC400FF0326 /* Eva.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Eva.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AE511562F148E4700BCE2D0 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = ../../../../System/Volumes/Preboot/Cryptexes/OS/System/Library/Frameworks/WebKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,6 +71,7 @@
 		4AC596A42D3C6DC400FF0326 = {
 			isa = PBXGroup;
 			children = (
+				4AA1C0BB2F414EF20056B8DA /* README.md */,
 				4A3CCDB52D5C94BD00D7C8CE /* .gitignore */,
 				4A3CA3A62F3C017F009ACFF0 /* AppIcon.icon */,
 				4AC596AF2D3C6DC400FF0326 /* Browser */,
@@ -160,6 +163,7 @@
 			files = (
 				4A3CCDB62D5C94BD00D7C8CE /* .gitignore in Resources */,
 				4A3CA3A72F3C017F009ACFF0 /* AppIcon.icon in Resources */,
+				4AA1C0BC2F414EF20056B8DA /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
