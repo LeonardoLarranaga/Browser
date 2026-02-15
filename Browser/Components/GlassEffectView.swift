@@ -13,6 +13,11 @@ struct GlassEffectView: NSViewRepresentable {
     let style: NSGlassEffectView.Style
     let tintColor: Color?
 
+    init(style: NSGlassEffectView.Style = .regular, tintColor: Color? = nil) {
+        self.style = style
+        self.tintColor = tintColor
+    }
+
     func makeNSView(context: Context) -> NSGlassEffectView {
         NSGlassEffectView()
     }

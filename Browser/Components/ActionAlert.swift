@@ -56,7 +56,7 @@ fileprivate struct ActionAlertView: ViewModifier {
                                 if let currentSpace = browserWindow.currentSpace, !currentSpace.colors.isEmpty {
                                     SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
                                 } else {
-                                    Rectangle().glassEffect(in: .rect)
+                                    GlassEffectView()
                                 }
                             }
                             .clipShape(.rect(cornerRadius: 12))

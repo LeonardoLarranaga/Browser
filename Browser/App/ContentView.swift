@@ -12,7 +12,7 @@ struct ContentView: View {
     @State var browserWindow = BrowserWindow()
     var body: some View {
         MainFrame()
-            .glassEffect(in: .rect)
+            .background(GlassEffectView())
             .ignoresSafeArea(.container, edges: .top)
             .focusedSceneValue(\.browserActiveWindowState, browserWindow)
             .environment(browserWindow)
