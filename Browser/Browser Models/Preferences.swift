@@ -63,8 +63,6 @@ class Preferences {
     var enableShadow = true
     var immersiveViewOnFullscreen = true
 
-    // General preferences
-    var clearSelectedTab = false
     var openPipOnTabChange = true
     var warnBeforeQuitting = true
 

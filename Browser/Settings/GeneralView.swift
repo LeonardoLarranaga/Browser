@@ -11,7 +11,6 @@ struct GeneralSettingsView: View {
     var body: some View {
         @Bindable var preferences = Preferences.shared
         Form {
-            Toggle("Close Selected Tab When Clearing Space", systemImage: "xmark.square", isOn: $preferences.clearSelectedTab)
             Toggle("Open Picture in Picture Automatically", systemImage: "inset.filled.topright.rectangle", isOn: $preferences.openPipOnTabChange)
             Toggle("Warn Before Quitting", systemImage: "exclamationmark.triangle", isOn: $preferences.warnBeforeQuitting)
             Toggle("Automatic Page Suspension", systemImage: "hand.raised.fill", isOn: $preferences.automaticPageSuspension)

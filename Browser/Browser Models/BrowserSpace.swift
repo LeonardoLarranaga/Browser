@@ -105,13 +105,11 @@ final class BrowserSpace: Identifiable {
         tabUndoManager.execute(command)
     }
 
-    func clear(using modelContext: ModelContext, tabUndoManager: TabUndoManager?) {
-        guard let tabUndoManager,
-              normalTabs.count >= (Preferences.shared.clearSelectedTab ? 1 : 2)
-        else { return }
+    func clear(using modelContext: ModelContext, deleteCurrent: Bool, tabUndoManager: TabUndoManager?) {
+        guard let tabUndoManager, !normalTabs.isEmpty else { return }
 
         let deletedTabs = normalTabs.filter {
-            Preferences.shared.clearSelectedTab ? true : $0 != currentTab
+            deleteCurrent ? true : $0 != currentTab
         }
 
         let command = CloseMultipleTabsCommand(

@@ -44,6 +44,15 @@ struct CloseMultipleTabsCommand: UndoableCommand {
         guard let space else { return }
         let tabIds = snapshots.map { $0.id }
 
+        // Check if current tab is being deleted
+        let isDeletingCurrentTab = space.currentTab.map { tabIds.contains($0.id) } ?? false
+
+        // Select a new tab before deleting if current tab is being deleted
+        if isDeletingCurrentTab {
+            let newTab = space.tabs.first(where: { !tabIds.contains($0.id) })
+            space.currentTab = newTab
+        }
+
         withAnimation(.browserDefault) {
             for tabId in tabIds {
                 if let tab = space.tabs.first(where: { $0.id == tabId }) {
