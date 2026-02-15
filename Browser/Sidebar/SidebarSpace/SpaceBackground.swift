@@ -40,7 +40,7 @@ struct SidebarSpaceBackground: View {
     }
     
     var gradient: some View {
-        LinearGradient(colors: Preferences.shared.sidebarPosition == .trailing && Preferences.shared.reverseColorsOnTrailingSidebar ? browserSpace.getColors.reversed() : browserSpace.getColors, startPoint: .leading, endPoint: .trailing).opacity(browserSpace.colorOpacity)
+        LinearGradient(colors: Preferences.sidebarPosition == .trailing && Preferences.reverseColorsOnTrailingSidebar ? browserSpace.getColors.reversed() : browserSpace.getColors, startPoint: .leading, endPoint: .trailing).opacity(browserSpace.colorOpacity)
     }
     
     var color: some View {

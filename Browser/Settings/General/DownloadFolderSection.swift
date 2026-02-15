@@ -16,7 +16,7 @@ struct DownloadFolderSection: View {
         Label("File Download Location", systemImage: "arrowshape.down.circle")
 
         Menu(content: {
-          if Preferences.shared.hasDownloadLocationSet {
+          if Preferences.hasDownloadLocationSet {
             Button {
             } label: {
               HStack {
@@ -26,7 +26,7 @@ struct DownloadFolderSection: View {
             }
           }
 
-          Button("Ask for each download", action: Preferences.shared.removeDownloadLocation)
+          Button("Ask for each download", action: Preferences.removeDownloadLocation)
           Button("Choose...", action: chooseDownloadLocation)
         }, label: {
           downloadLabel
@@ -37,7 +37,7 @@ struct DownloadFolderSection: View {
 
   var downloadLabel: some View {
     Group {
-      if let downloadLocation = Preferences.shared.downloadURL {
+      if let downloadLocation = Preferences.downloadURL {
         Label {
           Text(downloadLocation.path())
         } icon: {
@@ -61,7 +61,7 @@ struct DownloadFolderSection: View {
     panel.prompt = "Select Download Location"
     panel.begin { response in
       if response == .OK, let url = panel.url {
-        Preferences.shared.downloadURL = url
+        Preferences.downloadURL = url
       }
     }
   }

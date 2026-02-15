@@ -50,7 +50,7 @@ struct SidebarTabList: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.leading, .sidebarPadding)
-        .padding(.trailing, Preferences.shared.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
+        .padding(.trailing, Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
     }
     
 //    func moveTab(to destination: BrowserTab) {

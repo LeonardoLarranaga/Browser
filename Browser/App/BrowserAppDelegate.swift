@@ -11,7 +11,6 @@ import AppKit
 class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     var lastWindows: [NSWindow] = []
-    var newWindowOpened = false
     var windowWasClosed = false
 
     /// Add window observers to save the window position and size
@@ -39,7 +38,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
-        if Preferences.shared.warnBeforeQuitting {
+        if Preferences.warnBeforeQuitting {
             let alert = NSAlert()
             alert.messageText = "Are you sure you want to quit?"
             alert.addButton(withTitle: "Cancel")
@@ -68,17 +67,12 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         checkForNewWindows(window)
 
-        if windowWasClosed || newWindowOpened {
-            let windowOriginX = UserDefaults.standard.double(forKey: "windowOriginX")
-            let windowOriginY = UserDefaults.standard.double(forKey: "windowOriginY")
-            let windowWidth = UserDefaults.standard.double(forKey: "windowWidth")
-            let windowHeight = UserDefaults.standard.double(forKey: "windowHeight")
-
+        if windowWasClosed {
             var frame = window.frame
-            frame.origin.x = windowOriginX + (newWindowOpened ? 20 : 0)
-            frame.origin.y = windowOriginY
-            frame.size.width = windowWidth
-            frame.size.height = windowHeight
+            frame.origin.x = Preferences.windowFrame.originX
+            frame.origin.y = Preferences.windowFrame.originY
+            frame.size.width = Preferences.windowFrame.width
+            frame.size.height = Preferences.windowFrame.height
 
             window.setFrame(frame, display: true)
             windowWasClosed = false
@@ -87,8 +81,8 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         window.backgroundColor = .clear
         window.toolbar?.allowsDisplayModeCustomization = false
 
-        if Preferences.shared.sidebarPosition == .trailing {
-            NSApp.setBrowserWindowControls(hidden: !Preferences.shared.showWindowControlsOnTrailingSidebar)
+        if Preferences.sidebarPosition == .trailing {
+            NSApp.setBrowserWindowControls(hidden: !Preferences.showWindowControlsOnTrailingSidebar)
         }
     }
 
@@ -110,7 +104,6 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
     @objc func checkForNewWindows(_ sender: NSWindow) {
         let currentWindows = NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("Browser") == true }
-        newWindowOpened = currentWindows.count > lastWindows.count || !lastWindows.compactMap { $0.identifier?.rawValue }.contains(sender.identifier?.rawValue)
         lastWindows = currentWindows
     }
 
@@ -118,14 +111,16 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     /// - Parameter window: The window to save the position and size
     /// - Note: Only save the window position and size if the window is a BrowserWindow
     func saveWindowPositionAndSize(_ window: NSWindow) {
-        guard !windowWasClosed || !newWindowOpened else { return }
+        guard !windowWasClosed else { return }
         guard NSWindow.hasPrefix("BrowserWindow", in: window) else { return }
 
         let windowFrame = window.frame
-        UserDefaults.standard.set(windowFrame.origin.x, forKey: "windowOriginX")
-        UserDefaults.standard.set(windowFrame.origin.y, forKey: "windowOriginY")
-        UserDefaults.standard.set(windowFrame.size.width, forKey: "windowWidth")
-        UserDefaults.standard.set(windowFrame.size.height, forKey: "windowHeight")
+        Preferences.windowFrame = .init(
+            originX: windowFrame.origin.x,
+            originY: window.frame.origin.y,
+            width: windowFrame.size.width,
+            height: windowFrame.size.height
+        )
     }
 
     func closeNotMainWindows() {
@@ -135,7 +130,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     }
 
     @objc func setWarnBeforeQuitting(_ sender: NSButton) {
-        Preferences.shared.warnBeforeQuitting = sender.state == .on
+        Preferences.warnBeforeQuitting = sender.state == .on
     }
 
     func deleteTemporaryImages() {

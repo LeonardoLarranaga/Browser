@@ -20,7 +20,7 @@ struct Sidebar: View {
 
     var body: some View {
         VStack {
-            if Preferences.shared.urlBarPosition == .onSidebar {
+            if Preferences.urlBarPosition == .onSidebar {
                 SidebarURL()
                     .padding(.top, 50)
             }
@@ -30,7 +30,7 @@ struct Sidebar: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .padding(.bottom, 10)
         .opacity(sidebarModel.currentSidebarWidth == 0 ? 0 : 1)
-        .padding(.trailing, Preferences.shared.sidebarPosition == .trailing ? .sidebarPadding * 2 : 0)
+        .padding(.trailing, Preferences.sidebarPosition == .trailing ? .sidebarPadding * 2 : 0)
         .sidebarToolbar(browserSpaces: browserSpaces)
         .gesture(WindowDragGesture()) // Move the browser window by dragging the sidebar
         .task {

@@ -29,8 +29,8 @@ struct SidebarToolbar: ViewModifier {
         .navigation
     }
 
-    private var sidebarPosition: Preferences.SidebarPosition {
-        Preferences.shared.sidebarPosition
+    private var sidebarPosition: _Preferences.SidebarPosition {
+        Preferences.sidebarPosition
     }
 
     private var sidebarIcon: String {

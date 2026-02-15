@@ -120,7 +120,7 @@ class WKWebViewController: NSViewController {
     }
 
     func startSuspendTimer() {
-        guard Preferences.shared.automaticPageSuspension else { return }
+        guard Preferences.automaticPageSuspension else { return }
         suspendTimer?.cancel()
 
         suspendTimer = DispatchSource.makeTimerSource(queue: .main)

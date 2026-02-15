@@ -29,7 +29,7 @@ struct BrowserApp: App {
         WindowGroup(id: id) {
             ContentView()
                 .transaction {
-                    $0.disablesAnimations = Preferences.shared.disableAnimations
+                    $0.disablesAnimations = Preferences.disableAnimations
                 }
                 .frame(minWidth: 400, minHeight: 200)
         }

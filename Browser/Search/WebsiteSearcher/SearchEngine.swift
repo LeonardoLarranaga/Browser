@@ -36,6 +36,6 @@ enum SearchEngine: String, CaseIterable {
 extension SearchEngine {
     /// All search engines available
     static var allSearchers: [WebsiteSearcher] {
-        SearchEngine.allCases.map { $0.searcher } + Preferences.shared.customWebsiteSearchers
+        SearchEngine.allCases.map { $0.searcher } + Preferences.customWebsiteSearchers
     }
 }

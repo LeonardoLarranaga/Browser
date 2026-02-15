@@ -42,7 +42,7 @@ struct SidebarSpaceView: View {
                 }
             }
             .frame(height: 25)
-            .padding(.top, Preferences.shared.urlBarPosition == .onToolbar ? 40 : 0)
+            .padding(.top, Preferences.urlBarPosition == .onToolbar ? 40 : 0)
 
             ScrollView {
                 VStack {

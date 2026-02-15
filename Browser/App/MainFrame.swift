@@ -19,14 +19,14 @@ struct MainFrame: View {
     @Query(sort: \BrowserSpace.order) var browserSpaces: [BrowserSpace]
 
     var isImmersive: Bool {
-        browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.shared.immersiveViewOnFullscreen
+        browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.immersiveViewOnFullscreen
     }
 
     var body: some View {
         @Bindable var browserWindow = browserWindow
 
         HStack(spacing: 0) {
-            if Preferences.shared.sidebarPosition == .leading {
+            if Preferences.sidebarPosition == .leading {
                 if !sidebarModel.sidebarCollapsed {
                     sidebar
                     SidebarResizer()
@@ -34,16 +34,16 @@ struct MainFrame: View {
             }
 
             PageWebView(browserSpaces: browserSpaces)
-                .clipShape(.rect(corners: isImmersive ? .fixed(0) : Preferences.shared.roundedCorners ? .concentric(minimum: 8) : .fixed(0)))
-                .shadow(radius: isImmersive ? 0 : Preferences.shared.enableShadow ? 3 : 0)
-                .padding([.top, .bottom], isImmersive ? 0 : Preferences.shared.enablePadding ? 10 : 0)
+                .clipShape(.rect(corners: isImmersive ? .fixed(0) : Preferences.roundedCorners ? .concentric(minimum: 8) : .fixed(0)))
+                .shadow(radius: isImmersive ? 0 : Preferences.enableShadow ? 3 : 0)
+                .padding([.top, .bottom], isImmersive ? 0 : Preferences.enablePadding ? 10 : 0)
                 .padding(
-                    Preferences.shared.sidebarPosition == .leading ? .leading : .trailing,
+                    Preferences.sidebarPosition == .leading ? .leading : .trailing,
                     isImmersive ? 0 : sidebarModel.sidebarCollapsed ? 10 : 5
                 )
                 .padding(
-                    Preferences.shared.sidebarPosition == .leading ? .trailing : .leading,
-                    isImmersive ? 0 : Preferences.shared.enablePadding ? 10 : 0
+                    Preferences.sidebarPosition == .leading ? .trailing : .leading,
+                    isImmersive ? 0 : Preferences.enablePadding ? 10 : 0
                 )
                 .onReceive(NotificationCenter.default.publisher(for: NSWindow.willEnterFullScreenNotification)) { _ in
                     withAnimation(.browserDefault) {
@@ -57,7 +57,7 @@ struct MainFrame: View {
                 }
                 .actionAlert()
 
-            if Preferences.shared.sidebarPosition == .trailing {
+            if Preferences.sidebarPosition == .trailing {
                 if !sidebarModel.sidebarCollapsed {
                     SidebarResizer()
                     sidebar
@@ -79,7 +79,7 @@ struct MainFrame: View {
             if !newValue {
                 browserWindow.searchOpenLocation = .none
             }
-        }), origin: browserWindow.searchPanelOrigin, size: browserWindow.searchPanelSize, shouldCenter: browserWindow.searchOpenLocation == .fromNewTab || Preferences.shared.urlBarPosition == .onToolbar) {
+        }), origin: browserWindow.searchPanelOrigin, size: browserWindow.searchPanelSize, shouldCenter: browserWindow.searchOpenLocation == .fromNewTab || Preferences.urlBarPosition == .onToolbar) {
             SearchView()
                 .environment(browserWindow)
         }
@@ -89,7 +89,7 @@ struct MainFrame: View {
                 .environment(browserWindow)
         }
         // Show the sidebar by hovering the mouse on the edge of the screen
-        .overlay(alignment: Preferences.shared.sidebarPosition == .leading ? .topLeading : .topTrailing) {
+        .overlay(alignment: Preferences.sidebarPosition == .leading ? .topLeading : .topTrailing) {
             if sidebarModel.sidebarCollapsed && sidebarModel.currentSidebarWidth > 0 {
                 sidebar
                     .background {
@@ -98,12 +98,12 @@ struct MainFrame: View {
                         }
                     }
                     .glassEffect(in: .rect)
-                    .padding(Preferences.shared.sidebarPosition == .leading ? .trailing : .leading, .sidebarPadding)
-                    .browserTransition(.move(edge: Preferences.shared.sidebarPosition == .leading ? .leading : .trailing))
+                    .padding(Preferences.sidebarPosition == .leading ? .trailing : .leading, .sidebarPadding)
+                    .browserTransition(.move(edge: Preferences.sidebarPosition == .leading ? .leading : .trailing))
             }
         }
         .transaction {
-            if Preferences.shared.disableAnimations {
+            if Preferences.disableAnimations {
                 $0.animation = nil
             }
         }

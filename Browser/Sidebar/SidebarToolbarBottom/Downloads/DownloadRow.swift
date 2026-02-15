@@ -46,7 +46,7 @@ struct DownloadRow: View {
     
     private func downloadNSImage() -> NSImage {
         let fallbackImage = NSWorkspace.shared.icon(for: download.url.fileType ?? .item)
-        guard let downloadLocation = Preferences.shared.downloadURL,
+        guard let downloadLocation = Preferences.downloadURL,
               downloadLocation.startAccessingSecurityScopedResource() else {
             return fallbackImage
         }

@@ -39,7 +39,7 @@ struct SidebarBottomToolbar: View {
             .buttonStyle(.sidebarHover(padding: 2, enabledColor: foregroundColor))
             .contextMenu {
                 Button("Open Downloads Folder") {
-                    if let downloadURL = Preferences.shared.downloadURL {
+                    if let downloadURL = Preferences.downloadURL {
                         guard downloadURL.startAccessingSecurityScopedResource() else { return }
                         NSWorkspace.shared.open(downloadURL)
                         downloadURL.stopAccessingSecurityScopedResource()

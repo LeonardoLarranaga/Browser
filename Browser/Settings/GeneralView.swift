@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GeneralSettingsView: View {
     var body: some View {
-        @Bindable var preferences = Preferences.shared
+        @Bindable var preferences = Preferences
         Form {
             Toggle("Open Picture in Picture Automatically", systemImage: "inset.filled.topright.rectangle", isOn: $preferences.openPipOnTabChange)
             Toggle("Warn Before Quitting", systemImage: "exclamationmark.triangle", isOn: $preferences.warnBeforeQuitting)

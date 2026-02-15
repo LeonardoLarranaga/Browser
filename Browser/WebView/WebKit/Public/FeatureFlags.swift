@@ -19,7 +19,7 @@ enum FeatureFlags {
     }
 
     static func userToggleFeature(_ feature: WKFeature, enabled: Bool) {
-        Preferences.shared.configuredFeatureFlags[feature.key] = enabled
+        Preferences.configuredFeatureFlags[feature.key] = enabled
     }
 
     private static func toggleFeature(_ feature: WKFeature, enabled: Bool, for preferences: WKPreferences? = nil) {
@@ -34,7 +34,7 @@ enum FeatureFlags {
 
     static func isEnabled(_ feature: WKFeature) -> Bool {
         // Check if user has configured this feature flag
-        if let userConfigured = Preferences.shared.configuredFeatureFlags[feature.key] {
+        if let userConfigured = Preferences.configuredFeatureFlags[feature.key] {
             return userConfigured
         }
         // Fall back to the actual WKPreferences state
@@ -53,7 +53,7 @@ enum FeatureFlags {
         }
 
         // Apply user-configured flags (these override browser defaults)
-        Preferences.shared.configuredFeatureFlags.forEach { key, enabled in
+        Preferences.configuredFeatureFlags.forEach { key, enabled in
             toggleFeature(key, enabled: enabled, for: preferences)
         }
     }
@@ -63,7 +63,7 @@ enum FeatureFlags {
     }
 
     static func isFeatureFlagUserConfigured(_ feature: WKFeature) -> Bool {
-        Preferences.shared.configuredFeatureFlags[feature.key] != nil
+        Preferences.configuredFeatureFlags[feature.key] != nil
     }
 }
 

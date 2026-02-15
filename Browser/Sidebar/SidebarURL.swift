@@ -45,7 +45,7 @@ struct SidebarURL: View {
                 AnyShapeStyle(Color.white).opacity(hover ? 0.1 : 0.05)
         )
         .overlay(alignment: .bottom) {
-            if Preferences.shared.loadingIndicatorPosition == .onURL && browserWindow.currentSpace?.currentTab?.isLoading == true {
+            if Preferences.loadingIndicatorPosition == .onURL && browserWindow.currentSpace?.currentTab?.isLoading == true {
                 ProgressView(value: browserWindow.currentSpace?.currentTab?.estimatedProgress ?? 0)
                     .progressViewStyle(.linear)
                     .frame(height: 2)

@@ -10,7 +10,7 @@ extension MyWKWebView {
         // Cut (0)
         // Copy (1)
         // Paste (2)
-        if Preferences.shared.injectOpenPasswordsApp {
+        if Preferences.injectOpenPasswordsApp {
             menu.insertItem(.separator(), at: 3)
 
             let passwordAppItem = NSMenuItem(title: "Open Passwords App", action: #selector(openPasswordsApp), keyEquivalent: "")
@@ -20,7 +20,7 @@ extension MyWKWebView {
     }
 
     @objc func openPasswordsApp() {
-        if let passwordAppURL = Preferences.shared.selectedPasswordApp {
+        if let passwordAppURL = Preferences.selectedPasswordApp {
             NSWorkspace.shared.open(passwordAppURL)
         }
     }

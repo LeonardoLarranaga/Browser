@@ -83,7 +83,7 @@ extension WKWebViewController: WKScriptMessageHandler {
     }
 
     func handlePasswordTextFieldShortcut(_ body: Any) {
-        guard let appURL = Preferences.shared.selectedPasswordApp else { return }
+        guard let appURL = Preferences.selectedPasswordApp else { return }
         NSWorkspace.shared.open(appURL)
     }
 }

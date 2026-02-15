@@ -61,7 +61,7 @@ struct SidebarTab: View {
 
     func selectTab() {
         browserSpace.currentTab = browserTab
-        if Preferences.shared.disableAnimations { return }
+        if Preferences.disableAnimations { return }
         // Scale bounce effect
         Task {
             isPressed = true

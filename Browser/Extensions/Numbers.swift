@@ -8,10 +8,6 @@
 import AppKit
 
 extension CGFloat {
-    /// Approximate traffic lights height, taking into account the size of the toolbar
-    static let approximateTrafficLightsTopPadding: CGFloat = 13.5
-    /// Approximate traffic lights position
-    static let approximateTrafficLightsLeadingPadding: CGFloat = 20
     /// Sidebar minimum width
     static let minimumSidebarWidth: CGFloat = 150
     /// Sidebar maximum width

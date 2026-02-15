@@ -36,7 +36,7 @@ struct CustomWebsiteSearchersSection: View {
                     ButtonMakeDefault(defaultSearcher.searcher)
                 }
             }
-            List(Preferences.shared.customWebsiteSearchers) { searcher in
+            List(Preferences.customWebsiteSearchers) { searcher in
                 HStack {
                     Label { Text(searcher.website)
                     } icon: { Capsule().fill(searcher.color) }
@@ -54,7 +54,7 @@ struct CustomWebsiteSearchersSection: View {
                     }
 
                     Button("Remove", systemImage: "trash.fill") {
-                        Preferences.shared.customWebsiteSearchers.removeAll(where: { $0.id == searcher.id })
+                        Preferences.customWebsiteSearchers.removeAll(where: { $0.id == searcher.id })
                     }
                 }
             }
@@ -85,12 +85,12 @@ struct CustomWebsiteSearchersSection: View {
                     }
 
                     Button("Save") {
-                        if let selectedWebsiteSearcher, let index = Preferences.shared.customWebsiteSearchers.firstIndex(where: { $0.id == selectedWebsiteSearcher.id }) {
-                            Preferences.shared.customWebsiteSearchers[index].website = website
-                            Preferences.shared.customWebsiteSearchers[index].queryURL = queryURL
-                            Preferences.shared.customWebsiteSearchers[index].hexColor = hex
+                        if let selectedWebsiteSearcher, let index = Preferences.customWebsiteSearchers.firstIndex(where: { $0.id == selectedWebsiteSearcher.id }) {
+                            Preferences.customWebsiteSearchers[index].website = website
+                            Preferences.customWebsiteSearchers[index].queryURL = queryURL
+                            Preferences.customWebsiteSearchers[index].hexColor = hex
                         } else {
-                            Preferences.shared.customWebsiteSearchers.append(
+                            Preferences.customWebsiteSearchers.append(
                                 BrowserCustomSearcher(
                                     website: website,
                                     queryURL: queryURL,
@@ -110,9 +110,9 @@ struct CustomWebsiteSearchersSection: View {
 
     @ViewBuilder
     func ButtonMakeDefault(_ searcher: any WebsiteSearcher) -> some View {
-        var isDefault: Bool { searcher.equals(Preferences.shared.defaultWebsiteSearcher) }
+        var isDefault: Bool { searcher.equals(Preferences.defaultWebsiteSearcher) }
         Button(isDefault ? "Default" : "Make Default", systemImage: isDefault ? "checkmark" : "star") {
-            Preferences.shared.defaultWebsiteSearcher = searcher
+            Preferences.defaultWebsiteSearcher = searcher
         }
         .disabled(isDefault)
     }

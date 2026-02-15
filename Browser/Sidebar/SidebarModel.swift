@@ -38,12 +38,12 @@ import SwiftUI
             if sidebarCollapsed {
                 lastSidebarWidth = currentSidebarWidth
                 currentSidebarWidth = 0
-                if Preferences.shared.sidebarPosition == .leading {
+                if Preferences.sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: true)
                 }
             } else {
                 self.currentSidebarWidth = self.lastSidebarWidth
-                if Preferences.shared.sidebarPosition == .leading {
+                if Preferences.sidebarPosition == .leading {
                     NSApp.setBrowserWindowControls(hidden: false)
                 }
             }
@@ -60,7 +60,7 @@ import SwiftUI
     /// - Parameter event: The mouse movement event
     func handleMouseMovement(event: NSEvent) -> NSEvent? {
         guard let keyWindow = NSApp.keyWindow else { return event }
-        let sidebarPosition = Preferences.shared.sidebarPosition
+        let sidebarPosition = Preferences.sidebarPosition
 
         let windowX = sidebarPosition == .leading ? keyWindow.frame.minX : keyWindow.frame.maxX
         let cursorX = NSEvent.mouseLocation.x - windowX

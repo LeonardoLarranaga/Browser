@@ -39,18 +39,18 @@ class SearchManager {
         if isUsingWebsiteSearcher {
             return activeWebsiteSearcher.color
         } else {
-            return _accentColor ?? Preferences.shared.defaultWebsiteSearcher.color
+            return _accentColor ?? Preferences.defaultWebsiteSearcher.color
         }
     }
 
     var matchedWebsiteSearcher: any WebsiteSearcher {
-        guard !searchText.isEmpty else { return Preferences.shared.defaultWebsiteSearcher }
-        return SearchEngine.allSearchers.first(where: { $0.title.lowercased().hasPrefix(searchText.lowercased()) }) ?? Preferences.shared.defaultWebsiteSearcher
+        guard !searchText.isEmpty else { return Preferences.defaultWebsiteSearcher }
+        return SearchEngine.allSearchers.first(where: { $0.title.lowercased().hasPrefix(searchText.lowercased()) }) ?? Preferences.defaultWebsiteSearcher
     }
     var isUsingWebsiteSearcher: Bool = false
     private var _activeWebsiteSearcher: (any WebsiteSearcher)?
     var activeWebsiteSearcher: any WebsiteSearcher {
-        get { _activeWebsiteSearcher ?? Preferences.shared.defaultWebsiteSearcher }
+        get { _activeWebsiteSearcher ?? Preferences.defaultWebsiteSearcher }
         set { _activeWebsiteSearcher = newValue }
     }
 
@@ -105,7 +105,7 @@ class SearchManager {
         withAnimation(.browserDefault) {
             if isUsingWebsiteSearcher {
                 resetWebsiteSearcher()
-            } else if matchedWebsiteSearcher.title != Preferences.shared.defaultWebsiteSearcher.title {
+            } else if matchedWebsiteSearcher.title != Preferences.defaultWebsiteSearcher.title {
                 isUsingWebsiteSearcher = true
                 activeWebsiteSearcher = matchedWebsiteSearcher
                 searchText = ""

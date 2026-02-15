@@ -14,13 +14,7 @@ import SwiftData
     var currentSpace: BrowserSpace? = nil {
         didSet {
             if isMainBrowserWindow && !isNoTraceWindow {
-                if let newValue = currentSpace {
-                    UserDefaults.standard.set(newValue.id.uuidString, forKey: "currentBrowserSpace")
-                } else {
-                    UserDefaults.standard.removeObject(forKey: "currentBrowserSpace")
-                }
-            } else if isNoTraceWindow {
-                print("No Trace Window", currentSpace?.name as Any)
+                Preferences.currentBrowserSpace = currentSpace?.id
             }
         }
     }
@@ -28,10 +22,10 @@ import SwiftData
 
     var searchOpenLocation: SearchOpenLocation? = .none
     var searchPanelOrigin: CGPoint {
-        searchOpenLocation == .fromNewTab || Preferences.shared.urlBarPosition == .onToolbar ? .zero : CGPoint(x: 5, y: 50)
+        searchOpenLocation == .fromNewTab || Preferences.urlBarPosition == .onToolbar ? .zero : CGPoint(x: 5, y: 50)
     }
     var searchPanelSize: CGSize {
-        searchOpenLocation == .fromNewTab || Preferences.shared.urlBarPosition == .onToolbar ? CGSize(width: 700, height: 300) : CGSize(width: 400, height: 300)
+        searchOpenLocation == .fromNewTab || Preferences.urlBarPosition == .onToolbar ? CGSize(width: 700, height: 300) : CGSize(width: 400, height: 300)
     }
 
     var showURLQRCode = false
@@ -59,12 +53,10 @@ import SwiftData
         self.tabUndoManager.browserWindow = self
     }
 
-    /// Loads the current space from the UserDefaults and sets it as the current space
+    /// Loads the current space from Preferences and sets it as the current space
     @Sendable
     func loadCurrentSpace(browserSpaces: [BrowserSpace]) {
-        guard let spaceId = UserDefaults.standard.string(forKey: "currentBrowserSpace"),
-              let uuid = UUID(uuidString: spaceId) else { return }
-
+        guard let uuid = Preferences.currentBrowserSpace else { return }
         if let space = browserSpaces.first(where: { $0.id == uuid }) {
             goToSpace(space)
         }

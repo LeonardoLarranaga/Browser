@@ -20,11 +20,11 @@ extension WKWebViewController: WKNavigationDelegate {
             self.tab.updateFavicon(with: url)
         }
 
-        if Preferences.shared.showHoverURL {
+        if Preferences.showHoverURL {
             addHoverURLListener()
         }
         
-        if Preferences.shared.injectOpenPasswordsApp {
+        if Preferences.injectOpenPasswordsApp {
             addPasswordTextFieldShortcut()
         }
 

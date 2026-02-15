@@ -35,7 +35,7 @@ struct WebView: View {
             }
         }
         .overlay(alignment: .top) {
-            if Preferences.shared.loadingIndicatorPosition == .onWebView && browserWindow.currentSpace?.currentTab == tab {
+            if Preferences.loadingIndicatorPosition == .onWebView && browserWindow.currentSpace?.currentTab == tab {
                 if tab.isLoading {
                     ProgressView(value: tab.estimatedProgress)
                         .progressViewStyle(.linear)

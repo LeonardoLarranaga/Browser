@@ -22,7 +22,7 @@ struct SettingsView: View {
                 SettingsShortcutsView()
             }
 
-            if Preferences.shared.shouldShowFeatureFlagSettings {
+            if Preferences.shouldShowFeatureFlagSettings {
                 Tab("Feature Flags", systemImage: "flag.2.crossed.fill") {
                     SettingsFeatureFlagsView()
                 }

@@ -21,7 +21,7 @@ struct PageWebView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if Preferences.shared.urlBarPosition == .onToolbar {
+            if Preferences.urlBarPosition == .onToolbar {
                 SidebarURLToolbar()
             }
             
@@ -47,7 +47,7 @@ struct PageWebView: View {
         .transaction { $0.disablesAnimations = true }
         // Try to enter Picture in Picture of current tab when tab changes or app goes to background
         .onChange(of: browserWindow.currentSpace?.currentTab) { oldValue, newValue in
-            if Preferences.shared.openPipOnTabChange {
+            if Preferences.openPipOnTabChange {
                 if let oldValue {
                     oldValue.webview?.togglePictureInPicture()
                 }
@@ -58,12 +58,12 @@ struct PageWebView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willResignActiveNotification)) { _ in
-            if Preferences.shared.openPipOnTabChange {
+            if Preferences.openPipOnTabChange {
                 browserWindow.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: NSApplication.willBecomeActiveNotification)) { _ in
-            if Preferences.shared.openPipOnTabChange {
+            if Preferences.openPipOnTabChange {
                 browserWindow.currentSpace?.currentTab?.webview?.togglePictureInPicture()
             }
         }

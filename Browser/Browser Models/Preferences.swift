@@ -8,14 +8,21 @@
 import SwiftUI
 import ObservableDefaults
 
+/// Singleton instance of user preferences
+let Preferences = _Preferences.shared
+
+typealias TranslatedLanguage = _Preferences.TranslatedLanguage
+
 /// User preferences consistent throughout app sessions
 @ObservableDefaults
-class Preferences {
-    static let shared = Preferences()
+class _Preferences {
+    fileprivate static let shared = _Preferences()
 
     enum SidebarPosition: String {
         case leading, trailing
     }
+
+    var currentBrowserSpace: UUID? = nil
 
     var disableAnimations = false
     var sidebarPosition = SidebarPosition.leading {
@@ -167,4 +174,20 @@ class Preferences {
             }
         }
     }
+
+    // MARK: Window size and position
+    struct WindowFrame: Codable {
+        let originX: Double
+        let originY: Double
+        let width: Double
+        let height: Double
+    }
+    var windowFrame = WindowFrame(originX: 0, originY: 0, width: 600, height: 800)
+
+    // MARK: Recently translated languages
+    struct TranslatedLanguage: Codable {
+        let code: String
+        let name: String
+    }
+    var recentlyTranslatedLanguages: [TranslatedLanguage] = []
 }
