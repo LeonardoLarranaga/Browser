@@ -5,9 +5,9 @@
 //  Created by Leonardo Larrañaga on 2/16/25.
 //
 
-import SwiftUI
-import SwiftData
 import KeyboardShortcuts
+import SwiftData
+import SwiftUI
 
 /// Commands for the history menu
 struct HistoryCommands: Commands {

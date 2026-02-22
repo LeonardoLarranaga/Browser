@@ -5,7 +5,6 @@
 //  Created by Leonardo Larrañaga on 3/9/25.
 //
 
-import SwiftData
 import SwiftUI
 
 /// A custom website searcher that the user can add

@@ -10,11 +10,10 @@ import SwiftUI
 
 /// View that displays the search view with a text field and search suggestion results
 struct SearchView: View {
-    
+
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindow.self) var browserWindow
-    
     @State var searchManager = SearchManager()
     @Query(BrowserHistoryEntry.searchDescriptor) var historyEntries: [BrowserHistoryEntry]
 
@@ -22,14 +21,15 @@ struct SearchView: View {
         VStack(spacing: 0) {
             SearchTextField(searchManager: searchManager)
                 .frame(height: 25)
-            
+
             Divider()
                 .padding(.top, 5)
-            
+
             SearchSuggestionResultsView(searchManager: searchManager)
         }
         .foregroundStyle(colorScheme == .light ? .black : .white)
         .padding([.horizontal, .top], 15)
+        .task { searchManager.modelContext = modelContext }
         .onKeyPress(.escape) {
             closeSearchView()
             return .handled
@@ -45,8 +45,8 @@ struct SearchView: View {
             } else {
                 return .ignored
             }
-            
-            searchManager.searchAction(suggestionToUse, browserWindow: browserWindow, using: modelContext)
+
+            searchManager.searchAction(suggestionToUse, browserWindow: browserWindow)
             return .handled
         }
         .onKeyPress(.upArrow, action: searchManager.handleUpArrow)
@@ -66,7 +66,7 @@ struct SearchView: View {
             }
         }
     }
-    
+
     func closeSearchView() {
         DispatchQueue.main.async {
             browserWindow.searchOpenLocation = .none

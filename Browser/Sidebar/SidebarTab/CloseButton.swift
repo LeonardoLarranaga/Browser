@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SidebarTabCloseButton: View {
 
-    @Environment(\.modelContext) var modelContext
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserWindow.self) var browserWindow
@@ -18,7 +17,7 @@ struct SidebarTabCloseButton: View {
 
     var body: some View {
         Button("Close Tab", systemImage: "xmark") {
-            browserSpace.closeTab(browserTab, using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
+            browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
         }
         .font(.title3)
         .buttonStyle(.plain)

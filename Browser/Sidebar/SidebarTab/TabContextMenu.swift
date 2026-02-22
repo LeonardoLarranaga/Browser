@@ -10,7 +10,6 @@ import SwiftUI
 /// Context menu for a tab in the sidebar
 struct SidebarTabContextMenu: View {
 
-    @Environment(\.modelContext) var modelContext
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserWindow.self) var browserWindow
@@ -80,13 +79,13 @@ struct SidebarTabContextMenu: View {
 
     func pinTab() {
         withAnimation(.browserDefault) {
-            browserSpace.pinTab(browserTab, using: modelContext)
+            browserSpace.pinTab(browserTab)
         }
     }
 
     func unpinTab() {
         withAnimation(.browserDefault) {
-            browserSpace.unpinTab(browserTab, using: modelContext)
+            browserSpace.unpinTab(browserTab)
         }
     }
 
@@ -106,7 +105,7 @@ struct SidebarTabContextMenu: View {
 
     /// Close (delete) the tab and selects the next tab
     func closeTab() {
-        browserSpace.closeTab(browserTab, using: modelContext, tabUndoManager: browserWindow.tabUndoManager)
+        browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
     }
 
     /// Close (delete) the tabs below the current tab
@@ -121,7 +120,6 @@ struct SidebarTabContextMenu: View {
         let command = CloseMultipleTabsCommand(
             tabs: tabsToDelete,
             space: browserSpace,
-            modelContext: modelContext,
             commandType: .closeTabsBelow
         )
         browserWindow.tabUndoManager.execute(command)
@@ -139,7 +137,6 @@ struct SidebarTabContextMenu: View {
         let command = CloseMultipleTabsCommand(
             tabs: tabsToDelete,
             space: browserSpace,
-            modelContext: modelContext,
             commandType: .closeTabsAbove
         )
 

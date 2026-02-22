@@ -6,8 +6,8 @@
 //  https://cindori.com/developer/floating-panel
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 private struct FloatingPanelKey: EnvironmentKey {
     static let defaultValue: NSPanel? = nil

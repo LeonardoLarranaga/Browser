@@ -99,13 +99,13 @@ final class BrowserSpace: Identifiable {
     }
 
     /// Closes (deletes) a tab from the space and selects the next tab
-    func closeTab(_ tab: BrowserTab, using modelContext: ModelContext, tabUndoManager: TabUndoManager?) {
+    func closeTab(_ tab: BrowserTab, tabUndoManager: TabUndoManager?) {
         guard let tabUndoManager else { return }
-        let command = CloseTabCommand(tab: tab, space: self, modelContext: modelContext)
+        let command = CloseTabCommand(tab: tab, space: self)
         tabUndoManager.execute(command)
     }
 
-    func clear(using modelContext: ModelContext, deleteCurrent: Bool, tabUndoManager: TabUndoManager?) {
+    func clear(deleteCurrent: Bool, tabUndoManager: TabUndoManager?) {
         guard let tabUndoManager, !normalTabs.isEmpty else { return }
 
         let deletedTabs = normalTabs.filter {
@@ -115,7 +115,6 @@ final class BrowserSpace: Identifiable {
         let command = CloseMultipleTabsCommand(
             tabs: deletedTabs,
             space: self,
-            modelContext: modelContext,
             commandType: .clear
         )
         tabUndoManager.execute(command)
@@ -124,8 +123,8 @@ final class BrowserSpace: Identifiable {
     /// Opens a new tab in the space
     /// - Parameters:
     ///  - browserTab: The tab to open
-    ///  - modelContext: The model context to save the changes
-    func openNewTab(_ browserTab: BrowserTab, using modelContext: ModelContext, select: Bool = true) {
+    func openNewTab(_ browserTab: BrowserTab, select: Bool = true) {
+        guard let modelContext else { return }
         do {
             if browserTab.order > tabs.count {
                 tabs.append(browserTab)
@@ -143,19 +142,19 @@ final class BrowserSpace: Identifiable {
         }
     }
 
-    func pinTab(_ browserTab: BrowserTab, using modelContext: ModelContext) {
+    func pinTab(_ browserTab: BrowserTab) {
         do {
             browserTab.pinState = .pinned
-            try modelContext.save()
+            try modelContext?.save()
         } catch {
             print("Error pinning tab: \(error)")
         }
     }
 
-    func unpinTab(_ browserTab: BrowserTab, using modelContext: ModelContext) {
+    func unpinTab(_ browserTab: BrowserTab) {
         do {
             browserTab.pinState = .normal
-            try modelContext.save()
+            try modelContext?.save()
         } catch {
             print(error.localizedDescription)
         }
@@ -166,8 +165,7 @@ final class BrowserSpace: Identifiable {
     ///   - sourceTab: The tab to move
     ///   - destinationTab: The tab to insert before
     ///   - destinationPinState: The pin state of the destination area (pinned or normal)
-    ///   - modelContext: The model context to save the changes
-    func reorderTab(_ sourceTab: BrowserTab, to destinationTab: BrowserTab, destinationPinState: TabPinState, using modelContext: ModelContext) {
+    func reorderTab(_ sourceTab: BrowserTab, to destinationTab: BrowserTab, destinationPinState: TabPinState) {
         guard sourceTab.id != destinationTab.id else { return }
 
         do {
@@ -189,7 +187,7 @@ final class BrowserSpace: Identifiable {
 
             // Update tabs (this will automatically update order indices via setter)
             tabs = allTabs
-            try modelContext.save()
+            try modelContext?.save()
         } catch {
             print("Error reordering tab: \(error)")
         }

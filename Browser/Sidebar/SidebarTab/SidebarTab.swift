@@ -11,7 +11,6 @@ import SwiftUI
 struct SidebarTab: View {
 
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.modelContext) var modelContext
     @Environment(BrowserWindow.self) var browserWindow
 
     @Bindable var browserSpace: BrowserSpace
@@ -79,7 +78,7 @@ struct SidebarTab: View {
             // Perform real-time reordering when hovering over a tab
             if targeted, let sourceTab = draggingTab, sourceTab.id != browserTab.id {
                 withAnimation(.browserDefault) {
-                    browserSpace.reorderTab(sourceTab, to: browserTab, destinationPinState: pinState, using: modelContext)
+                    browserSpace.reorderTab(sourceTab, to: browserTab, destinationPinState: pinState)
                 }
             }
         }

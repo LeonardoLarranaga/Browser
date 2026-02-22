@@ -9,12 +9,11 @@ import SwiftUI
 
 /// View that displays the search suggestions
 struct SearchSuggestionResultsView: View {
-    
-    @Environment(\.modelContext) var modelContext
+
     @Environment(BrowserWindow.self) var browserWindow
-    
+
     var searchManager: SearchManager
-    
+
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -24,7 +23,7 @@ struct SearchSuggestionResultsView: View {
                         SearchSuggestionResultItem(searchManager: searchManager, index: index, searchSuggestion: searchSuggestion, searchOpenLocation: browserWindow.searchOpenLocation)
                             .id(index)
                             .onTapGesture {
-                                searchManager.searchAction(searchSuggestion, browserWindow: browserWindow, using: modelContext)
+                                searchManager.searchAction(searchSuggestion, browserWindow: browserWindow)
                             }
                     }
                 }

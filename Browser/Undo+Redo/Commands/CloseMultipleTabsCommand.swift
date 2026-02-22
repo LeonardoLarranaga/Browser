@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 struct CloseMultipleTabsCommand: UndoableCommand {
 
@@ -24,7 +23,6 @@ struct CloseMultipleTabsCommand: UndoableCommand {
 
     let snapshots: [ClosedTabSnapshot]
     weak var space: BrowserSpace?
-    let modelContext: ModelContext
     let currentTabId: UUID?
     let commandType: CommandType
 
@@ -32,16 +30,15 @@ struct CloseMultipleTabsCommand: UndoableCommand {
         commandType.description(tabCount: snapshots.count)
     }
 
-    init(tabs: [BrowserTab], space: BrowserSpace, modelContext: ModelContext, commandType: CommandType) {
+    init(tabs: [BrowserTab], space: BrowserSpace, commandType: CommandType) {
         self.snapshots = tabs.map { ClosedTabSnapshot(from: $0) }
         self.space = space
-        self.modelContext = modelContext
         self.currentTabId = space.currentTab?.id
         self.commandType = commandType
     }
 
     func execute() {
-        guard let space else { return }
+        guard let space, let modelContext = space.modelContext else { return }
         let tabIds = snapshots.map { $0.id }
 
         // Check if current tab is being deleted
@@ -65,7 +62,7 @@ struct CloseMultipleTabsCommand: UndoableCommand {
     }
 
     func undo() {
-        guard let space else { return }
+        guard let space, let modelContext = space.modelContext else { return }
 
         do {
             // Restore tabs in reverse order to maintain their original positions

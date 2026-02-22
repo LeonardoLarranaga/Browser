@@ -10,7 +10,6 @@ import SwiftUI
 /// Context menu for a history entry row. Contains actions to open the history entry in a new tab, in a new window, or to delete it.
 fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
 
-    @Environment(\.modelContext) var modelContext
     @Environment(BrowserWindow.self) var browserWindow
 
     let entry: BrowserHistoryEntry
@@ -69,13 +68,13 @@ fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
                 browserSpace: currentSpace,
                 contentType: .web
             )
-            currentSpace.openNewTab(browserTab, using: modelContext)
+            currentSpace.openNewTab(browserTab)
         }
     }
 
     func deleteEntry(_ entry: BrowserHistoryEntry) {
-        modelContext.delete(entry)
-        try? modelContext.save()
+        entry.modelContext?.delete(entry)
+        try? entry.modelContext?.save()
     }
 }
 

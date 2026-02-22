@@ -7,7 +7,6 @@
 
 import SwiftUI
 import WebKit
-import SwiftData
 
 /// Main view controller that contains a WKWebView
 class WKWebViewController: NSViewController {
@@ -26,7 +25,7 @@ class WKWebViewController: NSViewController {
     private var suspendTimer: DispatchSourceTimer?
     private var hasRegisteredWindowObserver = false
 
-    init(tab: BrowserTab, browserSpace: BrowserSpace, noTrace: Bool = false, using modelContext: ModelContext) {
+    init(tab: BrowserTab, browserSpace: BrowserSpace, noTrace: Bool = false) {
         self.tab = tab
         self.browserSpace = browserSpace
 
@@ -63,7 +62,7 @@ class WKWebViewController: NSViewController {
 
         startSuspendTimer()
     }
-    
+
     override func viewDidAppear() {
         super.viewDidAppear()
 
@@ -71,7 +70,7 @@ class WKWebViewController: NSViewController {
         // This ensures we observe the correct window.
         guard !hasRegisteredWindowObserver, let window = view.window else { return }
         hasRegisteredWindowObserver = true
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(windowWillClose(_:)),

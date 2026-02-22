@@ -9,9 +9,9 @@ import SwiftUI
 
 /// WKWebViewController wrapper for SwiftUI
 struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
-    
+
     @Environment(\.modelContext) var modelContext
-    
+
     @Environment(BrowserWindow.self) var browserWindow
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserTab.self) var tab
@@ -25,17 +25,16 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
         let wkWebViewController = WKWebViewController(
             tab: tab,
             browserSpace: browserSpace,
-            noTrace: noTrace,
-            using: modelContext
+            noTrace: noTrace
         )
         wkWebViewController.coordinator = context.coordinator
         return wkWebViewController
     }
-    
+
     func updateNSViewController(_ nsViewController: WKWebViewController, context: Context) {
         nsViewController.webView.isHidden = tab != browserSpace.currentTab
-                                            || tab.webviewErrorDescription != nil
-                                            || tab.webviewErrorCode != nil
+        || tab.webviewErrorDescription != nil
+        || tab.webviewErrorCode != nil
     }
 
     static func dismantleNSViewController(_ nsViewController: WKWebViewController, coordinator: Coordinator) {

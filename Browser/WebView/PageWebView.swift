@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 /// A view that contains all the stacks for the loaded tabs in all the spaces
 struct PageWebView: View {

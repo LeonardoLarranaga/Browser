@@ -10,8 +10,6 @@ import SwiftUI
 /// Divider with a clear button to remove all tabs from a space
 struct SidebarSpaceClearDivider: View {
 
-    @Environment(\.modelContext) var modelContext
-
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserWindow.self) var browserWindow
 
@@ -36,7 +34,7 @@ struct SidebarSpaceClearDivider: View {
                     }
 
                     lastTapTime = now
-                    browserSpace.clear(using: modelContext, deleteCurrent: deleteCurrent, tabUndoManager: browserWindow.tabUndoManager)
+                    browserSpace.clear(deleteCurrent: deleteCurrent, tabUndoManager: browserWindow.tabUndoManager)
                 }
                 .font(.caption.weight(.semibold))
                 .buttonStyle(.plain)

@@ -5,29 +5,27 @@
 //  Created by Leonardo Larrañaga on 14/2/26.
 //
 
-import SwiftData
 import SwiftUI
 
 struct CloseTabCommand: UndoableCommand {
     let snapshot: ClosedTabSnapshot
     weak var space: BrowserSpace?
-    let modelContext: ModelContext
     var wasCurrentTab: Bool
 
     var description: String {
         "Close Tab \"\(snapshot.title)\""
     }
 
-    init(tab: BrowserTab, space: BrowserSpace, modelContext: ModelContext) {
+    init(tab: BrowserTab, space: BrowserSpace) {
         self.snapshot = ClosedTabSnapshot(from: tab)
         self.space = space
-        self.modelContext = modelContext
         self.wasCurrentTab = space.currentTab == tab
     }
 
     func execute() {
         print("Is there a space? \(space != nil)")
         guard let space,
+              let modelContext = space.modelContext,
               let tab = space.tabs.first(where: { $0.id == snapshot.id })
         else { return print("Tab not found in space when trying to close") }
 
@@ -50,7 +48,7 @@ struct CloseTabCommand: UndoableCommand {
     }
 
     func undo() {
-        guard let space else { return }
+        guard let space, let modelContext = space.modelContext else { return }
 
         let restoredTab = snapshot.createTab(in: space)
 

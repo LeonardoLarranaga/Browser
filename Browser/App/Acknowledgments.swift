@@ -13,7 +13,7 @@ fileprivate struct Acknowledgment: Identifiable {
     let author: String
     let description: String
     let url: String
-    
+
     static var acknowledgments: [Acknowledgment] {
         [
             Acknowledgment(title: "SymbolPicker", author: "Yubo Qin (xnth97)", description: "A simple and cross-platform SFSymbol picker for SwiftUI.", url: "https://github.com/xnth97/SymbolPicker"),
@@ -24,25 +24,24 @@ fileprivate struct Acknowledgment: Identifiable {
 }
 
 struct Acknowledgments: View {
-    
-    @Environment(\.modelContext) var modelContext
+
     @Environment(BrowserWindow.self) var browserWindow
-    
+
     var body: some View {
         VStack {
             Text("Acknowledgments")
                 .font(.title.bold())
                 .padding()
-            
+
             Text("A big thanks ♡ to the following projects and articles:")
-            
+
             List(Acknowledgment.acknowledgments) { acknowledgment in
                 AcknowledgmentRow(acknowledgment)
             }
             .scrollContentBackground(.hidden)
         }
     }
-    
+
     @ViewBuilder
     fileprivate func AcknowledgmentRow(_ acknowledgment: Acknowledgment) -> some View {
         HStack {
@@ -57,9 +56,9 @@ struct Acknowledgments: View {
                     .font(.body)
                     .padding(.bottom)
             }
-            
+
             Spacer()
-            
+
             Button("Visit") {
                 visit(acknowledgment)
             }
@@ -71,11 +70,11 @@ struct Acknowledgments: View {
         .clipShape(.rect(cornerRadius: 10))
         .padding(5)
     }
-    
+
     fileprivate func visit(_ a: Acknowledgment) {
         guard let currentSpace = browserWindow.currentSpace else { return }
         let newTab = BrowserTab(title: a.title, url: URL(string: a.url)!, browserSpace: currentSpace)
-        browserWindow.currentSpace?.openNewTab(newTab, using: modelContext)
+        browserWindow.currentSpace?.openNewTab(newTab)
         browserWindow.showAcknowledgements = false
     }
 }

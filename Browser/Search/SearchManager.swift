@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/3/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// `SearchManager` manages the search action and search suggestions
 @Observable
@@ -16,7 +16,8 @@ class SearchManager {
     var searchSuggestions: [SearchSuggestion] = []
     var highlightedSearchSuggestionIndex: Int = 0
     var favicon: Data?
-    
+    var modelContext: ModelContext?
+
     /// The autocomplete text from the first history suggestion
     var autocompleteText: String {
         guard !searchText.isEmpty,
@@ -27,7 +28,7 @@ class SearchManager {
         let remainingText = String(firstHistoryItem.title.dropFirst(searchText.count))
         return searchText + remainingText
     }
-    
+
     /// The autocomplete suggestion to use when Enter is pressed
     var autocompleteSuggestion: SearchSuggestion? {
         guard !autocompleteText.isEmpty else { return nil }
@@ -118,9 +119,8 @@ class SearchManager {
     /// Open a new tab with the selected search suggestion
     /// - Parameters: searchSuggestion: The selected search suggestion
     /// - Parameters: browserWindow: The current `BrowserWindow`
-    /// - Parameters: modelContext: The current `ModelContext`
-    private func openNewTab(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow, using modelContext: ModelContext) {
-        guard let currentSpace = browserWindow.currentSpace else { return }
+    private func openNewTab(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow) {
+        guard let currentSpace = browserWindow.currentSpace, let modelContext else { return }
         let newTab = BrowserTab(title: searchSuggestion.title, url: searchSuggestion.suggestedURL, order: 0, browserSpace: currentSpace)
 
         do {
@@ -136,22 +136,21 @@ class SearchManager {
     /// Opens the search suggestion in the current tab
     /// - Parameters: searchSuggestion: The selected search suggestion
     /// - Parameters: browserWindow: The current `BrowserWindow`
-    /// - Parameters: modelContext: The current `ModelContext`
-    private func openInCurrentTab(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow, using modelContext: ModelContext) {
+    private func openInCurrentTab(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow) {
         if let currentTab = browserWindow.currentSpace?.currentTab {
             currentTab.url = searchSuggestion.suggestedURL
             currentTab.webview?.load(URLRequest(url: searchSuggestion.suggestedURL))
             currentTab.updateFavicon(with: searchSuggestion.suggestedURL)
         } else {
-            openNewTab(searchSuggestion, browserWindow: browserWindow, using: modelContext)
+            openNewTab(searchSuggestion, browserWindow: browserWindow)
         }
     }
 
-    func searchAction(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow, using modelContext: ModelContext) {
+    func searchAction(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow) {
         if browserWindow.searchOpenLocation == .fromNewTab {
-            openNewTab(searchSuggestion, browserWindow: browserWindow, using: modelContext)
+            openNewTab(searchSuggestion, browserWindow: browserWindow)
         } else {
-            openInCurrentTab(searchSuggestion, browserWindow: browserWindow, using: modelContext)
+            openInCurrentTab(searchSuggestion, browserWindow: browserWindow)
         }
 
         // Closes the search bar

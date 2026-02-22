@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftData
 
 /// Horizontal scrollable collection of spaces in the sidebar
 struct SidebarSpacesTabView: View {
