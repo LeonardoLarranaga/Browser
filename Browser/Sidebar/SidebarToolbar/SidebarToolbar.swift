@@ -15,9 +15,14 @@ import SwiftUI
 struct SidebarToolbar: ViewModifier {
 
     @Environment(\.modelContext) var modelContext
+    @Environment(\.colorScheme) var colorScheme
 
     @Environment(SidebarModel.self) var sidebarModel
     @Environment(BrowserWindow.self) var browserWindow
+
+    var toolbarColorScheme: ColorScheme {
+        browserWindow.currentSpace?.textColor(in: colorScheme) == .black ? .light : .dark
+    }
 
     let browserSpaces: [BrowserSpace]
 
@@ -95,6 +100,7 @@ struct SidebarToolbar: ViewModifier {
         }
         .labelStyle(.iconOnly)
         .menuIndicator(.hidden)
+        .preferredColorScheme(toolbarColorScheme)
     }
 }
 
