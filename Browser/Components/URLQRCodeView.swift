@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/8/25.
 //
 
-import SwiftUI
 import CoreImage.CIFilterBuiltins
+import SwiftUI
 
 struct URLQRCodeView: View {
     

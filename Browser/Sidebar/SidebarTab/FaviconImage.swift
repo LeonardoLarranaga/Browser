@@ -9,9 +9,9 @@ import SwiftUI
 
 /// The favicon image for a sidebar tab
 struct SidebarTabFaviconImage: View {
-
+    
     @Environment(BrowserTab.self) var browserTab
-
+    
     var body: some View {
         Group {
             if Preferences.loadingIndicatorPosition == .onTab && browserTab.isLoading {

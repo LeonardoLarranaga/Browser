@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct BrowserApp: App {
-    
+
     @NSApplicationDelegateAdaptor(BrowserAppDelegate.self) var appDelegate
-        
+
     var body: some Scene {
         BrowserWindow("BrowserWindow")
         BrowserWindow("BrowserTemporaryWindow", inMemory: true)
@@ -19,10 +19,10 @@ struct BrowserApp: App {
             .commands {
                 BrowserCommands()
             }
-        
+
         SettingsWindow()
     }
-    
+
     @SceneBuilder
     func BrowserWindow(_ id: String, inMemory: Bool = false) -> some Scene {
         WindowGroup(id: id) {
@@ -35,7 +35,7 @@ struct BrowserApp: App {
         .windowStyle(.hiddenTitleBar)
         .modelContainer(for: BrowserModel.appModels, inMemory: inMemory)
     }
-    
+
     @SceneBuilder
     func SettingsWindow() -> some Scene {
         Settings {

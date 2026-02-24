@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct SidebarTabTitle: View {
-
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
-
+    
     @Binding var isEditingTitle: Bool
     @FocusState var isTextFieldFocused: Bool
-
+    
     @State var customTitle = ""
     
     var body: some View {

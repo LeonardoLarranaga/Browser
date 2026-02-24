@@ -5,37 +5,37 @@
 //  Created by Leonardo Larrañaga on 2/11/25.
 //
 
-import SwiftUI
 import KeyboardShortcuts
+import SwiftUI
 
 struct EditCommands: Commands {
-
+    
     @FocusedValue(\.browserActiveWindowState) var browserWindow
-
+    
     @State var isEditable = false
-
+    
     var body: some Commands {
         let webView = browserWindow?.currentSpace?.currentTab?.webview
-
+        
         CommandGroup(replacing: .undoRedo) {
             let tabUndoManager = browserWindow?.tabUndoManager
             Button("\(tabUndoManager?.undoDescription ?? "")", action: tabUndoManager?.undo)
                 .disabled(tabUndoManager?.canUndo == false)
                 .globalKeyboardShortcut(.undoCloseTab)
-
+            
             Button("\(tabUndoManager?.redoDescription ?? "")", action: tabUndoManager?.redo)
                 .disabled(tabUndoManager?.canRedo == false)
                 .globalKeyboardShortcut(.redoCloseTab)
-
+            
             Divider()
         }
-
+        
         CommandGroup(after: .undoRedo) {
             Button("Copy Current URL", action: browserWindow?.copyURLToClipboard)
                 .globalKeyboardShortcut(.copyCurrentURL)
-
+            
             Divider()
-
+            
             if let webView {
                 Button(isEditable ? "Stop Editing Text On Page" : "Edit Text On Page") {
                     isEditable.toggle()
@@ -45,7 +45,7 @@ struct EditCommands: Commands {
                 .globalKeyboardShortcut(.toggleEditing)
             }
         }
-
+        
         CommandGroup(before: .textEditing) {
             Menu("Find") {
                 Button("Find...", action: webView?.toggleFindUI)
@@ -62,38 +62,38 @@ struct EditCommands: Commands {
             .id("BrowserFindMenu")
         }
     }
-
+    
     var currentTab: BrowserTab? {
         browserWindow?.currentSpace?.currentTab
     }
-
+    
     func findNext() {
         Task {
             await currentTab?.findInPageManager?.goToNextMatch()
         }
     }
-
+    
     func findPrevious() {
         Task {
             await currentTab?.findInPageManager?.goToPreviousMatch()
         }
     }
-
+    
     func useSelectionForFind() {
         guard let tab = currentTab, let webView = tab.webview else { return }
-
+        
         Task {
             // Get selected text from the page
             guard let selectedText = await webView.getSelectedText(), !selectedText.isEmpty else { return }
-
+            
             // Ensure find manager exists
             if tab.findInPageManager == nil {
                 tab.findInPageManager = FindInPageManager(webView: webView)
             }
-
+            
             // Show the find UI
             tab.showFindUI = true
-
+            
             // Search for the selected text
             await tab.findInPageManager?.search(selectedText)
         }
@@ -103,11 +103,11 @@ struct EditCommands: Commands {
 extension KeyboardShortcuts.Name {
     static let undoCloseTab = Self("undo_close_tab", default: .init(.z, modifiers: [.command]))
     static let redoCloseTab = Self("redo_close_tab", default: .init(.z, modifiers: [.command, .shift]))
-
+    
     static let copyCurrentURL = Self("copy_current_url", default: .init(.c, modifiers: [.command, .shift]))
-
+    
     static let toggleEditing = Self("toggle_editing")
-
+    
     static let find = Self("find", default: .init(.f, modifiers: [.command]))
     static let findNext = Self("find_next", default: .init(.g, modifiers: [.command]))
     static let findPrevious = Self("find_previous", default: .init(.g, modifiers: [.command, .shift]))

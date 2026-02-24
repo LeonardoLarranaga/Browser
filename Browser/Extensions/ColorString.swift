@@ -12,7 +12,7 @@ extension Color {
     /// - Parameter hex: The hex string to create the color from.
     init?(hex: String) {
         let cleanHex = hex.trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "#", with: "")
-
+        
         var rgb: UInt64 = 0
         
         var r: CGFloat = 0

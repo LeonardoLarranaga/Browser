@@ -9,10 +9,10 @@ import WebKit
 
 /// Custom WKWebView subclass to handle context menus
 class MyWKWebView: WKWebView {
-
+    
     private let zoomFactors: [CGFloat] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6]
     var scaledZoomFactor: CGFloat = 1.0
-
+    
     /// The "Search With Google" action (passed from the WKWebViewController)
     var searchWebAction: ((String) -> Void)? = nil
     /// The "Open Link In New Tab" action (passed from the WKWebViewController)
@@ -21,7 +21,7 @@ class MyWKWebView: WKWebView {
     var presentActionAlert: ((String, String) -> Void)? = nil
     /// Toggle the Find UI action (passed from the WKWebViewController)
     var toggleFindUI: (() -> Void)? = nil
-
+    
     override var isEditable: Bool {
         get {
             return _isEditable
@@ -30,20 +30,20 @@ class MyWKWebView: WKWebView {
             _isEditable = newValue
         }
     }
-
+    
     override init(frame: CGRect, configuration: WKWebViewConfiguration) {
         super.init(frame: frame, configuration: configuration)
     }
-
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     func zoomActualSize() {
         setZoomFactor(1.0)
         scaledZoomFactor = 1.0
     }
-
+    
     /// Handle Zoom In
     func zoomIn() {
         let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
@@ -54,7 +54,7 @@ class MyWKWebView: WKWebView {
             self.scaledZoomFactor = nextZoomFactor
         }
     }
-
+    
     /// Handle Zoom Out
     func zoomOut() {
         let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
@@ -65,7 +65,7 @@ class MyWKWebView: WKWebView {
             self.scaledZoomFactor = nextZoomFactor
         }
     }
-
+    
     /// Sets the zoom factor
     /// - Parameter zoomFactor: The zoom factor to set
     func setZoomFactor(_ zoomFactor: CGFloat) {
@@ -74,12 +74,12 @@ class MyWKWebView: WKWebView {
         pageZoom = clamped
         presentActionAlert?("Zoom Set to \(Int(clamped * 100))%", systemImage)
     }
-
+    
     /// Toggles the page editable
     func toggleEditable() {
         isEditable.toggle()
     }
-
+    
     /// Clears the cookies of the specific host and reloads
     func clearCookiesAndReload() {
         let cookieStore = WKWebsiteDataStore.default().httpCookieStore
@@ -90,7 +90,7 @@ class MyWKWebView: WKWebView {
         }
         reload()
     }
-
+    
     /// Clears the cache of the specific host and reloads
     func clearCacheAndReload() {
         WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
@@ -101,39 +101,39 @@ class MyWKWebView: WKWebView {
         }
         reload()
     }
-
+    
     /// Toggles the developer tools
     func toggleDeveloperTools() {
         DeveloperFeatures.toggleWebInspector(for: self)
     }
-
+    
     func showJavaScriptConsole() {
         DeveloperFeatures.showJavaScriptConsole(for: self)
     }
-
+    
     func showPageResources() {
         DeveloperFeatures.showPageResources(for: self)
     }
-
+    
     var isAudioMuted: Bool {
         MediaControls.isAudioMuted(for: self)
     }
-
+    
     /// Toggles the page muted state
     func toggleMute() {
         MediaControls.toggleAudioMute(for: self)
     }
-
+    
     /// Gets if the page has an active now playing session
     var hasActiveNowPlayingSession: Bool {
         MediaControls.hasActiveNowPlayingSession(for: self)
     }
-
+    
     func togglePictureInPicture() {
         guard let pipScript = JavaScript.getBundled("TogglePictureInPicture") else { return }
         evaluateJavaScript(pipScript)
     }
-
+    
     /// Gets the currently selected text on the page
     func getSelectedText() async -> String? {
         do {
@@ -143,7 +143,7 @@ class MyWKWebView: WKWebView {
             return nil
         }
     }
-
+    
     //MARK: - Variables for Context Menus
     weak var currentNSSavePanel: NSSavePanel?
     var rightMouseDownPosition = CGPoint.zero

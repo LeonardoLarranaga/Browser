@@ -8,18 +8,18 @@
 import SwiftUI
 
 struct SettingsFeatureFlagsView: View {
-
+    
     let groupedFeatureFlags = Array(FeatureFlags.getAllGrouped())
-
+    
     @State var showGrouped = true
     @State var searchText = ""
-
+    
     var body: some View {
         VStack {
             TextField("Search Feature Flags...", text: $searchText)
                 .textFieldStyle(.roundedBorder)
                 .padding([.horizontal, .top])
-
+            
             Form {
                 ForEach(groupedFeatureFlags, id: \.key) { category, featureFlags in
                     let filteredFlags = filteredFeatureFlags(for: featureFlags)
@@ -35,7 +35,7 @@ struct SettingsFeatureFlagsView: View {
             .formStyle(.grouped)
         }
     }
-
+    
     func filteredFeatureFlags(for featureFlags: [WKFeature]) -> [WKFeature] {
         featureFlags.filter { featureFlag in
             searchText.isReallyEmpty || featureFlag.name.localizedCaseInsensitiveContains(searchText) ||
@@ -45,10 +45,10 @@ struct SettingsFeatureFlagsView: View {
 }
 
 private struct FeatureFlagRow: View {
-
+    
     let featureFlag: WKFeature
     @State private var showPopover = false
-
+    
     var body: some View {
         HStack {
             Toggle(featureFlag.name, isOn: Binding(get: {
@@ -57,7 +57,7 @@ private struct FeatureFlagRow: View {
                 FeatureFlags.userToggleFeature(featureFlag, enabled: newValue)
             }))
             .bold(FeatureFlags.isFeatureFlagUserConfigured(featureFlag))
-
+            
             if featureFlag.details != nil {
                 Button("", systemImage: "info.circle") {
                     showPopover = true
@@ -69,9 +69,9 @@ private struct FeatureFlagRow: View {
                         .padding()
                 }
             }
-
+            
             Spacer()
-
+            
             Text(featureFlag.status.localizedStringKey)
                 .padding(2)
                 .padding(.horizontal, 2)

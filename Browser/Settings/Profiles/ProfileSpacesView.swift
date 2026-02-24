@@ -11,11 +11,11 @@ import SwiftUI
 /// Shows the list of BrowserSpaces belonging to the selected profile.
 /// When `selectedProfile` is nil it shows the Default profile's spaces (those with no profile attached).
 struct ProfileSpacesView: View {
-
+    
     let profiles: [BrowserProfile]
     let selectedProfile: BrowserProfile?
     let spaces: [BrowserSpace]
-
+    
     var body: some View {
         if spaces.isEmpty {
             ContentUnavailableView(
@@ -36,19 +36,19 @@ struct ProfileSpacesView: View {
 }
 
 private struct SpaceRow: View {
-
+    
     @Environment(\.modelContext) var modelContext
-
+    
     let space: BrowserSpace
     let profiles: [BrowserProfile]
-
+    
     @State var showMoveAlert = false
     @State var profileToMoveTo: BrowserProfile?
-
+    
     var spaceColor: Color {
         space.getColors.first ?? .primary
     }
-
+    
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: space.systemImage)
@@ -56,7 +56,7 @@ private struct SpaceRow: View {
                 .foregroundStyle(spaceColor)
                 .frame(width: 28, height: 28)
                 .background(spaceColor.opacity(0.15), in: Circle())
-
+            
             VStack(alignment: .leading, spacing: 1) {
                 Text(space.name)
                     .fontWeight(.medium)
@@ -64,16 +64,16 @@ private struct SpaceRow: View {
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
-
+            
             Spacer()
-
+            
             Menu("Move Space", systemImage: "rectangle.portrait.and.arrow.right.fill") {
                 if space.profile != nil {
                     Button("Default Profile", systemImage: "person.crop.circle") {
                         startMovingSpace(to: nil)
                     }
                 }
-
+                
                 ForEach(profiles.filter { !$0.browserSpaces.contains(space) }) { profile in
                     Button(profile.name, systemImage: profile.systemImage) {
                         startMovingSpace(to: profile)
@@ -90,12 +90,12 @@ private struct SpaceRow: View {
             Text("Are you sure you want to move \(space.name)? Close and reopen the tabs in the space to apply the change.")
         }
     }
-
+    
     func startMovingSpace(to profile: BrowserProfile?) {
         profileToMoveTo = profile
         showMoveAlert = true
     }
-
+    
     func moveSpace() {
         space.profile = profileToMoveTo
         try? modelContext.save()

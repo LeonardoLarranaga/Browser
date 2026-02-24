@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct CloseMultipleTabsCommand: UndoableCommand {
-
+    
     enum CommandType {
         case closeTabsAbove, closeTabsBelow, clear
-
+        
         func description(tabCount: Int) -> String {
             switch self {
             case .closeTabsAbove: "Close \(tabCount) Tabs Above"
@@ -20,36 +20,36 @@ struct CloseMultipleTabsCommand: UndoableCommand {
             }
         }
     }
-
+    
     let snapshots: [ClosedTabSnapshot]
     weak var space: BrowserSpace?
     let currentTabId: UUID?
     let commandType: CommandType
-
+    
     var description: String {
         commandType.description(tabCount: snapshots.count)
     }
-
+    
     init(tabs: [BrowserTab], space: BrowserSpace, commandType: CommandType) {
         self.snapshots = tabs.map { ClosedTabSnapshot(from: $0) }
         self.space = space
         self.currentTabId = space.currentTab?.id
         self.commandType = commandType
     }
-
+    
     func execute() {
         guard let space, let modelContext = space.modelContext else { return }
         let tabIds = snapshots.map { $0.id }
-
+        
         // Check if current tab is being deleted
         let isDeletingCurrentTab = space.currentTab.map { tabIds.contains($0.id) } ?? false
-
+        
         // Select a new tab before deleting if current tab is being deleted
         if isDeletingCurrentTab {
             let newTab = space.tabs.first(where: { !tabIds.contains($0.id) })
             space.currentTab = newTab
         }
-
+        
         withAnimation(.browserDefault) {
             for tabId in tabIds {
                 if let tab = space.tabs.first(where: { $0.id == tabId }) {
@@ -60,10 +60,10 @@ struct CloseMultipleTabsCommand: UndoableCommand {
             try? modelContext.save()
         }
     }
-
+    
     func undo() {
         guard let space, let modelContext = space.modelContext else { return }
-
+        
         do {
             // Restore tabs in reverse order to maintain their original positions
             for snapshot in snapshots.reversed() {

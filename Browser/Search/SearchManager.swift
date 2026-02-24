@@ -11,13 +11,13 @@ import SwiftUI
 /// `SearchManager` manages the search action and search suggestions
 @Observable
 class SearchManager {
-
+    
     var searchText = ""
     var searchSuggestions: [SearchSuggestion] = []
     var highlightedSearchSuggestionIndex: Int = 0
     var favicon: Data?
     var modelContext: ModelContext?
-
+    
     /// The autocomplete text from the first history suggestion
     var autocompleteText: String {
         guard !searchText.isEmpty,
@@ -28,13 +28,13 @@ class SearchManager {
         let remainingText = String(firstHistoryItem.title.dropFirst(searchText.count))
         return searchText + remainingText
     }
-
+    
     /// The autocomplete suggestion to use when Enter is pressed
     var autocompleteSuggestion: SearchSuggestion? {
         guard !autocompleteText.isEmpty else { return nil }
         return searchSuggestions.first(where: { $0.isHistoryItem && $0.title.lowercased().hasPrefix(searchText.lowercased()) })
     }
-
+    
     private var _accentColor: Color?
     var accentColor: Color {
         if isUsingWebsiteSearcher {
@@ -43,7 +43,7 @@ class SearchManager {
             return _accentColor ?? Preferences.defaultWebsiteSearcher.color
         }
     }
-
+    
     var matchedWebsiteSearcher: any WebsiteSearcher {
         guard !searchText.isEmpty else { return Preferences.defaultWebsiteSearcher }
         return SearchEngine.allSearchers.first(where: { $0.title.lowercased().hasPrefix(searchText.lowercased()) }) ?? Preferences.defaultWebsiteSearcher
@@ -54,33 +54,33 @@ class SearchManager {
         get { _activeWebsiteSearcher ?? Preferences.defaultWebsiteSearcher }
         set { _activeWebsiteSearcher = newValue }
     }
-
+    
     var searchTask: URLSessionDataTask?
-
+    
     /// Sets the initial values from the `BrowserWindow`
     /// - Parameter browserWindow: The `BrowserWindow` to get the initial values from
     func setInitialValuesFromWindowState(_ browserWindow: BrowserWindow) {
         if let accentColor = Color(hex: browserWindow.currentSpace?.colors.first ?? "") {
             self._accentColor = accentColor
         }
-
+        
         if browserWindow.searchOpenLocation == .fromURLBar {
             searchText = browserWindow.currentSpace?.currentTab?.url.absoluteString ?? ""
             favicon = browserWindow.currentSpace?.currentTab?.favicon
         }
     }
-
+    
     /// Handles the search action
     /// - Parameters: searchText: The autocomplete text to search
     func fetchSearchSuggestions(_ searchText: String, historyEntries: [BrowserHistoryEntry]) {
         searchInHistory(in: historyEntries, for: searchText)
         activeWebsiteSearcher.fetchSearchSuggestions(for: searchText, in: self)
     }
-
+    
     /// Move the highlighted search suggestion index up
     func handleUpArrow() -> KeyPress.Result {
         guard !searchSuggestions.isEmpty else { return .ignored }
-
+        
         if highlightedSearchSuggestionIndex > 0 {
             highlightedSearchSuggestionIndex -= 1
         } else {
@@ -88,11 +88,11 @@ class SearchManager {
         }
         return .handled
     }
-
+    
     /// Move the highlighted search suggestion index down
     func handleDownArrow() -> KeyPress.Result {
         guard !searchSuggestions.isEmpty else { return .ignored }
-
+        
         if highlightedSearchSuggestionIndex < searchSuggestions.count - 1 {
             highlightedSearchSuggestionIndex += 1
         } else {
@@ -100,7 +100,7 @@ class SearchManager {
         }
         return .handled
     }
-
+    
     /// Handle the tab key press, switches the search engine
     func handleTab() -> KeyPress.Result {
         withAnimation(.browserDefault) {
@@ -112,27 +112,27 @@ class SearchManager {
                 searchText = ""
             }
         }
-
+        
         return .handled
     }
-
+    
     /// Open a new tab with the selected search suggestion
     /// - Parameters: searchSuggestion: The selected search suggestion
     /// - Parameters: browserWindow: The current `BrowserWindow`
     private func openNewTab(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow) {
         guard let currentSpace = browserWindow.currentSpace, let modelContext else { return }
         let newTab = BrowserTab(title: searchSuggestion.title, url: searchSuggestion.suggestedURL, order: 0, browserSpace: currentSpace)
-
+        
         do {
             currentSpace.tabs.append(newTab)
             try modelContext.save()
         } catch {
             print("Error opening new tab: \(error)")
         }
-
+        
         currentSpace.currentTab = newTab
     }
-
+    
     /// Opens the search suggestion in the current tab
     /// - Parameters: searchSuggestion: The selected search suggestion
     /// - Parameters: browserWindow: The current `BrowserWindow`
@@ -145,35 +145,35 @@ class SearchManager {
             openNewTab(searchSuggestion, browserWindow: browserWindow)
         }
     }
-
+    
     func searchAction(_ searchSuggestion: SearchSuggestion, browserWindow: BrowserWindow) {
         if browserWindow.searchOpenLocation == .fromNewTab {
             openNewTab(searchSuggestion, browserWindow: browserWindow)
         } else {
             openInCurrentTab(searchSuggestion, browserWindow: browserWindow)
         }
-
+        
         // Closes the search bar
         DispatchQueue.main.async {
             browserWindow.searchOpenLocation = .none
         }
     }
-
+    
     func resetWebsiteSearcher() {
         isUsingWebsiteSearcher = false
         _activeWebsiteSearcher = nil
     }
-
+    
     /// Adds history entries that match the search query to the search suggestions
     private func searchInHistory(in historyEntries: [BrowserHistoryEntry], for query: String) {
         guard !query.isReallyEmpty else {
             searchSuggestions = []
             return
         }
-
+        
         let matchedEntries = historyEntries
             .filter { "\($0.title)\($0.url)".localizedCaseInsensitiveContains(query) }
-
+        
         let suggestions = matchedEntries.map {
             SearchSuggestion($0.title, itemURL: $0.url, favicon: $0.favicon)
         }

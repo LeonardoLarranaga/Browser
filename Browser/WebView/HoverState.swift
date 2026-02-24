@@ -14,15 +14,15 @@ final class HoverState {
         didSet { handleChange() }
     }
     var timer: Timer?
-
+    
     func handleChange() {
         guard !url.isEmpty else { return }
         timer?.invalidate()
-
+        
         withAnimation(.browserDefault) {
             show = true
         }
-
+        
         timer = Timer.scheduledTimer(withTimeInterval: 2, repeats: false) { timer in
             withAnimation(.browserDefault) {
                 self.show = false

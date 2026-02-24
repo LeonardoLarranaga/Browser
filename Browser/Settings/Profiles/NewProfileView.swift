@@ -9,25 +9,25 @@ import SwiftUI
 import SymbolPicker
 
 struct NewProfileView: View {
-
+    
     @Environment(\.modelContext) var modelContext
-
+    
     @Binding var selectedProfile: BrowserProfile?
     @Binding var isPresented: Bool
-
+    
     /// When non-nil, we are editing an existing profile instead of creating one.
     var editingProfile: BrowserProfile? = nil
-
+    
     @State var name = ""
     @State var systemImage = "person.crop.circle"
     @State var color = Color.blue
-
+    
     @FocusState var focusedField: Bool
     @State var showSymbolPicker = false
     @State var showColorPicker = false
-
+    
     var isEditing: Bool { editingProfile != nil }
-
+    
     var body: some View {
         Section(isEditing ? "Edit Profile" : "New Profile") {
             HStack {
@@ -43,15 +43,15 @@ struct NewProfileView: View {
                         }
                         focusedField = true
                     }
-
+                
                 Spacer()
-
+                
                 Button("Icon", systemImage: systemImage) {
                     showSymbolPicker.toggle()
                 }
-
+                
                 Spacer()
-
+                
                 Circle().fill(color)
                     .frame(width: 20, height: 20)
                     .onTapGesture { showColorPicker.toggle() }
@@ -59,7 +59,7 @@ struct NewProfileView: View {
                         WheelColorPicker(color: $color)
                     }
             }
-
+            
             HStack {
                 Spacer()
                 Button(role: .cancel) {
@@ -80,7 +80,7 @@ struct NewProfileView: View {
             SymbolPicker(symbol: $systemImage)
         }
     }
-
+    
     func saveProfile() {
         if let profile = editingProfile {
             // Edit existing profile
@@ -95,7 +95,7 @@ struct NewProfileView: View {
                 selectedProfile = newProfile
             }
         }
-
+        
         try? modelContext.save()
         isPresented = false
     }

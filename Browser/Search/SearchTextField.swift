@@ -44,15 +44,15 @@ struct SearchTextField: View {
                 
                 TextField("Where to?", text: $searchManager.searchText)
                     .focused($focusedField, equals: .search)
-
+                
             }
             .textFieldStyle(.plain)
             .font(browserWindow.searchOpenLocation == .fromNewTab ? .title2.weight(.semibold) : .body)
-
+            
             Spacer()
             
             Group {
-              if !searchManager.isUsingWebsiteSearcher && !searchManager.matchedWebsiteSearcher.equals(Preferences.defaultWebsiteSearcher) {
+                if !searchManager.isUsingWebsiteSearcher && !searchManager.matchedWebsiteSearcher.equals(Preferences.defaultWebsiteSearcher) {
                     Text("Search with \(searchManager.matchedWebsiteSearcher.title)")
                     
                     Text("Tab")

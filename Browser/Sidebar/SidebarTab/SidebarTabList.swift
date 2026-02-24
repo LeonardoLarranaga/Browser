@@ -9,15 +9,15 @@ import SwiftUI
 
 /// List of tabs of a space in the sidebar
 struct SidebarTabList: View {
-
+    
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(\.modelContext) var modelContext
     @Environment(SidebarModel.self) var sidebarModel
-
+    
     var tabs: [BrowserTab]
     var pinState: TabPinState
     @Binding var draggingTab: BrowserTab?
-
+    
     var body: some View {
         LazyVStack(alignment: .leading, spacing: 5) {
             ForEach(tabs) { browserTab in
@@ -46,7 +46,7 @@ struct SidebarTabList: View {
 
 class TabDropProvider: NSItemProvider {
     var onEnd: (() -> Void)?
-
+    
     deinit {
         onEnd?()
     }

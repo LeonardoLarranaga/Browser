@@ -9,12 +9,12 @@ import SwiftData
 import SwiftUI
 
 struct ProfileCardList: View {
-
+    
     let profiles: [BrowserProfile]
-
+    
     @Binding var showAddProfile: Bool
     @Binding var selectedProfile: BrowserProfile?
-
+    
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             LazyHGrid(rows: [GridItem(.fixed(110))], spacing: 12) {

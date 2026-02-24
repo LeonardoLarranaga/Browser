@@ -9,11 +9,11 @@ import SwiftUI
 
 /// View that displays the search suggestions
 struct SearchSuggestionResultsView: View {
-
+    
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     var searchManager: SearchManager
-
+    
     var body: some View {
         ScrollViewReader { proxy in
             ScrollView {

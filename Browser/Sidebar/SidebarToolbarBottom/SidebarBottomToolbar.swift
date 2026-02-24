@@ -21,7 +21,7 @@ struct SidebarBottomToolbar: View {
     var foregroundColor: Color {
         browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary
     }
-        
+    
     var body: some View {
         HStack {
             Button("Downloads", systemImage: "circle") {

@@ -13,25 +13,25 @@ enum FeatureFlags {
     static func getAll() -> [WKFeature] {
         WKPreferences._experimentalFeatures()
     }
-
+    
     static func getAllGrouped() -> [WebFeatureCategory: [WKFeature]] {
         Dictionary(grouping: getAll(), by: { $0.category })
     }
-
+    
     static func userToggleFeature(_ feature: WKFeature, enabled: Bool) {
         Preferences.configuredFeatureFlags[feature.key] = enabled
     }
-
+    
     private static func toggleFeature(_ feature: WKFeature, enabled: Bool, for preferences: WKPreferences? = nil) {
         preferences?._setEnabled(enabled, for: feature)
     }
-
+    
     private static func toggleFeature(_ key: String, enabled: Bool, for preferences: WKPreferences? = nil) {
         if let feature = getFeature(key: key) {
             toggleFeature(feature, enabled: enabled, for: preferences)
         }
     }
-
+    
     static func isEnabled(_ feature: WKFeature) -> Bool {
         // Check if user has configured this feature flag
         if let userConfigured = Preferences.configuredFeatureFlags[feature.key] {
@@ -40,28 +40,28 @@ enum FeatureFlags {
         // Fall back to the actual WKPreferences state
         return WebViewConfiguration.make(profile: nil).preferences._isEnabled(for: feature)
     }
-
+    
     static func getFeature(key: String) -> WKFeature? {
         getAll().first { $0.key == key }
     }
-
+    
     /// Applies the default feature flags, browser-specific defaults, and user-defined to a WKPreferences.
     static func applyFeatureFlags(to preferences: WKPreferences) {
         // Apply browser defaults first
         browserDefaultFeatureFlags.forEach { key, defaultValue in
             toggleFeature(key, enabled: defaultValue, for: preferences)
         }
-
+        
         // Apply user-configured flags (these override browser defaults)
         Preferences.configuredFeatureFlags.forEach { key, enabled in
             toggleFeature(key, enabled: enabled, for: preferences)
         }
     }
-
+    
     static var browserDefaultFeatureFlags: [String: Bool] {
         ["PreferPageRenderingUpdatesNear60FPSEnabled": false]
     }
-
+    
     static func isFeatureFlagUserConfigured(_ feature: WKFeature) -> Bool {
         Preferences.configuredFeatureFlags[feature.key] != nil
     }

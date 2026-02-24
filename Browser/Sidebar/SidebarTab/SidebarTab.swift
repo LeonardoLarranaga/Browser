@@ -9,25 +9,25 @@ import SwiftUI
 
 /// Tab in the sidebar
 struct SidebarTab: View {
-
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
-
+    
     var pinState: TabPinState
     @Binding var draggingTab: BrowserTab?
-
+    
     @State var isEditingTitle = false
     @State var isHovering = false
     @State var isPressed = false
     @State var isTargeted = false
-
+    
     var body: some View {
         HStack {
             SidebarTabFaviconImage()
-
+            
             if browserTab.webview?.hasActiveNowPlayingSession == true {
                 Button("Mute Tab", systemImage: browserTab.webview?.isAudioMuted == true ? "speaker.slash" : "speaker.wave.2") {
                     self.browserTab.webview?.toggleMute()
@@ -38,11 +38,11 @@ struct SidebarTab: View {
                 ))
                 .browserTransition(.move(edge: .leading))
             }
-
+            
             SidebarTabTitle(isEditingTitle: $isEditingTitle)
-
+            
             Spacer()
-
+            
             if isHovering {
                 SidebarTabCloseButton()
             }
@@ -52,7 +52,7 @@ struct SidebarTab: View {
         .padding(3)
         .background(
             browserSpace.currentTab == browserTab ? .white :
-            isHovering ? .white.opacity(0.5) : .clear
+                isHovering ? .white.opacity(0.5) : .clear
         )
         .clipShape(.rect(cornerRadius: 10))
         .contentShape(.rect)
@@ -74,7 +74,7 @@ struct SidebarTab: View {
             return true
         } isTargeted: { targeted in
             self.isTargeted = targeted
-
+            
             // Perform real-time reordering when hovering over a tab
             if targeted, let sourceTab = draggingTab, sourceTab.id != browserTab.id {
                 withAnimation(.browserDefault) {
@@ -83,7 +83,7 @@ struct SidebarTab: View {
             }
         }
     }
-
+    
     func selectTab() {
         browserSpace.currentTab = browserTab
         if Preferences.disableAnimations { return }

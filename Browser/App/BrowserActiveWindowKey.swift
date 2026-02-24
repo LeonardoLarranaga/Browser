@@ -21,7 +21,7 @@ extension FocusedValues {
         get { self[BrowserActiveWindowKey.self] }
         set { self[BrowserActiveWindowKey.self] = newValue }
     }
-    
+
     var sidebarModel: SidebarModel? {
         get { self[SidebarModelActiveWindowKey.self] }
         set { self[SidebarModelActiveWindowKey.self] = newValue }

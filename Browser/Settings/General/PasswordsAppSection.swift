@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct PasswordsAppSection: View {
-
+    
     @State var showFileImporter = false
-
+    
     var body: some View {
         @Bindable var preferences = Preferences
-
+        
         Section {
             Toggle("Add Passwords App Shortcut to Text Fields", systemImage: "key.2.on.ring.fill", isOn: $preferences.injectOpenPasswordsApp)
-
+            
             if preferences.injectOpenPasswordsApp, let passwordApp = preferences.selectedPasswordApp {
                 Menu {
                     Button("Select Passwords App") {

@@ -15,7 +15,7 @@ struct SidebarResizer: View {
     @State var isDragging = false
     @State var isHovering = false
     @State var hoverTask: Task<Void, Never>? = nil
-
+    
     var body: some View {
         // View base
         Color.clear
@@ -46,7 +46,7 @@ struct SidebarResizer: View {
                 hoverTask = nil
             }
     }
-
+    
     /// On hover change handler
     /// Shows the resize dragger after a delay
     private func onHoverChange(_ hovering: Bool) {
@@ -65,7 +65,7 @@ struct SidebarResizer: View {
             }
         }
     }
-
+    
     /// Resize the sidebar depending on the drag gesture value
     private func resizeSidebar(with value: DragGesture.Value) {
         // Save the last sidebar width before dragging

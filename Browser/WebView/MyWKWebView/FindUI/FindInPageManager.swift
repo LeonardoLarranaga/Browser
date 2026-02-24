@@ -11,7 +11,7 @@ import WebKit
 struct FindInPageResult {
     let totalMatches: Int
     let currentMatch: Int
-
+    
     static let empty = FindInPageResult(totalMatches: 0, currentMatch: 0)
 }
 
@@ -21,30 +21,30 @@ struct FindInPageResult {
 @Observable
 @MainActor
 final class FindInPageManager {
-
+    
     var totalMatches: Int = 0
     var currentMatch: Int = 0
     var searchQuery: String = ""
-
+    
     private weak var webView: WKWebView?
-
+    
     init(webView: WKWebView? = nil) {
         self.webView = webView
     }
-
+    
     /// Sets the webView to use for find operations
     func setWebView(_ webView: WKWebView?) {
         self.webView = webView
     }
-
+    
     /// Injects the Find in Page JavaScript if not already present on the page
     private func ensureScriptInjected() async throws {
         guard let webView = webView else { return }
-
+        
         // Check if the script is already injected on this page
         let checkScript = "typeof window.BrowserFindInPage !== 'undefined'"
         let isInjected = try await webView.evaluateJavaScript(checkScript) as? Bool ?? false
-
+        
         if !isInjected {
             guard let script = JavaScript.getBundled("FindInPage") else {
                 print("FindInPageManager: Could not load FindInPage.js")
@@ -53,7 +53,7 @@ final class FindInPageManager {
             _ = try await webView.evaluateJavaScript(script)
         }
     }
-
+    
     /// Parses the JavaScript result dictionary
     private func parseResult(_ result: Any?) -> FindInPageResult {
         guard let dict = result as? [String: Any],
@@ -63,31 +63,31 @@ final class FindInPageManager {
         }
         return FindInPageResult(totalMatches: totalMatches, currentMatch: currentMatch)
     }
-
+    
     /// Updates the published state from a result
     private func updateState(from result: FindInPageResult) {
         self.totalMatches = result.totalMatches
         self.currentMatch = result.currentMatch
     }
-
+    
     /// Searches for text in the page
     func search(_ query: String) async {
         searchQuery = query
-
+        
         guard let webView = webView else {
             updateState(from: .empty)
             return
         }
-
+        
         do {
             try await ensureScriptInjected()
-
+            
             let escapedQuery = query
                 .replacingOccurrences(of: "\\", with: "\\\\")
                 .replacingOccurrences(of: "'", with: "\\'")
                 .replacingOccurrences(of: "\n", with: "\\n")
                 .replacingOccurrences(of: "\r", with: "\\r")
-
+            
             let js = "window.BrowserFindInPage.search('\(escapedQuery)')"
             let result = try await webView.evaluateJavaScript(js)
             let parsedResult = parseResult(result)
@@ -97,11 +97,11 @@ final class FindInPageManager {
             updateState(from: .empty)
         }
     }
-
+    
     /// Goes to the next match
     func goToNextMatch() async {
         guard let webView = webView else { return }
-
+        
         do {
             try await ensureScriptInjected()
             let result = try await webView.evaluateJavaScript("window.BrowserFindInPage.goToNextMatch()")
@@ -111,11 +111,11 @@ final class FindInPageManager {
             print("FindInPageManager goToNextMatch error: \(error)")
         }
     }
-
+    
     /// Goes to the previous match
     func goToPreviousMatch() async {
         guard let webView = webView else { return }
-
+        
         do {
             try await ensureScriptInjected()
             let result = try await webView.evaluateJavaScript("window.BrowserFindInPage.goToPreviousMatch()")
@@ -125,7 +125,7 @@ final class FindInPageManager {
             print("FindInPageManager goToPreviousMatch error: \(error)")
         }
     }
-
+    
     /// Clears the find highlights
     func clear() async {
         guard let webView = webView else {
@@ -133,7 +133,7 @@ final class FindInPageManager {
             searchQuery = ""
             return
         }
-
+        
         do {
             try await ensureScriptInjected()
             _ = try await webView.evaluateJavaScript("window.BrowserFindInPage.clear()")
@@ -143,11 +143,11 @@ final class FindInPageManager {
             print("FindInPageManager clear error: \(error)")
         }
     }
-
+    
     /// Gets the current state from JavaScript
     func refreshState() async {
         guard let webView = webView else { return }
-
+        
         do {
             try await ensureScriptInjected()
             let result = try await webView.evaluateJavaScript("window.BrowserFindInPage.getState()")

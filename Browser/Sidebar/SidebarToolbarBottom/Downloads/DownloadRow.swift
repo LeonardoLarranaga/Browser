@@ -51,17 +51,17 @@ struct DownloadRow: View {
             return fallbackImage
         }
         defer { downloadLocation.stopAccessingSecurityScopedResource() }
-
+        
         if FileManager.default.fileExists(atPath: download.url.path) {
             if download.url.isDirectory {
                 return NSWorkspace.shared.icon(for: .folder)
             }
-
+            
             if download.url.contains(.image) {
                 return NSImage(contentsOf: download.url) ?? fallbackImage
             }
         }
-
+        
         return fallbackImage
     }
 }

@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct SidebarTabCloseButton: View {
-
+    
     @Environment(BrowserTab.self) var browserTab
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     @State var isHovering = false
     var isPinnedAndLoaded: Bool {
         browserTab.pinState == .pinned && browserTab.isLoaded
     }
-
+    
     var body: some View {
         Button("Close Tab", systemImage: isPinnedAndLoaded ? "minus" : "xmark") {
             if isPinnedAndLoaded {

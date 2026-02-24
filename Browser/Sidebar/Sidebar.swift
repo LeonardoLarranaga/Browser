@@ -9,15 +9,15 @@ import SwiftUI
 
 /// The main sidebar view
 struct Sidebar: View {
-
+    
     @Environment(\.modelContext) var modelContext
-
+    
     @Environment(SidebarModel.self) var sidebarModel
-
+    
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     let browserSpaces: [BrowserSpace]
-
+    
     var body: some View {
         VStack {
             if Preferences.urlBarPosition == .onSidebar {
@@ -42,7 +42,7 @@ struct Sidebar: View {
         }
         .onReceive(NotificationCenter.default.publisher(for: NSWindow.willCloseNotification)) { notification in
             guard NSWindow.hasPrefix("Browser", in: notification.object as? NSWindow) else { return }
-
+            
             // If the window is not the main browser window, delete the window temporary space
             if !browserWindow.isMainBrowserWindow {
                 do {
@@ -63,13 +63,13 @@ struct Sidebar: View {
             }
         }
     }
-
+    
     func createSpace() {
         do {
             let nextIndex = browserSpaces.firstIndex(where: { $0.id == browserWindow.currentSpace?.id }) ?? -1 + 1
-
+            
             var newSpace: BrowserSpace
-
+            
             if browserWindow.isMainBrowserWindow {
                 newSpace = BrowserSpace(name: "", systemImage: "circle.fill", order: nextIndex, colors: [], colorScheme: "system")
             } else if browserWindow.isNoTraceWindow {
@@ -77,15 +77,15 @@ struct Sidebar: View {
             } else {
                 newSpace = BrowserSpace(name: "Temporary Window", systemImage: "circle.fill", order: 0, colors: [], colorScheme: "system")
             }
-
+            
             modelContext.insert(newSpace)
             try modelContext.save()
-
+            
             // Select the new space
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                 browserWindow.goToSpace(newSpace)
             }
-
+            
             if browserSpaces.count > 1 {
                 // Update all spaces order
                 for (index, space) in browserSpaces.enumerated() {

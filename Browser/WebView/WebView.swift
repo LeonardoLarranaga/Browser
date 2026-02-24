@@ -9,13 +9,13 @@ import SwiftUI
 
 /// View that represents the webview of a tab, it can be a webview or a history view
 struct WebView: View {
-
+    
     @Environment(BrowserWindow.self) var browserWindow
     @Environment(BrowserTab.self) var tab
     @Environment(BrowserSpace.self) var browserSpace
-
+    
     @State var hover = HoverState()
-
+    
     var body: some View {
         Group {
             switch tab.contentType {

@@ -19,7 +19,7 @@ struct FaviconPlaceholder: View {
         }
         .frame(width: 256, height: 256)
     }
-
+    
     static func nsImage(url: URL) -> NSImage? {
         ImageRenderer(content: FaviconPlaceholder(url: url)).nsImage
     }

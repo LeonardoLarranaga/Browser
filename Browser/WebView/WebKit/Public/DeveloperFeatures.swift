@@ -8,12 +8,12 @@
 import WebKit
 
 enum DeveloperFeatures {
-
+    
     static func showWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         inspector.show()
     }
-
+    
     static func toggleWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         if inspector.isVisible {
@@ -22,7 +22,7 @@ enum DeveloperFeatures {
             inspector.show()
         }
     }
-
+    
     static func showJavaScriptConsole(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         if !inspector.isVisible {
@@ -30,7 +30,7 @@ enum DeveloperFeatures {
         }
         inspector.showConsole()
     }
-
+    
     static func showPageResources(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         if !inspector.isVisible {
@@ -38,31 +38,31 @@ enum DeveloperFeatures {
         }
         inspector.showResources()
     }
-
+    
     static func isWebInspectorVisible(for webView: WKWebView) -> Bool {
         return webView._inspector.isVisible
     }
-
+    
     /// Check if the Web Inspector is connected
     static func isWebInspectorConnected(for webView: WKWebView) -> Bool {
         return webView._inspector.isConnected
     }
-
+    
     static func hideWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         inspector.hide()
     }
-
+    
     static func closeWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         inspector.close()
     }
-
+    
     static func attachWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         inspector.attach()
     }
-
+    
     static func detachWebInspector(for webView: WKWebView) {
         guard let inspector = webView._inspector else { return }
         inspector.detach()

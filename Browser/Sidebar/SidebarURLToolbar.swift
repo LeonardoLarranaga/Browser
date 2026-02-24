@@ -44,7 +44,7 @@ struct SidebarURLToolbar: View {
                         browserWindow.searchOpenLocation = .fromURLBar
                     }
             }
-
+            
             Spacer()
             
             SidebarToolbarButton("link", disabled: currentTab == nil, action: browserWindow.copyURLToClipboard)

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DownloadsList: View {
-
+    
     @Environment(BrowserWindow.self) var browserWindow
     
     @State private var downloads: [Download] = []
@@ -37,7 +37,7 @@ struct DownloadsList: View {
                         // Take the most recent date
                         let date1 = max(resourceValues1?.creationDate ?? .now, resourceValues1?.contentModificationDate ?? .now)
                         let date2 = max(resourceValues2?.creationDate ?? .now, resourceValues2?.contentModificationDate ?? .now)
-                                                
+                        
                         return date1 < date2
                     }
                     .prefix(5)

@@ -8,25 +8,25 @@
 import SwiftUI
 
 struct ProfileCard: View {
-
+    
     let profile: BrowserProfile?
     @Binding var selectedProfile: BrowserProfile?
-
+    
     @State var isHovering = false
-
+    
     init(_ profile: BrowserProfile?, selectedProfile: Binding<BrowserProfile?>) {
         self.profile = profile
         self._selectedProfile = selectedProfile
     }
-
+    
     var isSelected: Bool {
         selectedProfile?.id == profile?.id
     }
-
+    
     var color: Color {
         profile?.color ?? .accentColor
     }
-
+    
     var body: some View {
         Button {
             selectedProfile = profile

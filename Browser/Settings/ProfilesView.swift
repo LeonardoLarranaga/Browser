@@ -10,23 +10,23 @@ import SwiftUI
 import WebKit
 
 struct SettingsProfilesView: View {
-
+    
     @Environment(\.modelContext) private var modelContext
-
+    
     @Query var profiles: [BrowserProfile]
     @Query(sort: \BrowserSpace.order) var spaces: [BrowserSpace]
-
+    
     @State var showAddProfile = false
     @State var showEditProfile = false
     @State var selectedProfile: BrowserProfile? = nil
-
+    
     @State var showDeleteProfileAlert = false
-
+    
     var selectedProfileSpaces: [BrowserSpace] {
         if let selectedProfile { selectedProfile.browserSpaces }
         else { spaces.filter { $0.profile == nil } }
     }
-
+    
     var body: some View {
         Form {
             Section {
@@ -36,18 +36,18 @@ struct SettingsProfilesView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
-
+            
             if showAddProfile {
                 NewProfileView(selectedProfile: $selectedProfile, isPresented: $showAddProfile)
             }
-
+            
             if showEditProfile, let selectedProfile {
                 NewProfileView(selectedProfile: $selectedProfile, isPresented: $showEditProfile, editingProfile: selectedProfile)
             }
-
+            
             Section {
                 ProfileSpacesView(profiles: profiles, selectedProfile: selectedProfile, spaces: selectedProfileSpaces)
-
+                
                 if selectedProfile != nil {
                     Button("Edit Profile", systemImage: "pencil") {
                         showAddProfile = false
@@ -55,7 +55,7 @@ struct SettingsProfilesView: View {
                             showEditProfile.toggle()
                         }
                     }
-
+                    
                     if selectedProfileSpaces.isEmpty {
                         Button("Delete Profile", systemImage: "trash") {
                             showDeleteProfileAlert = true
@@ -66,7 +66,7 @@ struct SettingsProfilesView: View {
                 Text("\(selectedProfile?.name ?? "Default") Spaces")
             } footer: {
                 Text("You may only delete a profile if it has no associated spaces.")
-
+                
             }
         }
         .formStyle(.grouped)
@@ -81,10 +81,10 @@ struct SettingsProfilesView: View {
             Text("Are you sure you want to delete the \(selectedProfile?.name ?? "") profile? This will also delete all your history, cookies, and other browsing data associated with this profile. This action cannot be undone.")
         }
     }
-
+    
     func deleteSelectedProfile() {
         guard let selectedProfile else { return }
-
+        
         // 1. Wipe the isolated WKWebsiteDataStore (cookies, cache, IndexedDB, etc.)
         Task {
             do {
@@ -93,21 +93,21 @@ struct SettingsProfilesView: View {
                 print("Failed to remove website data store for profile \(selectedProfile.name): \(error)")
             }
         }
-
+        
         // 2. Delete all history entries belonging to this profile
         for entry in selectedProfile.historyEntries {
             modelContext.delete(entry)
         }
-
+        
         // 3. Delete the profile itself
         modelContext.delete(selectedProfile)
-
+        
         do {
             try modelContext.save()
         } catch {
             NSAlert(error: error).runModal()
         }
-
+        
         self.selectedProfile = nil
     }
 }

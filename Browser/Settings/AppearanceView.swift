@@ -10,11 +10,11 @@ import SwiftUI
 struct SettingsAppearanceView: View {
     
     var body: some View {
-      @Bindable var preferences = Preferences
+        @Bindable var preferences = Preferences
         Form {
             Section("App") {
-              Picker("Sidebar Position", systemImage: "sidebar.left", selection: $preferences.sidebarPosition) {
-                Label("Leading", systemImage: "sidebar.left").tag(_Preferences.SidebarPosition.leading)
+                Picker("Sidebar Position", systemImage: "sidebar.left", selection: $preferences.sidebarPosition) {
+                    Label("Leading", systemImage: "sidebar.left").tag(_Preferences.SidebarPosition.leading)
                     Label("Trailing", systemImage: "sidebar.right").tag(_Preferences.SidebarPosition.trailing)
                 }
                 
@@ -29,7 +29,7 @@ struct SettingsAppearanceView: View {
                         Label(position.localizedStringKey, systemImage: position.systemImage).tag(position)
                     }
                 }
-
+                
                 Picker("URL Bar Position", systemImage: "link", selection: $preferences.urlBarPosition) {
                     Label("On Sidebar", systemImage: "sidebar.left").tag(_Preferences.URLBarPosition.onSidebar)
                     Label("On Toolbar", systemImage: "menubar.rectangle").tag(_Preferences.URLBarPosition.onToolbar)

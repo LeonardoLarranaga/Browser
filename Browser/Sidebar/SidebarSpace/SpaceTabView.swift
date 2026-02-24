@@ -72,7 +72,7 @@ struct SidebarSpacesTabView: View {
             if browserWindow.currentSpace == nil && browserWindow.isMainBrowserWindow {
                 browserWindow.loadCurrentSpace(browserSpaces: browserSpaces)
             }
-                        
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.appeared = true
             }

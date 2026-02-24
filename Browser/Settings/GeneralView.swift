@@ -15,11 +15,11 @@ struct GeneralSettingsView: View {
             Toggle("Warn Before Quitting", systemImage: "exclamationmark.triangle", isOn: $preferences.warnBeforeQuitting)
             Toggle("Automatic Page Suspension", systemImage: "hand.raised.fill", isOn: $preferences.automaticPageSuspension)
             Toggle("Show Hover URL", systemImage: "dot.circle.and.cursorarrow", isOn: $preferences.showHoverURL)
-
+            
             DownloadFolderSection()
             PasswordsAppSection()
             CustomWebsiteSearchersSection()
-
+            
             Toggle("Show Feature Flags for Web Developers", systemImage: "flag.2.crossed.fill", isOn: $preferences.shouldShowFeatureFlagSettings)
         }
         .formStyle(.grouped)

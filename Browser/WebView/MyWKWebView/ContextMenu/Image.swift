@@ -15,21 +15,21 @@ extension MyWKWebView {
             menu.insertItem(copy, at: 1)
             menu.removeItem(openInWindowItem)
         }
-
+        
         if let downloadImageItem = menu.items.first(where: { $0.identifier?.rawValue == "WKMenuItemIdentifierDownloadImage" }),
            let copy = downloadImageItem.copy() as? NSMenuItem {
             copy.isEnabled = Preferences.hasDownloadLocationSet
             menu.insertItem(copy, at: 1)
             menu.removeItem(downloadImageItem)
         }
-
+        
         let saveImageAsItem = NSMenuItem(title: "Save Image As...", action: #selector(saveImageAs), keyEquivalent: "")
         saveImageAsItem.target = self
         menu.insertItem(saveImageAsItem, at: 2)
-
+        
         // Copy Image (index 3)
     }
-
+    
     /// Opens an NSSavePanel and saves the clicked image to disk.
     @objc func saveImageAs() {
         getImageURL { imageURL in
@@ -40,7 +40,7 @@ extension MyWKWebView {
             savePanel.allowedContentTypes = [.image]
             savePanel.begin { response in
                 guard response == .OK, let destinationURL = savePanel.url else { return }
-
+                
                 Task {
                     do {
                         let (data, _) = try await URLSession.shared.data(from: imageURL)
@@ -52,17 +52,17 @@ extension MyWKWebView {
             }
         }
     }
-
+    
     private func getImageURL(completion: @escaping (URL) -> Void) {
         let x = Int(rightMouseDownPosition.x.rounded())
         let y = Int(rightMouseDownPosition.y.rounded())
-
+        
         let js = """
         var el = document.elementFromPoint(\(x), \(y));
         var img = el?.closest('img');
         img ? (img.currentSrc || img.src) : null;
         """
-
+        
         evaluateJavaScript(js) { result, error in
             guard error == nil,
                   let urlString = result as? String,
@@ -70,7 +70,7 @@ extension MyWKWebView {
                 NSAlert(error: "Couldn't get image URL.").runModal()
                 return
             }
-
+            
             completion(url)
         }
     }

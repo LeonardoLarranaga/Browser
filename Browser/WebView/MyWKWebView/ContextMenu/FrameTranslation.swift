@@ -12,7 +12,7 @@ extension MyWKWebView {
         let item = NSMenuItem(title: "Translate Using Google", action: nil, keyEquivalent: "")
         let menu = NSMenu(title: "Translate Using Google")
         item.submenu = menu
-
+        
         let languages = [
             ("Acehnese", "ace"),
             ("Acholi", "ach"),
@@ -208,11 +208,11 @@ extension MyWKWebView {
             ("Yucatec Maya", "yua"),
             ("Zulu", "zu")
         ].map { TranslatedLanguage(code: $0.1, name: $0.0) }
-
+        
         let recentlyTranslatedLanguages = Preferences.recentlyTranslatedLanguages
         if !recentlyTranslatedLanguages.isEmpty {
             menu.addItem(NSMenuItem(title: "Recent", action: nil, keyEquivalent: ""))
-
+            
             for language in recentlyTranslatedLanguages {
                 let item = NSMenuItem(title: language.name, action: #selector(translate(_:)), keyEquivalent: "")
                 item.representedObject = language
@@ -220,29 +220,29 @@ extension MyWKWebView {
             }
             menu.addItem(.separator())
         }
-
+        
         for language in languages {
             let item = NSMenuItem(title: language.name, action: #selector(translate(_:)), keyEquivalent: "")
             item.representedObject = language
             menu.addItem(item)
         }
-
+        
         return item
     }
-
+    
     @objc func translate(_ sender: NSMenuItem) {
         guard let language = sender.representedObject as? TranslatedLanguage else { return }
-
+        
         Preferences.recentlyTranslatedLanguages.removeAll { $0.code == language.code }
         Preferences.recentlyTranslatedLanguages.insert(language, at: 0)
-
+        
         guard let getTextScript = JavaScript.getBundled("GetPageText") else { return }
-
+        
         evaluateJavaScript(getTextScript) { result, error in
             guard let texts = result as? [String] else { return }
-
+            
             let api = URL(string: "https://translate-pa.googleapis.com/v1/translateHtml")!
-
+            
             var request = URLRequest(url: api)
             request.httpMethod = "POST"
             request.allHTTPHeaderFields = [
@@ -252,13 +252,13 @@ extension MyWKWebView {
                 "Accept": "*/*",
                 "Origin": "https://www.google.com",
             ]
-
+            
             let requestBody = try? JSONSerialization.data(withJSONObject: [
                 [texts, "auto", language.code],
                 "te_lib"
             ])
             request.httpBody = requestBody
-
+            
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error {
                     return print("Translation failed: \(error)")
@@ -266,9 +266,9 @@ extension MyWKWebView {
                 guard let data = data else { return print("Translation failed: \(error?.localizedDescription ?? "Unknown error")") }
                 guard let json = try? JSONSerialization.jsonObject(with: data) as? [[Any]] else { return print("Translation failed: Invalid JSON response") }
                 guard let translatedTexts = json[0] as? [String] else { return print("Translation failed: Invalid JSON structure: \(json)") }
-
+                
                 let transformedTexts = translatedTexts.map { CFXMLCreateStringByUnescapingEntities(nil, $0 as CFString, nil) as String }
-
+                
                 DispatchQueue.main.async {
                     let replaceScript = """
                         function replaceTexts(translations) {
@@ -315,7 +315,7 @@ extension MyWKWebView {
                         }
                         replaceTexts(\(transformedTexts));
                         """
-
+                    
                     self.evaluateJavaScript(replaceScript) { _, error in
                         if error == nil {
                             self.presentActionAlert?("Page Translated! Refresh To Revert", "translate")
@@ -323,7 +323,7 @@ extension MyWKWebView {
                     }
                 }
             }
-
+            
             task.resume()
         }
     }

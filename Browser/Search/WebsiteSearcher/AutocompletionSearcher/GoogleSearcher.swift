@@ -24,5 +24,5 @@ struct GoogleSearcher: WebsiteSearcher {
         return try parseSearchSuggestions(from: result, droppingFirst: 1, droppingLast: 3)
     }
 }
-    
+
 

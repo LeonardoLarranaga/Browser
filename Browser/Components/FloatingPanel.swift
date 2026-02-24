@@ -124,10 +124,10 @@ class FloatingPanel<Content: View>: NSPanel {
 
 /// Add a  ``FloatingPanel`` to a view hierarchy
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
-
+    
     /// The app model context for SwiftData support
     @Environment(\.modelContext) var modelContext
-
+    
     /// Determines wheter the panel should be presented or not
     @Binding var isPresented: Bool
     
@@ -137,11 +137,11 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     
     /// Determines if the panel should be centered in the key window
     var shouldCenter: Bool
-
+    
     /// The liquid glass style of the panel's background
     var glassStyle: NSGlassEffectView.Style
     var glassTintColor: Color?
-
+    
     /// Holds the panel content's view closure
     @ViewBuilder let view: () -> PanelContent
     

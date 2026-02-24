@@ -38,10 +38,10 @@ struct HistoryCommands: Commands {
     
     func showHistory() {
         guard let currentSpace = browserWindow?.currentSpace else { return }
-
+        
         let favicon = ImageRenderer(content: Image(systemName: "arrow.counterclockwise.square.fill").resizable().frame(width: 32, height: 32).scaledToFit().foregroundStyle(.gray)).nsImage?.pngData
         let historyTab = BrowserTab(title: "History", favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: currentSpace, contentType: .history)
-
+        
         do {
             currentSpace.tabs.append(historyTab)
             try modelContext.save()

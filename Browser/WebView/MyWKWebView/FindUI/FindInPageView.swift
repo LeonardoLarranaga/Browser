@@ -9,16 +9,16 @@ import SwiftUI
 
 /// A custom view to find text in a web page.
 struct FindInPageView: View {
-
+    
     @Environment(BrowserTab.self) var tab
-
+    
     @State var searchText: String = ""
     @FocusState var isFocused: Bool
     @State private var isSearching: Bool = false
-
+    
     /// Debounce task for search
     @State private var searchTask: Task<Void, Never>?
-
+    
     /// The find manager from the tab
     private var findManager: FindInPageManager {
         if tab.findInPageManager == nil {
@@ -26,11 +26,11 @@ struct FindInPageView: View {
         }
         return tab.findInPageManager!
     }
-
+    
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-
+            
             HStack(spacing: 0) {
                 TextField("Find In Page...", text: $searchText)
                     .focused($isFocused)
@@ -48,7 +48,7 @@ struct FindInPageView: View {
                     .onSubmit {
                         goToNext()
                     }
-
+                
                 // Match count indicator
                 if isSearching {
                     ProgressView()
@@ -66,13 +66,13 @@ struct FindInPageView: View {
                         .padding(.leading, 4)
                 }
             }
-
+            
             Button("Go Previous", systemImage: "arrow.up", action: goToPrevious)
                 .disabled(findManager.totalMatches == 0)
-
+            
             Button("Go Next", systemImage: "arrow.down", action: goToNext)
                 .disabled(findManager.totalMatches == 0)
-
+            
             Button("Close", systemImage: "xmark", action: close)
         }
         .buttonStyle(.plain)
@@ -94,7 +94,7 @@ struct FindInPageView: View {
             }
         }
     }
-
+    
     /// Performs search with debouncing
     private func performSearch(query: String) {
         searchTask?.cancel()
@@ -125,21 +125,21 @@ struct FindInPageView: View {
             }
         }
     }
-
+    
     /// Go to the next match
     private func goToNext() {
         Task {
             await findManager.goToNextMatch()
         }
     }
-
+    
     /// Go to the previous match
     private func goToPrevious() {
         Task {
             await findManager.goToPreviousMatch()
         }
     }
-
+    
     /// Close the find UI (hides but preserves state)
     func close() {
         tab.showFindUI = false

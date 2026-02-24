@@ -13,38 +13,38 @@ import SwiftUI
 /// ToolbarItem/ToolbarItemGroup doesn't conform to View,
 /// so the current implementation is very repetitive.
 struct SidebarToolbar: ViewModifier {
-
+    
     @Environment(\.modelContext) var modelContext
     @Environment(\.colorScheme) var colorScheme
-
+    
     @Environment(SidebarModel.self) var sidebarModel
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     var toolbarColorScheme: ColorScheme {
         browserWindow.currentSpace?.textColor(in: colorScheme) == .black ? .light : .dark
     }
-
+    
     let browserSpaces: [BrowserSpace]
-
+    
     var currentTab: BrowserTab? {
         browserWindow.currentSpace?.currentTab
     }
-
+    
     private var placement: ToolbarItemPlacement {
         .navigation
     }
-
+    
     private var sidebarPosition: _Preferences.SidebarPosition {
         Preferences.sidebarPosition
     }
-
+    
     private var sidebarIcon: String {
         switch sidebarPosition {
         case .leading: "sidebar.left"
         case .trailing: "sidebar.right"
         }
     }
-
+    
     func body(content: Content) -> some View {
         content
             .toolbar {
@@ -60,21 +60,21 @@ struct SidebarToolbar: ViewModifier {
                 }
             }
     }
-
+    
     func SidebarButton() -> some View {
         Button("Toggle Sidebar", systemImage: sidebarIcon, action: sidebarModel.toggleSidebar)
     }
-
+    
     func BackButton() -> some View {
         Button("Go Back", systemImage: "chevron.left", action: browserWindow.backButtonAction)
             .disabled(currentTab == nil || currentTab?.canGoBack == false)
     }
-
+    
     func ForwardButton() -> some View {
         Button("Go Forward", systemImage: "chevron.right", action: browserWindow.forwardButtonAction)
             .disabled(currentTab == nil || currentTab?.canGoForward == false)
     }
-
+    
     func SmallToolbar() -> some View {
         Menu("Sidebar Options", systemImage: "ellipsis") {
             SidebarButton()
@@ -86,7 +86,7 @@ struct SidebarToolbar: ViewModifier {
         }
         .labelStyle(.iconOnly)
     }
-
+    
     func Toolbar(addSpacer: Bool = false) -> some View {
         Group {
             if sidebarModel.currentSidebarWidth < 205 {

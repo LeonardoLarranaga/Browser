@@ -9,9 +9,9 @@
 import SwiftUI
 
 struct AddProfileButton: View {
-
+    
     @Binding var showAddProfile: Bool
-
+    
     var body: some View {
         Button {
             withAnimation(.browserDefault) {

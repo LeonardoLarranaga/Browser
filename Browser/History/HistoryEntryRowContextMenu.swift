@@ -9,13 +9,13 @@ import SwiftUI
 
 /// Context menu for a history entry row. Contains actions to open the history entry in a new tab, in a new window, or to delete it.
 fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
-
+    
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     let entry: BrowserHistoryEntry
     let selectedEntries: Set<BrowserHistoryEntry>
     let browserTab: BrowserTab
-
+    
     func body(content: Content) -> some View {
         content.contextMenu {
             if selectedEntries.count < 2 {
@@ -25,13 +25,13 @@ fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
                     browserTab.favicon = entry.favicon
                     browserTab.contentType = .web
                 }
-
+                
                 Button("Open in New Tab") {
                     openEntryInNewTab(entry)
                 }
-
+                
                 Divider()
-
+                
                 Button("Delete Entry") {
                     deleteEntry(entry)
                 }
@@ -39,9 +39,9 @@ fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
                 Button("Open \(selectedEntries.count) Entries") {
                     selectedEntries.forEach(openEntryInNewTab(_:))
                 }
-
+                
                 Divider()
-
+                
                 Button("Delete \(selectedEntries.count) Entries") {
                     selectedEntries.forEach(deleteEntry(_:))
                 }
@@ -57,7 +57,7 @@ fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
             }
         )
     }
-
+    
     func openEntryInNewTab(_ entry: BrowserHistoryEntry) {
         if let currentSpace = browserWindow.currentSpace {
             let browserTab = BrowserTab(
@@ -71,7 +71,7 @@ fileprivate struct HistoryEntryRowContextMenu: ViewModifier {
             currentSpace.openNewTab(browserTab)
         }
     }
-
+    
     func deleteEntry(_ entry: BrowserHistoryEntry) {
         entry.modelContext?.delete(entry)
         try? entry.modelContext?.save()

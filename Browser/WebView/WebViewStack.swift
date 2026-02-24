@@ -9,9 +9,9 @@ import SwiftUI
 
 /// View that contains a stack for the loaded tabs in the current space
 struct WebViewStack: View {
-
+    
     @Environment(BrowserSpace.self) var browserSpace
-
+    
     var body: some View {
         ZStack {
             if let currentTab = browserSpace.currentTab {

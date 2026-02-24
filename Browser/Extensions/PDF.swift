@@ -2,11 +2,11 @@
 //  PDF.swift
 //  Browser
 //
-//  Created by Leonardo Larrañaga on 2/4/25.
+//  Created by Leonardo LarraNaga on 2/4/25.
 //
 
-import PDFKit
 import CoreGraphics
+import PDFKit
 
 extension PDFDocument {
     /// Split a long page into multiple pages

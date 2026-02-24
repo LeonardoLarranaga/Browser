@@ -19,7 +19,7 @@ extension View {
             self
         }
     }
-
+    
     /// Reads the size of the view and updates the given binding with the width
     /// - Parameter width: Binding to update with the width of the view
     func readingWidth(width: Binding<CGFloat>) -> some View {

@@ -11,19 +11,19 @@ struct ActionAlert {
     private(set) var message: String
     private(set) var systemImage: String
     private(set) var isPresented: Bool
-
+    
     init() {
         self.message = ""
         self.systemImage = ""
         self.isPresented = false
     }
-
+    
     mutating func present(message: String, systemImage: String) {
         self.message = message
         self.systemImage = systemImage
         isPresented = true
     }
-
+    
     mutating func dismiss() {
         isPresented = false
     }
@@ -31,11 +31,11 @@ struct ActionAlert {
 
 /// An alert that displays an action that was performed by the user
 fileprivate struct ActionAlertView: ViewModifier {
-
+    
     @Environment(BrowserWindow.self) var browserWindow
-
+    
     @State var dismissTimer: Timer?
-
+    
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .top) {
@@ -79,13 +79,13 @@ fileprivate struct ActionAlertView: ViewModifier {
                 }
             }
     }
-
+    
     func dismiss() {
         withAnimation(.browserDefault) {
             browserWindow.actionAlert.dismiss()
         }
     }
-
+    
     func startDismissTimer() {
         dismissTimer?.invalidate()
         dismissTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in

@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/4/25.
 //
 
-import WebKit
 import PDFKit
+import WebKit
 
 /// Custom context menu for frames (background, not an element)
 extension MyWKWebView {
@@ -267,7 +267,7 @@ extension MyWKWebView {
             break
         }
     }
-
+    
     @objc private func _toggleFindUI() {
         toggleFindUI?()
     }

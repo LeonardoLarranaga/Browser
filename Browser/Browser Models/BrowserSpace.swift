@@ -11,7 +11,7 @@ import SwiftUI
 /// `BrowserSpace` represents a space in the browser that contains tabs.
 @Model
 final class BrowserSpace: Identifiable {
-
+    
     @Attribute(.unique) var id: UUID
     var name: String
     var systemImage: String
@@ -20,10 +20,10 @@ final class BrowserSpace: Identifiable {
     var grainOpacity: Double
     var colorOpacity: Double
     var colorScheme: String
-
+    
     @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
     @Relationship var profile: BrowserProfile?
-
+    
     var tabs: [BrowserTab] {
         get {
             _tabs.sorted()
@@ -34,21 +34,21 @@ final class BrowserSpace: Identifiable {
             _tabs = newValue
         }
     }
-
+    
     var normalTabs: [BrowserTab] {
         tabs.filter { $0.pinState == .normal }
     }
-
+    
     var pinnedTabs: [BrowserTab] {
         tabs.filter { $0.pinState == .pinned }
     }
-
+    
     var pinnedTabsVisible: Bool = true
-
+    
     @Attribute(.ephemeral) var currentTab: BrowserTab? = nil
     @Transient var loadedTabs: [BrowserTab] = []
     @Attribute(.ephemeral) var isEditing: Bool = false
-
+    
     init(name: String, systemImage: String, order: Int, colors: [Color], grainOpacity: Double = 0.0, colorOpacity: Double = 1.0, colorScheme: String) {
         self.id = UUID()
         self.name = name
@@ -61,39 +61,39 @@ final class BrowserSpace: Identifiable {
         self.currentTab = nil
         self._tabs = []
     }
-
+    
     /// Returns the text color of the space based on the colors of the space and the color scheme
     func textColor(in colorScheme: ColorScheme) -> Color {
         // If the space has no colors, return the primary color (black on light mode, white on dark mode)
         if colors.isEmpty { return .primary }
-
+        
         // Return white or black depending on the luminance of the first color
         var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
         NSColor(getColors[0]).getRed(&r, green: &g, blue: &b, alpha: &a)
         a = colorOpacity
-
+        
         // Convert the color to sRGB
         func sRGB(_ c: CGFloat) -> CGFloat {
             c <= 0.04045 ? c / 12.92 : pow((c + 0.055) / 1.055, 2.4)
         }
-
+        
         r = sRGB(r)
         g = sRGB(g)
         b = sRGB(b)
-
+        
         let luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b
         let backgroundLuminance: CGFloat = colorScheme == .light ? 1 : 0
-
+        
         let finalLuminance = sqrt((1 - a) * backgroundLuminance + a * luminance)
-
+        
         return finalLuminance > 0.3 ? .black : .white
     }
-
+    
     /// This is a computed property that returns the colors of the space as `Color` objects
     @Transient var getColors: [Color] {
         colors.map { Color(hex: $0) ?? .clear }
     }
-
+    
     /// Removes a tab from the ZStack of WebViews of the space
     func unloadTab(_ tab: BrowserTab) {
         guard let index = loadedTabs.firstIndex(of: tab) else { return }
@@ -101,21 +101,21 @@ final class BrowserSpace: Identifiable {
         loadedTabs.remove(at: index)
         loadedTabs.removeAll(where: { $0.id == tab.id })
     }
-
+    
     /// Closes (deletes) a tab from the space and selects the next tab
     func closeTab(_ tab: BrowserTab, tabUndoManager: TabUndoManager?) {
         guard let tabUndoManager else { return }
         let command = CloseTabCommand(tab: tab, space: self)
         tabUndoManager.execute(command)
     }
-
+    
     func clear(deleteCurrent: Bool, tabUndoManager: TabUndoManager?) {
         guard let tabUndoManager, !normalTabs.isEmpty else { return }
-
+        
         let deletedTabs = normalTabs.filter {
             deleteCurrent ? true : $0 != currentTab
         }
-
+        
         let command = CloseMultipleTabsCommand(
             tabs: deletedTabs,
             space: self,
@@ -123,7 +123,7 @@ final class BrowserSpace: Identifiable {
         )
         tabUndoManager.execute(command)
     }
-
+    
     /// Opens a new tab in the space
     /// - Parameters:
     ///  - browserTab: The tab to open
@@ -145,7 +145,7 @@ final class BrowserSpace: Identifiable {
             print("Error opening new tab: \(error)")
         }
     }
-
+    
     func pinTab(_ browserTab: BrowserTab) {
         do {
             browserTab.pinState = .pinned
@@ -154,7 +154,7 @@ final class BrowserSpace: Identifiable {
             print("Error pinning tab: \(error)")
         }
     }
-
+    
     func unpinTab(_ browserTab: BrowserTab) {
         do {
             browserTab.pinState = .normal
@@ -163,7 +163,7 @@ final class BrowserSpace: Identifiable {
             print(error.localizedDescription)
         }
     }
-
+    
     /// Reorders a tab by moving it from its current position to a new destination
     /// - Parameters:
     ///   - sourceTab: The tab to move
@@ -171,24 +171,24 @@ final class BrowserSpace: Identifiable {
     ///   - destinationPinState: The pin state of the destination area (pinned or normal)
     func reorderTab(_ sourceTab: BrowserTab, to destinationTab: BrowserTab, destinationPinState: TabPinState) {
         guard sourceTab.id != destinationTab.id else { return }
-
+        
         do {
             // Change pin state if moving to a different section
             if sourceTab.pinState != destinationPinState {
                 sourceTab.pinState = destinationPinState
             }
-
+            
             // Get all tabs and find indices
             var allTabs = tabs
             guard let sourceIndex = allTabs.firstIndex(where: { $0.id == sourceTab.id }),
                   let destinationIndex = allTabs.firstIndex(where: { $0.id == destinationTab.id })
             else { return }
-
+            
             // Reorder in the array
             allTabs.remove(at: sourceIndex)
             let newDestinationIndex = sourceIndex < destinationIndex ? destinationIndex - 1 : destinationIndex
             allTabs.insert(sourceTab, at: newDestinationIndex)
-
+            
             // Update tabs (this will automatically update order indices via setter)
             tabs = allTabs
             try modelContext?.save()

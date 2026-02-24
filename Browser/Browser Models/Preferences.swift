@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 1/18/25.
 //
 
-import SwiftUI
 import ObservableDefaults
+import SwiftUI
 
 /// Singleton instance of user preferences
 let Preferences = _Preferences.shared

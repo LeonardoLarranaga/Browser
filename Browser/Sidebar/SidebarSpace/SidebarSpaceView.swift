@@ -9,18 +9,18 @@ import SwiftUI
 
 // View that represents a space in the sidebar
 struct SidebarSpaceView: View {
-
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.modelContext) var modelContext
-
+    
     let browserSpaces: [BrowserSpace]
-
+    
     @Bindable var browserSpace: BrowserSpace
-
+    
     @State var isHovering = false
     @State var isHoveringClearButton = false
     @State private var draggingTab: BrowserTab?
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack {
@@ -30,9 +30,9 @@ struct SidebarSpaceView: View {
                     .fontWeight(.bold)
                     .padding(.leading, .sidebarPadding * 2)
                     .frame(height: 25)
-
+                
                 Spacer()
-
+                
                 if !browserSpace.pinnedTabs.isEmpty && isHovering {
                     Button("Hide Pinned tabs", systemImage: browserSpace.pinnedTabsVisible ? "chevron.down" : "chevron.right") {
                         withAnimation(.browserDefault) {
@@ -44,7 +44,7 @@ struct SidebarSpaceView: View {
             }
             .frame(height: 25)
             .padding(.top, Preferences.urlBarPosition == .onToolbar ? 40 : 0)
-
+            
             ScrollView {
                 VStack {
                     if browserSpace.pinnedTabsVisible {
@@ -53,12 +53,12 @@ struct SidebarSpaceView: View {
                             .padding(.bottom, -5)
                             .browserTransition(.move(edge: .top).combined(with: .opacity))
                     }
-
+                    
                     SidebarSpaceClearDivider(isHovering: isHovering)
-
+                    
                     SidebarTabNewButton()
                         .padding(.vertical, -3)
-
+                    
                     SidebarTabList(tabs: browserSpace.normalTabs, pinState: .normal, draggingTab: $draggingTab)
                 }
             }

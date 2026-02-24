@@ -8,9 +8,9 @@
 import Foundation
 
 enum SearchEngine: String, CaseIterable {
-
+    
     case google, bing, wikipedia, youtube, duckduckgo
-
+    
     /// The search engine to use
     var searcher: WebsiteSearcher {
         switch self {
@@ -26,7 +26,7 @@ enum SearchEngine: String, CaseIterable {
             DuckDuckGoSearcher()
         }
     }
-
+    
     /// The title of the search engine
     var title: String {
         self.searcher.title

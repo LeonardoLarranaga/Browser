@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/15/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// An immutable model that represents a browser history entry.
 @Model

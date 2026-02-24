@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/9/25.
 //
 
-import SwiftUI
 import KeyboardShortcuts
+import SwiftUI
 
 struct ViewCommands: Commands {
     
@@ -62,18 +62,18 @@ struct ViewCommands: Commands {
                     .globalKeyboardShortcut(.zoomOut)
                 
                 Divider()
-
+                
                 Menu("Developer") {
                     Button("Toggle Web Inspector", action: webView.toggleDeveloperTools)
                         .globalKeyboardShortcut(.openDeveloperTools)
-
+                    
                     Button("Show JavaScript Console", action: webView.showJavaScriptConsole)
                         .globalKeyboardShortcut(.showJavaScriptConsole)
-
+                    
                     Button("Show Page Resources", action: webView.showPageResources)
                         .globalKeyboardShortcut(.showPageResources)
                 }
-
+                
                 Divider()
             }
         }

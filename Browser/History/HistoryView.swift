@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 2/16/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct HistoryView: View {
 
@@ -44,14 +44,14 @@ struct HistoryView: View {
                     Button("Clear History") {
                         BrowserHistoryEntry.deleteAllHistory(using: modelContext)
                     }
-                    
+
                     Spacer()
-                    
+
                     TextField("Search History", text: $searchText)
                         .textFieldStyle(.roundedBorder)
                 }
                 .padding([.horizontal, .top])
-                
+
                 List {
                     ForEach(groupedHistory.keys.sorted { $1 < $0 }, id: \.self) { date in
                         Section {

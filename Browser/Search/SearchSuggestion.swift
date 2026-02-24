@@ -14,7 +14,7 @@ struct SearchSuggestion: Identifiable, Equatable {
     let itemURL: URL
     let favicon: (url: URL?, data: Data?)
     let isHistoryItem: Bool
-
+    
     private var url: URL? {
         URL(string: title.startsWithHTTP ? title : "https://\(title)")
     }
@@ -33,14 +33,14 @@ struct SearchSuggestion: Identifiable, Equatable {
         self.favicon = (favicon, nil)
         self.isHistoryItem = false
     }
-
+    
     init(_ title: String, itemURL: URL, favicon: Data?) {
         self.title = title
         self.itemURL = itemURL
         self.favicon = (nil, favicon)
         self.isHistoryItem = true
     }
-
+    
     /// The icon of the search suggestion
     var searchIcon: some View {
         Group {

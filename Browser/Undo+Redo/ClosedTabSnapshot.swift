@@ -18,7 +18,7 @@ struct ClosedTabSnapshot {
     let contentType: TabContentType
     let customTitle: String?
     let spaceId: UUID
-
+    
     init(from tab: BrowserTab) {
         self.id = tab.id
         self.title = tab.title
@@ -30,7 +30,7 @@ struct ClosedTabSnapshot {
         self.customTitle = tab.customTitle
         self.spaceId = tab.spaceId
     }
-
+    
     func createTab(in space: BrowserSpace) -> BrowserTab {
         assert(spaceId == space.id, "The space ID of the snapshot does not match the provided space")
         let tab = BrowserTab(
