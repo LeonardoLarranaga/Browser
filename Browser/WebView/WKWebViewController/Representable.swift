@@ -38,7 +38,7 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     }
 
     static func dismantleNSViewController(_ nsViewController: WKWebViewController, coordinator: Coordinator) {
-        print("🟡 Dismantling WKWebViewController for tab: \(nsViewController.tab.title)")
+        print("Dismantling WKWebViewController for tab: \(nsViewController.tab.title)")
         nsViewController.cleanup()
     }
 

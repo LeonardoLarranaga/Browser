@@ -261,11 +261,11 @@ extension MyWKWebView {
 
             let task = URLSession.shared.dataTask(with: request) { data, response, error in
                 if let error {
-                    return print("❌ Translation failed: \(error)")
+                    return print("Translation failed: \(error)")
                 }
-                guard let data = data else { return print("❌ Translation failed: \(error?.localizedDescription ?? "Unknown error")") }
-                guard let json = try? JSONSerialization.jsonObject(with: data) as? [[Any]] else { return print("❌ Translation failed: Invalid JSON response") }
-                guard let translatedTexts = json[0] as? [String] else { return print("❌ Translation failed: Invalid JSON structure: \(json)") }
+                guard let data = data else { return print("Translation failed: \(error?.localizedDescription ?? "Unknown error")") }
+                guard let json = try? JSONSerialization.jsonObject(with: data) as? [[Any]] else { return print("Translation failed: Invalid JSON response") }
+                guard let translatedTexts = json[0] as? [String] else { return print("Translation failed: Invalid JSON structure: \(json)") }
 
                 let transformedTexts = translatedTexts.map { CFXMLCreateStringByUnescapingEntities(nil, $0 as CFString, nil) as String }
 

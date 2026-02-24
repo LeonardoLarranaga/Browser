@@ -80,14 +80,14 @@ class WKWebViewController: NSViewController {
     }
 
     deinit {
-        print("🔵 WKWebViewController deinit \(tab.title)")
+        print("WKWebViewController deinit \(tab.title)")
         NotificationCenter.default.removeObserver(self)
     }
 
     func cleanup() {
         // Only deinit if the tab is not loaded or was closed
         if !browserSpace.loadedTabs.contains(tab) {
-            print("🧹 WKWebViewController cleanup \(tab.title)")
+            print("WKWebViewController cleanup \(tab.title)")
             cancelSuspendTimer()
 
             // Break delegate retain cycles
@@ -135,7 +135,7 @@ class WKWebViewController: NSViewController {
                 self.webView.microphoneCaptureState != .none {
                 self.resetSuspendTimer()
             } else {
-                print("🔵 WKWebViewController suspend \(self.tab.title)")
+                print("WKWebViewController suspend \(self.tab.title)")
                 self.coordinator.parent.browserSpace.unloadTab(self.coordinator.parent.tab)
             }
         }

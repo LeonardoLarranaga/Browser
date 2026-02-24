@@ -11,19 +11,19 @@ extension MyWKWebView {
     /// Handle the context menu
     override func willOpenMenu(_ menu: NSMenu, with event: NSEvent) {
         super.willOpenMenu(menu, with: event)
-        
+
         // Detect menu type
         var contextMenuType: ContextMenuType = .unknown
-        
+
         let menuItemsIdentifiers = menu.items.map { $0.identifier?.rawValue }
-        
+
         for identifier in menuItemsIdentifiers {
             if let type = ContextMenuType(rawValue: identifier ?? "") {
                 contextMenuType = type
                 break
             }
         }
-        
+
         switch contextMenuType {
         case .frame:
             handleFrameContextMenu(menu)
@@ -38,11 +38,11 @@ extension MyWKWebView {
         default:
             break
         }
-        
+
         if contextMenuType == .unknown {
-            print("🖥️📚 Unknown context menu type with identifiers:", menuItemsIdentifiers)
+            print("Unknown context menu type with identifiers:", menuItemsIdentifiers)
         } else {
-            print("🖥️📚 Context menu type: \(contextMenuType.rawValue)")
+            print("Context menu type: \(contextMenuType.rawValue)")
         }
     }
 

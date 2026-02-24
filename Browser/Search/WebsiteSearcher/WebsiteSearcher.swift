@@ -41,7 +41,7 @@ extension WebsiteSearcher {
     func parseSearchSuggestions(from result: String, droppingFirst: Int, droppingLast: Int) throws -> [SearchSuggestion] {
         let components = result.components(separatedBy: ",")
         guard !components.isEmpty else {
-            print("🔍👓 Error parsing search suggestions. Empty components.")
+            print("Error parsing search suggestions. Empty components.")
             return []
         }
 
@@ -85,13 +85,13 @@ extension WebsiteSearcher {
         searchManager.searchTask = URLSession.shared.dataTask(with: queryURL) { data, response, error in
             guard let data = data, error == nil else {
                 if let error = error as? URLError, error.code != .cancelled {
-                    print("🔍📡 Error fetching search \"\(query)\" suggestions: \(error.localizedDescription)")
+                    print("Error fetching search \"\(query)\" suggestions: \(error.localizedDescription)")
                 }
                 return
             }
 
             guard let resultString = String(data: data, encoding: .isoLatin1) else {
-                print("🔍📡 Error parsing search suggestions. Invalid string data.")
+                print("Error parsing search suggestions. Invalid string data.")
                 return
             }
 
@@ -102,7 +102,7 @@ extension WebsiteSearcher {
                     searchManager.searchSuggestions = [first] + historySuggestions + suggestions
                 }
             } catch {
-                print("🔍📡 Error parsing search suggestions: \(error.localizedDescription)")
+                print("Error parsing search suggestions: \(error.localizedDescription)")
             }
         }
         searchManager.searchTask?.resume()
