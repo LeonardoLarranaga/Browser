@@ -57,7 +57,12 @@ extension WKWebViewControllerRepresentable {
                 if let lastHistoryEntry, lastHistoryEntry.url == self.parent.tab.url {
                     lastHistoryEntry.date = Date()
                 } else {
-                    let historyEntry = BrowserHistoryEntry(title: self.parent.tab.title, url: self.parent.tab.url, favicon: self.parent.tab.favicon)
+                    let historyEntry = BrowserHistoryEntry(
+                        title: self.parent.tab.title,
+                        url: self.parent.tab.url,
+                        favicon: self.parent.tab.favicon,
+                        profile: self.parent.browserSpace.profile
+                    )
                     self.parent.modelContext.insert(historyEntry)
                 }
 

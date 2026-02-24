@@ -118,6 +118,20 @@ https://github.com/user-attachments/assets/9ddad9bc-0f08-4626-bbd2-043cb6bb1593
 </td>
 </tr>
 
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/60328d5f-e233-45c8-a9bd-fa149fb99ed0
+
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Profiles</b></h3>
+<p style="margin-top: 4px;">Divide your browsing data and logins in your spaces with profiles.</p>
+</div>
+</td>
+</tr>
+
 </table>
 
 ### And More!

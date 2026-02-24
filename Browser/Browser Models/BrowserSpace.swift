@@ -5,8 +5,8 @@
 //  Created by Leonardo Larrañaga on 1/28/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 /// `BrowserSpace` represents a space in the browser that contains tabs.
 @Model
@@ -22,6 +22,7 @@ final class BrowserSpace: Identifiable {
     var colorScheme: String
 
     @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
+    @Relationship var profile: BrowserProfile?
 
     var tabs: [BrowserTab] {
         get {

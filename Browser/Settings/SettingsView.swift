@@ -13,11 +13,15 @@ struct SettingsView: View {
             Tab("General", systemImage: "gear") {
                 GeneralSettingsView()
             }
-            
+
             Tab("Appearance", systemImage: "paintpalette") {
                 SettingsAppearanceView()
             }
-            
+
+            Tab("Profiles", systemImage: "person") {
+                SettingsProfilesView()
+            }
+
             Tab("Keyboard Shortcuts", systemImage: "command") {
                 SettingsShortcutsView()
             }

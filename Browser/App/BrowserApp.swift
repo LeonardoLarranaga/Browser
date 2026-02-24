@@ -33,7 +33,7 @@ struct BrowserApp: App {
                 .frame(minWidth: 400, minHeight: 200)
         }
         .windowStyle(.hiddenTitleBar)
-        .modelContainer(for: [BrowserSpace.self, BrowserTab.self, BrowserHistoryEntry.self], inMemory: inMemory)
+        .modelContainer(for: BrowserModel.appModels, inMemory: inMemory)
     }
     
     @SceneBuilder
@@ -42,5 +42,6 @@ struct BrowserApp: App {
             SettingsView()
                 .frame(width: 750, height: 550)
         }
+        .modelContainer(for: BrowserModel.appModels)
     }
 }

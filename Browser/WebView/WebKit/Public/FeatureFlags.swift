@@ -38,7 +38,7 @@ enum FeatureFlags {
             return userConfigured
         }
         // Fall back to the actual WKPreferences state
-        return SharedWebViewConfiguration.shared().configuration.preferences._isEnabled(for: feature)
+        return WebViewConfiguration.make(profile: nil).preferences._isEnabled(for: feature)
     }
 
     static func getFeature(key: String) -> WKFeature? {
@@ -57,7 +57,7 @@ enum FeatureFlags {
             toggleFeature(key, enabled: enabled, for: preferences)
         }
     }
-    
+
     static var browserDefaultFeatureFlags: [String: Bool] {
         ["PreferPageRenderingUpdatesNear60FPSEnabled": false]
     }
