@@ -71,6 +71,10 @@ final class BrowserTab: Identifiable, Comparable {
         customTitle ?? title
     }
 
+    var isLoaded: Bool {
+        browserSpace.loadedTabs.contains(self)
+    }
+
     /// Updates the tab's favicon with the largest image found in the website
     /// - Parameter url: The URL of the website to find the favicon
     func updateFavicon(with url: URL) {

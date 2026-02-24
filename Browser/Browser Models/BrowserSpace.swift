@@ -95,6 +95,9 @@ final class BrowserSpace: Identifiable {
 
     /// Removes a tab from the ZStack of WebViews of the space
     func unloadTab(_ tab: BrowserTab) {
+        guard let index = loadedTabs.firstIndex(of: tab) else { return }
+        currentTab = loadedTabs[safe: index - 1] ?? loadedTabs[safe: index + 1]
+        loadedTabs.remove(at: index)
         loadedTabs.removeAll(where: { $0.id == tab.id })
     }
 

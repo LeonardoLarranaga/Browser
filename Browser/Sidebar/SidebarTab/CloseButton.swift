@@ -14,10 +14,17 @@ struct SidebarTabCloseButton: View {
     @Environment(BrowserWindow.self) var browserWindow
 
     @State var isHovering = false
+    var isPinnedAndLoaded: Bool {
+        browserTab.pinState == .pinned && browserTab.isLoaded
+    }
 
     var body: some View {
-        Button("Close Tab", systemImage: "xmark") {
-            browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
+        Button("Close Tab", systemImage: isPinnedAndLoaded ? "minus" : "xmark") {
+            if isPinnedAndLoaded {
+                browserSpace.unloadTab(browserTab)
+            } else {
+                browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
+            }
         }
         .font(.title3)
         .buttonStyle(.plain)
