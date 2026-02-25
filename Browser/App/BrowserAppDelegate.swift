@@ -13,11 +13,21 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     var lastWindows: [NSWindow] = []
     var windowWasClosed = false
 
+    // Track windows in fullscreen transition to avoid setFrame/layout churn.
+    private var windowsTransitioningFullScreen = Set<ObjectIdentifier>()
+    private var pendingFrameRestore = Set<ObjectIdentifier>()
+
     /// Add window observers to save the window position and size
     func applicationWillFinishLaunching(_ notification: Notification) {
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidBecomeKey(_:)), name: NSWindow.didBecomeKeyNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResizeOrMove(_:)), name: NSWindow.didResizeNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(windowDidResizeOrMove(_:)), name: NSWindow.didMoveNotification, object: nil)
+
+        // Fullscreen transition tracking
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillEnterFullScreen(_:)), name: NSWindow.willEnterFullScreenNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowWillExitFullScreen(_:)), name: NSWindow.willExitFullScreenNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidEnterFullScreen(_:)), name: NSWindow.didEnterFullScreenNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(windowDidExitFullScreen(_:)), name: NSWindow.didExitFullScreenNotification, object: nil)
 
         NSWindow.allowsAutomaticWindowTabbing = false
     }
@@ -68,13 +78,13 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         checkForNewWindows(window)
 
         if windowWasClosed {
-            var frame = window.frame
-            frame.origin.x = Preferences.windowFrame.originX
-            frame.origin.y = Preferences.windowFrame.originY
-            frame.size.width = Preferences.windowFrame.width
-            frame.size.height = Preferences.windowFrame.height
-
-            window.setFrame(frame, display: true)
+            // Don't fight AppKit while the window is transitioning fullscreen.
+            let windowID = ObjectIdentifier(window)
+            if windowsTransitioningFullScreen.contains(windowID) || window.styleMask.contains(.fullScreen) {
+                pendingFrameRestore.insert(windowID)
+            } else {
+                restoreWindowFrame(window)
+            }
             windowWasClosed = false
         }
 
@@ -83,6 +93,49 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
         if Preferences.sidebarPosition == .trailing {
             NSApp.setBrowserWindowControls(hidden: !Preferences.showWindowControlsOnTrailingSidebar)
+        }
+    }
+
+    private func restoreWindowFrame(_ window: NSWindow) {
+        var frame = window.frame
+        frame.origin.x = Preferences.windowFrame.originX
+        frame.origin.y = Preferences.windowFrame.originY
+        frame.size.width = Preferences.windowFrame.width
+        frame.size.height = Preferences.windowFrame.height
+
+        // Defer to next runloop to avoid re-entrancy during constraints/layout.
+        DispatchQueue.main.async {
+            window.setFrame(frame, display: true)
+        }
+    }
+
+    @objc internal func windowWillEnterFullScreen(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        windowsTransitioningFullScreen.insert(ObjectIdentifier(window))
+    }
+
+    @objc internal func windowWillExitFullScreen(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        windowsTransitioningFullScreen.insert(ObjectIdentifier(window))
+    }
+
+    @objc internal func windowDidEnterFullScreen(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        // Still transitioning for a brief moment; remove next runloop.
+        DispatchQueue.main.async { [weak self] in
+            self?.windowsTransitioningFullScreen.remove(ObjectIdentifier(window))
+        }
+    }
+
+    @objc internal func windowDidExitFullScreen(_ notification: Notification) {
+        guard let window = notification.object as? NSWindow else { return }
+        let windowID = ObjectIdentifier(window)
+
+        windowsTransitioningFullScreen.remove(windowID)
+
+        if pendingFrameRestore.contains(windowID) {
+            pendingFrameRestore.remove(windowID)
+            restoreWindowFrame(window)
         }
     }
 

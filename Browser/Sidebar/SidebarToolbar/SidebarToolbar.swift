@@ -59,6 +59,7 @@ struct SidebarToolbar: ViewModifier {
                     Toolbar(addSpacer: true)
                 }
             }
+            .windowToolbarFullScreenVisibility(.onHover)
     }
     
     func SidebarButton() -> some View {

@@ -45,13 +45,15 @@ struct MainFrame: View {
                     Preferences.sidebarPosition == .leading ? .trailing : .leading,
                     isImmersive ? 0 : Preferences.enablePadding ? 10 : 0
                 )
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.willEnterFullScreenNotification)) { _ in
-                    withAnimation(.browserDefault) {
+                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didEnterFullScreenNotification)) { _ in
+                    // Defer to get out of AppKit's fullscreen constraint/layout pass.
+                    DispatchQueue.main.async {
                         browserWindow.isFullScreen = true
                     }
                 }
-                .onReceive(NotificationCenter.default.publisher(for: NSWindow.willExitFullScreenNotification)) { _ in
-                    withAnimation(.browserDefault) {
+                .onReceive(NotificationCenter.default.publisher(for: NSWindow.didExitFullScreenNotification)) { _ in
+                    // Defer to get out of AppKit's fullscreen constraint/layout pass.
+                    DispatchQueue.main.async {
                         browserWindow.isFullScreen = false
                     }
                 }
@@ -65,7 +67,6 @@ struct MainFrame: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .toolbar { Text("") }
         .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .background {
             if let currentSpace = browserWindow.currentSpace {

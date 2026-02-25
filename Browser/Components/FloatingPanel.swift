@@ -23,7 +23,7 @@ extension EnvironmentValues {
 /// An NSPanel subclass that implements floating panel traits.
 class FloatingPanel<Content: View>: NSPanel {
     @Binding var isPresented: Bool
-    
+
     init(
         isPresented: Binding<Bool>,
         contentRect: NSRect,
@@ -35,119 +35,122 @@ class FloatingPanel<Content: View>: NSPanel {
         view: () -> Content
     ) {
         self._isPresented = isPresented
-        
+
         super.init(
             contentRect: contentRect,
             styleMask: [.nonactivatingPanel, .titled, .closable, .fullSizeContentView],
             backing: backing,
             defer: flag
         )
-        
+
         // Allow the panel to be on top of other windows
         isFloatingPanel = true
         level = .floating
         backgroundColor = .clear
-        
+
         // Allow the pannel to be overlaid in a fullscreen space
         collectionBehavior.insert(.fullScreenAuxiliary)
-        
+
         // Don't show a window title, even if it's set
         titleVisibility = .hidden
         titlebarAppearsTransparent = true
-        
+
         isMovableByWindowBackground = false
         isMovable = false
-        
+
         // Hide when onfocused
         hidesOnDeactivate = true
-        
+
         // Hide all traffic light buttons
         standardWindowButton(.closeButton)?.isHidden = true
         standardWindowButton(.miniaturizeButton)?.isHidden = true
         standardWindowButton(.zoomButton)?.isHidden = true
-        
+
         // Set the content view
         // The safe area is ignored because the title bar still interferes with the geometry
         let rootView = view()
             .background(GlassEffectView(style: glassStyle, tintColor: glassTintColor))
             .ignoresSafeArea()
             .environment(\.floatingPanel, self)
-        
+
         if let modelContainer = modelContainer {
             contentView = NSHostingView(rootView: rootView.modelContainer(modelContainer))
         } else {
             contentView = NSHostingView(rootView: rootView)
         }
     }
-    
+
     // Close automatically when out of focus, e.g. outside click
     override func resignMain() {
         super.resignMain()
         close()
     }
-    
+
     // Close and toggle presentation, so that it matches the current state of the panel
     override func close() {
         super.close()
         isPresented = false
     }
-    
+
     // `canBecomeKey` and `canBecomeMain` are both required so that text inputs inside the panel can receive focus
     override var canBecomeKey: Bool {
         true
     }
-    
+
     override var canBecomeMain: Bool {
         true
     }
-    
+
     /// Centers the panel using the current window
     func center(in window: NSWindow?) {
         guard let window else { return }
-        
+
         let x = (window.frame.width - frame.width) / 2 + window.frame.origin.x
         let y = (window.frame.height - frame.height) / 2 + window.frame.origin.y
-        
+
         setFrameOrigin(NSPoint(x: x, y: y))
     }
-    
+
     /// Moves the origin of the panel to a point in a window. Where (0, 0) is the top left corner of said window
     func move(to point: CGPoint, in window: NSWindow?) {
         guard let window else { return }
-        
+
         let x = point.x + window.frame.origin.x
         let y = window.frame.origin.y + window.frame.size.height - frame.size.height - point.y
-        
+
         setFrameOrigin(NSPoint(x: x, y: y))
     }
 }
 
 /// Add a  ``FloatingPanel`` to a view hierarchy
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
-    
+
     /// The app model context for SwiftData support
     @Environment(\.modelContext) var modelContext
-    
+
     /// Determines wheter the panel should be presented or not
     @Binding var isPresented: Bool
-    
+
     /// Determines the size and origin of the panel
     var origin: CGPoint
     var size: CGSize
-    
+
     /// Determines if the panel should be centered in the key window
     var shouldCenter: Bool
-    
+
     /// The liquid glass style of the panel's background
     var glassStyle: NSGlassEffectView.Style
     var glassTintColor: Color?
-    
+
     /// Holds the panel content's view closure
     @ViewBuilder let view: () -> PanelContent
-    
+
     /// Stores the panel instance with the same generic type as the view closure
     @State var panel: FloatingPanel<PanelContent>?
-    
+
+    // Coalesce geometry mutations to avoid fighting AppKit's layout/constraint passes.
+    @State private var pendingPresentationWorkID = UUID()
+
     func body(content: Content) -> some View {
         content
             .onAppear {
@@ -169,28 +172,69 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
             }
             .onChange(of: isPresented) { _, newValue in
                 if newValue {
-                    // Save the current key window before it converts into the panel
-                    let window = NSApp.keyWindow
-                    
-                    // Resize the panel to the new size
-                    panel?.setFrame(CGRect(origin: origin, size: size), display: false)
-                    present()
-                    
-                    if shouldCenter {
-                        panel?.center(in: window)
-                    } else {
-                        panel?.move(to: origin, in: window)
-                    }
+                    schedulePresentationUpdate()
                 } else {
                     panel?.close()
                 }
             }
+            .onChange(of: origin) { _, _ in
+                guard isPresented else { return }
+                schedulePresentationUpdate()
+            }
+            .onChange(of: size) { _, _ in
+                guard isPresented else { return }
+                schedulePresentationUpdate()
+            }
+            .onChange(of: shouldCenter) { _, _ in
+                guard isPresented else { return }
+                schedulePresentationUpdate()
+            }
     }
-    
+
+    private func schedulePresentationUpdate() {
+        let workID = UUID()
+        pendingPresentationWorkID = workID
+
+        // Defer to next runloop so we're not doing window frame/origin work during SwiftUI layout.
+        DispatchQueue.main.async {
+            guard pendingPresentationWorkID == workID else { return }
+            applyPresentationGeometryAndPresent()
+        }
+    }
+
+    private func applyPresentationGeometryAndPresent() {
+        guard let panel else { return }
+
+        // Save the key window before the panel becomes key.
+        let window = NSApp.keyWindow
+
+        // Apply size first (keeping origin relatively stable). Use current origin as a baseline.
+        let currentOrigin = panel.frame.origin
+        panel.setFrame(CGRect(origin: currentOrigin, size: size), display: false)
+
+        if shouldCenter {
+            panel.center(in: window)
+        } else {
+            panel.move(to: origin, in: window)
+        }
+
+        present()
+    }
+
     /// Present the panel and make it the key window
     func present() {
-        panel?.makeKeyAndOrderFront(nil)
-        panel?.makeMain()
+        guard let panel else { return }
+
+        if panel.isVisible {
+            // Already on-screen; avoid repeatedly stealing focus on every geometry update.
+            if NSApp.keyWindow !== panel {
+                panel.orderFront(nil)
+            }
+            return
+        }
+
+        panel.makeKeyAndOrderFront(nil)
+        panel.makeMain()
     }
 }
 

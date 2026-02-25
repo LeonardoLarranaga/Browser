@@ -27,12 +27,28 @@ extension View {
             GeometryReader { geometry in
                 Color.clear
                     .onAppear {
-                        width.wrappedValue = geometry.size.width
+                        updateWidthIfNeeded(geometry.size.width, into: width)
                     }
                     .onChange(of: geometry.size.width) { _, newValue in
-                        width.wrappedValue = newValue
+                        updateWidthIfNeeded(newValue, into: width)
                     }
             }
         }
+    }
+}
+
+private func updateWidthIfNeeded(_ newWidth: CGFloat, into binding: Binding<CGFloat>) {
+    // Avoid feedback loops during constraint/layout passes by:
+    // 1) ignoring tiny changes, and
+    // 2) deferring the write to the next runloop.
+    let tolerance: CGFloat = 0.5
+
+    let current = binding.wrappedValue
+    guard abs(current - newWidth) > tolerance else { return }
+
+    DispatchQueue.main.async {
+        let latest = binding.wrappedValue
+        guard abs(latest - newWidth) > tolerance else { return }
+        binding.wrappedValue = newWidth
     }
 }
