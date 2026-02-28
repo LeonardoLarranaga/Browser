@@ -30,9 +30,11 @@ struct SidebarTabTitle: View {
             })
             .focused($isTextFieldFocused)
             .onAppear {
-                customTitle = browserTab.displayTitle
-                isTextFieldFocused = true
-                NSApp.selectAllText()
+                DispatchQueue.main.async {
+                    customTitle = browserTab.displayTitle
+                    isTextFieldFocused = true
+                    NSApp.selectAllText()
+                }
             }
         } else {
             Text(browserTab.displayTitle)

@@ -57,7 +57,8 @@ struct SidebarTab: View {
         .clipShape(.rect(cornerRadius: 10))
         .contentShape(.rect)
         .opacity(draggingTab?.id == browserTab.id ? 0 : 1)
-        .onTapGesture(perform: selectTab)
+        .simultaneousGesture(TapGesture().onEnded(selectTab))
+        .simultaneousGesture(TapGesture(count: 2).onEnded { isEditingTitle = true })
         .onHover {
             if draggingTab == nil {
                 isHovering = $0
