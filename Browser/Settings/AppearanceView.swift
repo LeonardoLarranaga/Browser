@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SettingsAppearanceView: View {
-    
+
     var body: some View {
         @Bindable var preferences = Preferences
         Form {
@@ -17,29 +17,20 @@ struct SettingsAppearanceView: View {
                     Label("Leading", systemImage: "sidebar.left").tag(_Preferences.SidebarPosition.leading)
                     Label("Trailing", systemImage: "sidebar.right").tag(_Preferences.SidebarPosition.trailing)
                 }
-                
+
                 Toggle("Disable Animations", systemImage: "figure.run", isOn: $preferences.disableAnimations)
-                
+
                 Toggle("Show Window Controls On Trailling Sidebar", systemImage: "macwindow", isOn: $preferences.showWindowControlsOnTrailingSidebar)
-                
+
                 Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $preferences.reverseColorsOnTrailingSidebar)
-                
+
                 Picker("Loading Indicator Position", systemImage: "progress.indicator", selection: $preferences.loadingIndicatorPosition) {
                     ForEach(_Preferences.LoadingIndicatorPosition.allCases, id: \.self) { position in
                         Label(position.localizedStringKey, systemImage: position.systemImage).tag(position)
                     }
                 }
-                
-                Picker("URL Bar Position", systemImage: "link", selection: $preferences.urlBarPosition) {
-                    Label("On Sidebar", systemImage: "sidebar.left").tag(_Preferences.URLBarPosition.onSidebar)
-                    Label("On Toolbar", systemImage: "menubar.rectangle").tag(_Preferences.URLBarPosition.onToolbar)
-                }
-                
-                if Preferences.urlBarPosition == .onToolbar {
-                    Toggle("Show Full URL on Toolbar", systemImage: "menubar.arrow.up.rectangle", isOn: $preferences.showFullURLOnToolbar)
-                }
             }
-            
+
             Section {
                 Toggle("Rounded Corners", systemImage: "button.roundedtop.horizontal", isOn: $preferences.roundedCorners)
                 Toggle("Enable Padding", systemImage: "inset.filled.rectangle", isOn: $preferences.enablePadding)

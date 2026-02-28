@@ -9,21 +9,17 @@ import SwiftUI
 
 /// A view that contains all the stacks for the loaded tabs in all the spaces
 struct PageWebView: View {
-    
+
     @Environment(\.scenePhase) var scenePhase
     @Environment(BrowserWindow.self) var browserWindow
-    
+
     let browserSpaces: [BrowserSpace]
-    
+
     // UUID to scroll to the current space (using browserWindow.viewScrollState doesn't work)
     @State var scrollState: UUID?
-    
+
     var body: some View {
         VStack(spacing: 0) {
-            if Preferences.urlBarPosition == .onToolbar {
-                SidebarURLToolbar()
-            }
-            
             ScrollView(.horizontal) {
                 LazyHStack(spacing: .zero) {
                     ForEach(browserSpaces) { browserSpace in
@@ -50,7 +46,7 @@ struct PageWebView: View {
                 if let oldValue {
                     oldValue.webview?.togglePictureInPicture()
                 }
-                
+
                 if let newValue {
                     newValue.webview?.togglePictureInPicture()
                 }

@@ -57,13 +57,6 @@ class _Preferences {
 
     var loadingIndicatorPosition = LoadingIndicatorPosition.onURL
 
-    enum URLBarPosition: Int {
-        case onSidebar
-        case onToolbar
-    }
-    var urlBarPosition = URLBarPosition.onSidebar
-    var showFullURLOnToolbar = false
-
     // Web appearance preferences
     var roundedCorners = true
     var enablePadding = true

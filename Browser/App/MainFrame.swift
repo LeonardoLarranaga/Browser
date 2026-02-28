@@ -80,7 +80,7 @@ struct MainFrame: View {
             if !newValue {
                 browserWindow.searchOpenLocation = .none
             }
-        }), origin: browserWindow.searchPanelOrigin, size: browserWindow.searchPanelSize, shouldCenter: browserWindow.searchOpenLocation == .fromNewTab || Preferences.urlBarPosition == .onToolbar) {
+        }), origin: browserWindow.searchPanelOrigin, size: browserWindow.searchPanelSize, shouldCenter: browserWindow.searchOpenLocation == .fromNewTab) {
             SearchView()
                 .environment(browserWindow)
         }
