@@ -6,6 +6,8 @@
 //
 
 import SwiftData
+import SwiftUI
+import WebKit
 
 enum TabContentType: String, Codable {
     case web
@@ -31,7 +33,9 @@ final class BrowserTab: Identifiable, Comparable {
     var contentType: TabContentType
     
     var customTitle: String? = nil
-    
+
+    var pinnedURL: URL? = nil
+
     @Relationship private var browserSpace: BrowserSpace
     var spaceId: UUID { browserSpace.id }
     
@@ -69,6 +73,17 @@ final class BrowserTab: Identifiable, Comparable {
     
     var displayTitle: String {
         customTitle ?? title
+    }
+
+    @Transient private var _iconColorCache: (data: Data, color: Color)? = nil
+    var iconColor: Color {
+        guard let favicon else { return .accentColor }
+        if let cache = _iconColorCache, cache.data == favicon { return cache.color }
+        guard let nsImage = NSImage(data: favicon),
+              let average = nsImage.averageColor else { return .accentColor }
+        let color = Color(nsColor: average)
+        _iconColorCache = (favicon, color)
+        return color
     }
     
     var isLoaded: Bool {
@@ -109,6 +124,21 @@ final class BrowserTab: Identifiable, Comparable {
         webviewErrorCode = nil
     }
     
+    var canResetToPinnedURL: Bool {
+        guard let pinnedURL else { return false }
+        return pinnedURL != url
+    }
+
+    func resetToPinnedURL() {
+        guard let pinnedURL else { return }
+        url = pinnedURL
+        webview?.load(URLRequest(url: pinnedURL))
+    }
+
+    func replacePinnedURLWithCurrent() {
+        pinnedURL = url
+    }
+
     /// Copies the tab's URL to the clipboard
     func copyLink() {
         NSPasteboard.general.clearContents()

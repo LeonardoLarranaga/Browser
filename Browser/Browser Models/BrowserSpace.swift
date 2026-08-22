@@ -38,9 +38,21 @@ final class BrowserSpace: Identifiable {
     var normalTabs: [BrowserTab] {
         tabs.filter { $0.pinState == .normal }
     }
-    
+
     var pinnedTabs: [BrowserTab] {
         tabs.filter { $0.pinState == .pinned }
+    }
+
+    var favoriteTabs: [BrowserTab] {
+        tabs.filter { $0.pinState == .favorite }
+    }
+
+    func tabs(for pinState: TabPinState) -> [BrowserTab] {
+        switch pinState {
+        case .normal: return normalTabs
+        case .pinned: return pinnedTabs
+        case .favorite: return favoriteTabs
+        }
     }
     
     var pinnedTabsVisible: Bool = true
@@ -147,53 +159,96 @@ final class BrowserSpace: Identifiable {
     }
     
     func pinTab(_ browserTab: BrowserTab) {
-        do {
-            browserTab.pinState = .pinned
-            try modelContext?.save()
-        } catch {
-            print("Error pinning tab: \(error)")
-        }
+        moveTab(browserTab, to: .pinned)
     }
-    
+
     func unpinTab(_ browserTab: BrowserTab) {
-        do {
-            browserTab.pinState = .normal
-            try modelContext?.save()
-        } catch {
-            print(error.localizedDescription)
-        }
+        moveTab(browserTab, to: .normal)
     }
-    
-    /// Reorders a tab by moving it from its current position to a new destination
-    /// - Parameters:
-    ///   - sourceTab: The tab to move
-    ///   - destinationTab: The tab to insert before
-    ///   - destinationPinState: The pin state of the destination area (pinned or normal)
-    func reorderTab(_ sourceTab: BrowserTab, to destinationTab: BrowserTab, destinationPinState: TabPinState) {
-        guard sourceTab.id != destinationTab.id else { return }
-        
+
+    func favoriteTab(_ browserTab: BrowserTab) {
+        moveTab(browserTab, to: .favorite)
+    }
+
+    func unfavoriteTab(_ browserTab: BrowserTab) {
+        moveTab(browserTab, to: .normal)
+    }
+
+    func moveTab(_ browserTab: BrowserTab, to pinState: TabPinState) {
+        guard browserTab.pinState != pinState else { return }
+
         do {
-            // Change pin state if moving to a different section
-            if sourceTab.pinState != destinationPinState {
-                sourceTab.pinState = destinationPinState
-            }
-            
-            // Get all tabs and find indices
+            browserTab.pinState = pinState
+            updatePinnedURL(browserTab, for: pinState)
+
             var allTabs = tabs
-            guard let sourceIndex = allTabs.firstIndex(where: { $0.id == sourceTab.id }),
-                  let destinationIndex = allTabs.firstIndex(where: { $0.id == destinationTab.id })
-            else { return }
-            
-            // Reorder in the array
+            guard let sourceIndex = allTabs.firstIndex(where: { $0.id == browserTab.id }) else { return }
             allTabs.remove(at: sourceIndex)
-            let newDestinationIndex = sourceIndex < destinationIndex ? destinationIndex - 1 : destinationIndex
-            allTabs.insert(sourceTab, at: newDestinationIndex)
-            
-            // Update tabs (this will automatically update order indices via setter)
+
+            let insertionIndex: Int
+            if let lastOfTier = allTabs.lastIndex(where: { $0.pinState == pinState }) {
+                insertionIndex = lastOfTier + 1
+            } else {
+                insertionIndex = defaultInsertionIndex(for: pinState, in: allTabs)
+            }
+            allTabs.insert(browserTab, at: insertionIndex)
+
             tabs = allTabs
             try modelContext?.save()
         } catch {
-            print("Error reordering tab: \(error)")
+            print("Error moving tab: \(error)")
+        }
+    }
+
+    func commitDrop(_ sourceTab: BrowserTab, tier: TabPinState, beforeID: UUID?) {
+        do {
+            sourceTab.pinState = tier
+            updatePinnedURL(sourceTab, for: tier)
+
+            var allTabs = tabs
+            guard let sourceIndex = allTabs.firstIndex(where: { $0.id == sourceTab.id }) else { return }
+            allTabs.remove(at: sourceIndex)
+
+            let insertionIndex: Int
+            if let beforeID, let idx = allTabs.firstIndex(where: { $0.id == beforeID }) {
+                insertionIndex = idx
+            } else if let lastOfTier = allTabs.lastIndex(where: { $0.pinState == tier }) {
+                insertionIndex = lastOfTier + 1
+            } else {
+                insertionIndex = defaultInsertionIndex(for: tier, in: allTabs)
+            }
+
+            allTabs.insert(sourceTab, at: min(max(insertionIndex, 0), allTabs.count))
+
+            tabs = allTabs
+            try modelContext?.save()
+        } catch {
+            print("Error committing tab drop: \(error)")
+        }
+    }
+
+    private func updatePinnedURL(_ tab: BrowserTab, for pinState: TabPinState) {
+        switch pinState {
+        case .pinned, .favorite:
+            if tab.pinnedURL == nil {
+                tab.pinnedURL = tab.url
+            }
+        case .normal:
+            tab.pinnedURL = nil
+        }
+    }
+
+    private func defaultInsertionIndex(for pinState: TabPinState, in tabs: [BrowserTab]) -> Int {
+        switch pinState {
+        case .favorite:
+            return 0
+        case .pinned:
+            if let lastFavorite = tabs.lastIndex(where: { $0.pinState == .favorite }) {
+                return lastFavorite + 1
+            }
+            return 0
+        case .normal:
+            return tabs.count
         }
     }
 }
