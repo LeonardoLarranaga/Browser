@@ -7,84 +7,97 @@
 
 import SwiftUI
 
-/// Tab in the sidebar
 struct SidebarTab: View {
-    
+
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindow.self) var browserWindow
-    
+    @Environment(TabDragManager.self) var dragManager
+
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
-    
+
     var pinState: TabPinState
-    @Binding var draggingTab: BrowserTab?
-    
+
     @State var isEditingTitle = false
     @State var isHovering = false
     @State var isPressed = false
-    @State var isTargeted = false
-    
+
+    private var isSelected: Bool {
+        browserSpace.currentTab == browserTab
+    }
+
+    private var isDragging: Bool {
+        dragManager.isDragging(browserTab)
+    }
+
     var body: some View {
-        HStack {
+        HStack(spacing: 0) {
             SidebarTabFaviconImage()
-            
+
             if browserTab.webview?.hasActiveNowPlayingSession == true {
                 Button("Mute Tab", systemImage: browserTab.webview?.isAudioMuted == true ? "speaker.slash" : "speaker.wave.2") {
                     self.browserTab.webview?.toggleMute()
                 }
-                .buttonStyle(.sidebarHover(
-                    enabledColor: colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary,
-                    hoverColor: colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary
-                ))
+                .buttonStyle(.sidebarHover(enabledColor: .primary, hoverColor: .primary))
                 .browserTransition(.move(edge: .leading))
+                .padding(.leading, 4)
             }
-            
+
             SidebarTabTitle(isEditingTitle: $isEditingTitle)
-            
-            Spacer()
-            
-            if isHovering {
-                SidebarTabCloseButton()
+                .padding(.leading, 6)
+
+            Spacer(minLength: 0)
+
+            ZStack {
+                if isHovering {
+                    SidebarTabCloseButton()
+                        .transition(.scale(scale: 0.6).combined(with: .opacity))
+                }
             }
+            .frame(width: 24)
+            .animation(.snappy(duration: 0.18), value: isHovering)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .frame(height: 30)
-        .padding(3)
-        .background(
-            browserSpace.currentTab == browserTab ? .white :
-                isHovering ? .white.opacity(0.5) : .clear
-        )
-        .clipShape(.rect(cornerRadius: 10))
+        .frame(height: 34)
+        .padding(.horizontal, 4)
+        .background(tabBackground)
+        .clipShape(.rect(cornerRadius: 12))
+        .overlay {
+            if isSelected {
+                RoundedRectangle(cornerRadius: 12)
+                    .strokeBorder(.white.opacity(colorScheme == .dark ? 0.08 : 0.5), lineWidth: 0.5)
+            }
+        }
+        .shadow(color: .black.opacity(isSelected ? 0.12 : 0), radius: 3, y: 1)
         .contentShape(.rect)
-        .opacity(draggingTab?.id == browserTab.id ? 0 : 1)
+        .opacity(isDragging ? 0 : 1)
+        .scaleEffect(isPressed ? 0.98 : 1.0)
+        .reportTabFrame(id: browserTab.id, tier: pinState)
         .simultaneousGesture(TapGesture().onEnded(selectTab))
         .simultaneousGesture(TapGesture(count: 2).onEnded { isEditingTitle = true })
+        .tabDragGesture(tab: browserTab, tier: pinState, manager: dragManager, browserSpace: browserSpace)
         .onHover {
-            if draggingTab == nil {
+            if !dragManager.isActive {
                 isHovering = $0
             }
         }
         .contextMenu { SidebarTabContextMenu(isEditingTitle: $isEditingTitle) }
-        .scaleEffect(isPressed ? 0.98 : 1.0)
         .animation(.bouncy(duration: 0.15), value: isPressed)
         .environment(browserTab)
         .environment(browserSpace)
-        .dropDestination(for: String.self) { _, _ in
-            // Reset dragging state when drop completes
-            draggingTab = nil
-            return true
-        } isTargeted: { targeted in
-            self.isTargeted = targeted
-            
-            // Perform real-time reordering when hovering over a tab
-            if targeted, let sourceTab = draggingTab, sourceTab.id != browserTab.id {
-                withAnimation(.browserDefault) {
-                    browserSpace.reorderTab(sourceTab, to: browserTab, destinationPinState: pinState)
-                }
-            }
+    }
+
+    @ViewBuilder
+    private var tabBackground: some View {
+        if isSelected {
+            Color.white.opacity(colorScheme == .dark ? 0.22 : 0.9)
+        } else if isHovering {
+            Color.primary.opacity(0.08)
+        } else {
+            Color.clear
         }
     }
-    
+
     func selectTab() {
         browserSpace.currentTab = browserTab
         if Preferences.disableAnimations { return }
