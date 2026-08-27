@@ -14,6 +14,10 @@ extension Animation {
     static var browserDefault: Animation? {
         Preferences.disableAnimations ? nil : .bouncy
     }
+
+    static var browserSnappy: Animation? {
+        Preferences.disableAnimations ? nil : .snappy(duration: 0.2, extraBounce: 0.05)
+    }
 }
 
 extension View {
