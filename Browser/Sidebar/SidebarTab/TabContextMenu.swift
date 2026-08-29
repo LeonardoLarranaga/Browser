@@ -56,7 +56,25 @@ struct SidebarTabContextMenu: View {
             } else {
                 Button("Unpin Tab", action: unpinTab)
             }
-            
+
+            if browserTab.pinState != .favorite {
+                Button("Add to Essentials", action: favoriteTab)
+            } else {
+                Button("Remove from Essentials", action: unfavoriteTab)
+            }
+
+            if browserTab.pinState != .normal {
+                Button("Replace Pinned URL with Current", systemImage: "pin") {
+                    browserTab.replacePinnedURLWithCurrent()
+                }
+
+                if browserTab.canResetToPinnedURL {
+                    Button("Reset to Pinned URL", systemImage: "arrow.uturn.backward") {
+                        browserTab.resetToPinnedURL()
+                    }
+                }
+            }
+
             Button("Duplicate Tab", action: duplicateTab)
             
             Divider()
@@ -86,6 +104,18 @@ struct SidebarTabContextMenu: View {
     func unpinTab() {
         withAnimation(.browserDefault) {
             browserSpace.unpinTab(browserTab)
+        }
+    }
+
+    func favoriteTab() {
+        withAnimation(.browserDefault) {
+            browserSpace.favoriteTab(browserTab)
+        }
+    }
+
+    func unfavoriteTab() {
+        withAnimation(.browserDefault) {
+            browserSpace.unfavoriteTab(browserTab)
         }
     }
     
