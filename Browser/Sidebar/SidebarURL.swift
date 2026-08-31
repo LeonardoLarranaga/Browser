@@ -8,27 +8,41 @@
 import SwiftUI
 
 struct SidebarURL: View {
-    
+
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindow.self) var browserWindow
-    
+
     @State var hover = false
-    
+
+    private var currentTab: BrowserTab? {
+        browserWindow.currentSpace?.currentTab
+    }
+
+    private var isSecure: Bool {
+        currentTab?.url.scheme == "https"
+    }
+
     var body: some View {
-        HStack {
-            if let currentTab = browserWindow.currentSpace?.currentTab {
-                Text(currentTab.url.cleanHost)
+        HStack(spacing: 5) {
+            if let currentTab {
+                Image(systemName: isSecure ? "lock.fill" : "exclamationmark.triangle.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
                     .padding(.leading, .sidebarPadding)
-                
-                Spacer()
-                
+
+                Text(currentTab.url.cleanHost)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
+                Spacer(minLength: 0)
+
                 if hover {
                     Button("Refresh", systemImage: "arrow.clockwise", action: browserWindow.refreshButtonAction)
-                        .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
+                        .buttonStyle(.subtleURLBar)
                         .browserTransition(.opacity)
-                    
+
                     Button("Copy URL To Clipboard", systemImage: "link", action: browserWindow.copyURLToClipboard)
-                        .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
+                        .buttonStyle(.subtleURLBar)
                         .padding(.trailing, .sidebarPadding)
                         .browserTransition(.opacity)
                 }
@@ -66,6 +80,20 @@ struct SidebarURL: View {
     }
 }
 
-#Preview {
-    SidebarURL()
+struct SubtleURLBarButtonStyle: ButtonStyle {
+    @State private var hover = false
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .labelStyle(.iconOnly)
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+            .frame(width: 22, height: 22)
+            .background(hover ? Color.primary.opacity(0.08) : .clear)
+            .clipShape(.rect(cornerRadius: 6))
+            .onHover { hover = $0 }
+    }
+}
+
+extension ButtonStyle where Self == SubtleURLBarButtonStyle {
+    static var subtleURLBar: SubtleURLBarButtonStyle { SubtleURLBarButtonStyle() }
 }
