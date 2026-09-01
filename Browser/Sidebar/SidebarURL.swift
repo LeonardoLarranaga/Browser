@@ -10,6 +10,7 @@ import SwiftUI
 struct SidebarURL: View {
 
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openSettings) var openSettings
     @Environment(BrowserWindow.self) var browserWindow
 
     @State var hover = false
@@ -41,8 +42,7 @@ struct SidebarURL: View {
                         .buttonStyle(.subtleURLBar)
                         .browserTransition(.opacity)
 
-                    Button("Copy URL To Clipboard", systemImage: "link", action: browserWindow.copyURLToClipboard)
-                        .buttonStyle(.subtleURLBar)
+                    siteMenu
                         .padding(.trailing, .sidebarPadding)
                         .browserTransition(.opacity)
                 }
@@ -77,6 +77,76 @@ struct SidebarURL: View {
             }
         }
         .zIndex(-1)
+    }
+
+    private var siteMenu: some View {
+        Menu {
+            Section {
+                Label(isSecure ? "Connection is secure" : "Connection is not secure",
+                      systemImage: isSecure ? "lock.fill" : "lock.open.fill")
+                Label(isSecure ? "Encrypted (HTTPS)" : "Not encrypted (HTTP)",
+                      systemImage: isSecure ? "checkmark.shield.fill" : "xmark.shield.fill")
+            } header: {
+                Text(currentTab?.url.host() ?? "")
+            }
+
+            Section {
+                Button("Copy Link", systemImage: "link", action: browserWindow.copyURLToClipboard)
+                if let url = currentTab?.url {
+                    ShareLink(item: url) {
+                        Label("Share…", systemImage: "square.and.arrow.up")
+                    }
+                }
+                Button("Reload", systemImage: "arrow.clockwise", action: browserWindow.refreshButtonAction)
+            }
+
+            Section {
+                Menu {
+                    Button("Zoom In", systemImage: "plus.magnifyingglass", action: zoomIn)
+                    Button("Actual Size", systemImage: "1.magnifyingglass", action: zoomReset)
+                    Button("Zoom Out", systemImage: "minus.magnifyingglass", action: zoomOut)
+                } label: {
+                    Label("Zoom", systemImage: "textformat.size")
+                }
+
+                Button("Web Inspector", systemImage: "hammer") {
+                    currentTab?.webview?.toggleDeveloperTools()
+                }
+            }
+
+            Section("Privacy") {
+                Button("Clear Cookies & Reload", systemImage: "trash") {
+                    currentTab?.webview?.clearCookiesAndReload()
+                }
+                Button("Clear Cache & Reload", systemImage: "trash.slash") {
+                    currentTab?.webview?.clearCacheAndReload()
+                }
+                Button("Site Settings & Permissions…", systemImage: "gearshape") {
+                    openSettings()
+                }
+            }
+        } label: {
+            Image(systemName: "gearshape")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+        }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .fixedSize()
+    }
+
+    private func zoomIn() {
+        guard let webview = currentTab?.webview else { return }
+        webview.setZoomFactor(webview.pageZoom + 0.1)
+    }
+
+    private func zoomOut() {
+        guard let webview = currentTab?.webview else { return }
+        webview.setZoomFactor(webview.pageZoom - 0.1)
+    }
+
+    private func zoomReset() {
+        currentTab?.webview?.setZoomFactor(1)
     }
 }
 
