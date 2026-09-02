@@ -70,6 +70,8 @@ final class BrowserTab: Identifiable, Comparable {
     @Attribute(.ephemeral) var isLoading: Bool = false
     
     @Attribute(.ephemeral) var showFindUI = false
+
+    @Attribute(.ephemeral) var pageZoomLevel: CGFloat = 1.0
     
     var displayTitle: String {
         customTitle ?? title

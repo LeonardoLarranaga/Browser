@@ -37,6 +37,23 @@ struct SidebarURL: View {
 
                 Spacer(minLength: 0)
 
+                if currentTab.pageZoomLevel != 1.0 {
+                    Button {
+                        currentTab.webview?.zoomActualSize()
+                    } label: {
+                        Text("\(Int(currentTab.pageZoomLevel * 100))%")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.primary.opacity(0.1))
+                            .clipShape(.capsule)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Reset zoom to 100%")
+                    .browserTransition(.opacity)
+                }
+
                 if hover {
                     Button("Refresh", systemImage: "arrow.clockwise", action: browserWindow.refreshButtonAction)
                         .buttonStyle(.subtleURLBar)
@@ -136,17 +153,15 @@ struct SidebarURL: View {
     }
 
     private func zoomIn() {
-        guard let webview = currentTab?.webview else { return }
-        webview.setZoomFactor(webview.pageZoom + 0.1)
+        currentTab?.webview?.zoomIn()
     }
 
     private func zoomOut() {
-        guard let webview = currentTab?.webview else { return }
-        webview.setZoomFactor(webview.pageZoom - 0.1)
+        currentTab?.webview?.zoomOut()
     }
 
     private func zoomReset() {
-        currentTab?.webview?.setZoomFactor(1)
+        currentTab?.webview?.zoomActualSize()
     }
 }
 

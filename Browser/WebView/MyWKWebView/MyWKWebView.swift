@@ -21,6 +21,7 @@ class MyWKWebView: WKWebView {
     var presentActionAlert: ((String, String) -> Void)? = nil
     /// Toggle the Find UI action (passed from the WKWebViewController)
     var toggleFindUI: (() -> Void)? = nil
+    var onZoomChanged: ((CGFloat) -> Void)? = nil
     
     override var isEditable: Bool {
         get {
@@ -70,9 +71,9 @@ class MyWKWebView: WKWebView {
     /// - Parameter zoomFactor: The zoom factor to set
     func setZoomFactor(_ zoomFactor: CGFloat) {
         let clamped = max(zoomFactors.first!, min(zoomFactor, zoomFactors.last!))
-        let systemImage = clamped > pageZoom ? "plus.magnifyingglass" : "minus.magnifyingglass"
         pageZoom = clamped
-        presentActionAlert?("Zoom Set to \(Int(clamped * 100))%", systemImage)
+        scaledZoomFactor = clamped
+        onZoomChanged?(clamped)
     }
     
     /// Toggles the page editable
