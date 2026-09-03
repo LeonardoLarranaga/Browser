@@ -10,10 +10,10 @@ import SwiftUI
 struct SidebarURL: View {
 
     @Environment(\.colorScheme) var colorScheme
-    @Environment(\.openSettings) var openSettings
     @Environment(BrowserWindow.self) var browserWindow
 
     @State var hover = false
+    @State private var showSiteSettings = false
 
     private var currentTab: BrowserTab? {
         browserWindow.currentSpace?.currentTab
@@ -93,6 +93,11 @@ struct SidebarURL: View {
                 self.hover = hover
             }
         }
+        .sheet(isPresented: $showSiteSettings) {
+            if let currentTab {
+                SiteSettingsView(tab: currentTab)
+            }
+        }
         .zIndex(-1)
     }
 
@@ -139,7 +144,7 @@ struct SidebarURL: View {
                     currentTab?.webview?.clearCacheAndReload()
                 }
                 Button("Site Settings & Permissions…", systemImage: "gearshape") {
-                    openSettings()
+                    showSiteSettings = true
                 }
             }
         } label: {
