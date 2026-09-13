@@ -16,7 +16,8 @@ struct SiteSettingsView: View {
     @State private var hasStoredData = false
     @State private var checkingData = true
 
-    private var host: String { tab.url.host() ?? tab.url.absoluteString }
+    private var host: String? { tab.url.host()?.lowercased() }
+    private var displayHost: String { host ?? tab.url.absoluteString }
     private var isSecure: Bool { tab.url.scheme == "https" }
 
     var body: some View {
@@ -53,7 +54,7 @@ struct SiteSettingsView: View {
                 .frame(width: 32, height: 32)
 
             VStack(alignment: .leading, spacing: 2) {
-                Text(host)
+                Text(displayHost)
                     .font(.headline)
                     .lineLimit(1)
                 Label(isSecure ? "Connection is secure" : "Connection is not secure",
@@ -167,14 +168,17 @@ struct SiteSettingsView: View {
             get: { permissions[type] ?? .ask },
             set: { newValue in
                 permissions[type] = newValue
+                guard let host else { return }
                 SitePermissionStore.shared.set(newValue, host: host, type: type)
             }
         )
     }
 
     private func load() {
-        for type in SitePermissionType.allCases {
-            permissions[type] = SitePermissionStore.shared.decision(host: host, type: type)
+        if let host {
+            for type in SitePermissionType.allCases {
+                permissions[type] = SitePermissionStore.shared.decision(host: host, type: type)
+            }
         }
         refreshDataState()
     }
@@ -184,7 +188,15 @@ struct SiteSettingsView: View {
     }
 
     private func matchingRecords(_ records: [WKWebsiteDataRecord]) -> [WKWebsiteDataRecord] {
-        records.filter { host.matchesWebsiteDomain($0.displayName) }
+        guard let host, !host.isEmpty else { return [] }
+
+        return records.filter {
+            let displayName = $0.displayName.lowercased()
+            guard !displayName.isEmpty else { return false }
+            return displayName == host
+                || displayName.hasSuffix(".\(host)")
+                || host.hasSuffix(".\(displayName)")
+        }
     }
 
     private func refreshDataState() {

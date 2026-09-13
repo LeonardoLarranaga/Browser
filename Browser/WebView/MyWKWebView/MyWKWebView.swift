@@ -11,7 +11,6 @@ import WebKit
 class MyWKWebView: WKWebView {
     
     private let zoomFactors: [CGFloat] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6]
-    var scaledZoomFactor: CGFloat = 1.0
     
     /// The "Search With Google" action (passed from the WKWebViewController)
     var searchWebAction: ((String) -> Void)? = nil
@@ -42,29 +41,26 @@ class MyWKWebView: WKWebView {
     
     func zoomActualSize() {
         setZoomFactor(1.0)
-        scaledZoomFactor = 1.0
     }
     
     /// Handle Zoom In
     func zoomIn() {
-        let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
-        let nextIndex = currentIndex + 1
-        if nextIndex < zoomFactors.count {
-            let nextZoomFactor = zoomFactors[nextIndex]
-            setZoomFactor(nextZoomFactor)
-            self.scaledZoomFactor = nextZoomFactor
-        }
+        let nextIndex = currentZoomIndex + 1
+        guard zoomFactors.indices.contains(nextIndex) else { return }
+        setZoomFactor(zoomFactors[nextIndex])
     }
     
     /// Handle Zoom Out
     func zoomOut() {
-        let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
-        let nextIndex = currentIndex - 1
-        if nextIndex >= 0 {
-            let nextZoomFactor = zoomFactors[nextIndex]
-            setZoomFactor(nextZoomFactor)
-            self.scaledZoomFactor = nextZoomFactor
-        }
+        let previousIndex = currentZoomIndex - 1
+        guard zoomFactors.indices.contains(previousIndex) else { return }
+        setZoomFactor(zoomFactors[previousIndex])
+    }
+
+    private var currentZoomIndex: Int {
+        zoomFactors.enumerated().min {
+            abs($0.element - pageZoom) < abs($1.element - pageZoom)
+        }?.offset ?? zoomFactors.firstIndex(of: 1.0) ?? 0
     }
     
     /// Sets the zoom factor
@@ -72,7 +68,6 @@ class MyWKWebView: WKWebView {
     func setZoomFactor(_ zoomFactor: CGFloat) {
         let clamped = max(zoomFactors.first!, min(zoomFactor, zoomFactors.last!))
         pageZoom = clamped
-        scaledZoomFactor = clamped
         onZoomChanged?(clamped)
     }
     

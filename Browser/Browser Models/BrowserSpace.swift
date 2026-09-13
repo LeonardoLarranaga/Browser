@@ -49,9 +49,9 @@ final class BrowserSpace: Identifiable {
 
     func tabs(for pinState: TabPinState) -> [BrowserTab] {
         switch pinState {
-        case .normal: return normalTabs
-        case .pinned: return pinnedTabs
-        case .favorite: return favoriteTabs
+        case .normal: normalTabs
+        case .pinned: pinnedTabs
+        case .favorite: favoriteTabs
         }
     }
     
@@ -174,7 +174,7 @@ final class BrowserSpace: Identifiable {
         moveTab(browserTab, to: .normal)
     }
 
-    func moveTab(_ browserTab: BrowserTab, to pinState: TabPinState) {
+    private func moveTab(_ browserTab: BrowserTab, to pinState: TabPinState) {
         guard browserTab.pinState != pinState else { return }
 
         do {

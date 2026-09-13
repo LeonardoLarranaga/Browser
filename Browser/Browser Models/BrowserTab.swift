@@ -77,14 +77,14 @@ final class BrowserTab: Identifiable, Comparable {
         customTitle ?? title
     }
 
-    @Transient private var _iconColorCache: (data: Data, color: Color)? = nil
+    @Transient private var iconColorCache: (data: Data, color: Color)? = nil
     var iconColor: Color {
         guard let favicon else { return .accentColor }
-        if let cache = _iconColorCache, cache.data == favicon { return cache.color }
+        if let cache = iconColorCache, cache.data == favicon { return cache.color }
         guard let nsImage = NSImage(data: favicon),
               let average = nsImage.averageColor else { return .accentColor }
         let color = Color(nsColor: average)
-        _iconColorCache = (favicon, color)
+        iconColorCache = (favicon, color)
         return color
     }
     
@@ -133,8 +133,22 @@ final class BrowserTab: Identifiable, Comparable {
 
     func resetToPinnedURL() {
         guard let pinnedURL else { return }
+
+        let wasCurrent = browserSpace.currentTab == self
         url = pinnedURL
-        webview?.load(URLRequest(url: pinnedURL))
+        pageZoomLevel = 1.0
+
+        // Recreate the web view so the reset also clears its back/forward history.
+        if wasCurrent {
+            browserSpace.currentTab = nil
+        }
+        browserSpace.loadedTabs.removeAll { $0.id == id }
+
+        guard wasCurrent else { return }
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.browserSpace.currentTab = self
+        }
     }
 
     func replacePinnedURLWithCurrent() {

@@ -13,15 +13,15 @@ enum SitePermissionType: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .camera: return "Camera"
-        case .microphone: return "Microphone"
+        case .camera: "Camera"
+        case .microphone: "Microphone"
         }
     }
 
     var systemImage: String {
         switch self {
-        case .camera: return "camera"
-        case .microphone: return "mic"
+        case .camera: "camera"
+        case .microphone: "mic"
         }
     }
 }
@@ -35,9 +35,9 @@ enum SitePermissionDecision: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .ask: return "Ask"
-        case .allow: return "Allow"
-        case .deny: return "Block"
+        case .ask: "Ask"
+        case .allow: "Allow"
+        case .deny: "Block"
         }
     }
 }
@@ -49,7 +49,7 @@ final class SitePermissionStore {
     private let defaults = UserDefaults.standard
 
     private func key(host: String, type: SitePermissionType) -> String {
-        "sitePermission.\(type.rawValue).\(host)"
+        "sitePermission.\(type.rawValue).\(host.lowercased())"
     }
 
     func decision(host: String, type: SitePermissionType) -> SitePermissionDecision {
