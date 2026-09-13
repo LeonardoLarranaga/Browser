@@ -9,9 +9,10 @@ import SwiftData
 
 enum BrowserModel {
     static let appModels: [any PersistentModel.Type] = [
-        BrowserSpace.self,
-        BrowserTab.self,
+        BrowserFolder.self,
         BrowserHistoryEntry.self,
-        BrowserProfile.self
+        BrowserProfile.self,
+        BrowserSpace.self,
+        BrowserTab.self
     ]
 }

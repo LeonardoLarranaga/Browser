@@ -40,9 +40,15 @@ struct SidebarSpaceView: View {
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 4) {
-                    if browserSpace.pinnedTabsVisible && (!browserSpace.pinnedTabs.isEmpty || dragManager.isActive) {
+                    if browserSpace.pinnedTabsVisible && (!browserSpace.pinnedTabs.isEmpty || !browserSpace.topLevelFolders.isEmpty || dragManager.isActive) {
                         SidebarTabList(tabs: browserSpace.pinnedTabs, pinState: .pinned)
                             .browserTransition(.move(edge: .top).combined(with: .opacity))
+
+                        ForEach(browserSpace.topLevelFolders) { folder in
+                            SidebarFolder(folder: folder)
+                            .padding(.leading, .sidebarPadding)
+                            .padding(.trailing, Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
+                        }
                     }
 
                     SidebarSpaceClearDivider(isHovering: isHovering)
@@ -63,6 +69,9 @@ struct SidebarSpaceView: View {
         .onPreferenceChange(TierZonePreferenceKey.self) { zones in
             dragManager.tierZones = zones
         }
+        .onPreferenceChange(FolderFramePreferenceKey.self) { frames in
+            dragManager.folderFrames = frames
+        }
         .overlay(alignment: .topLeading) {
             if let tab = dragManager.draggingTab {
                 SidebarDragPreview(
@@ -70,6 +79,14 @@ struct SidebarSpaceView: View {
                     tier: dragManager.dropTier ?? tab.pinState,
                     rowWidth: dragManager.sourceWidth,
                     tileWidth: projectedEssentialTileWidth(for: tab)
+                )
+                .position(dragManager.pointer)
+                .allowsHitTesting(false)
+                .transition(.opacity)
+            } else if let folder = dragManager.draggingFolder {
+                SidebarFolderDragPreview(
+                    folder: folder,
+                    rowWidth: dragManager.sourceWidth
                 )
                 .position(dragManager.pointer)
                 .allowsHitTesting(false)
@@ -88,7 +105,7 @@ struct SidebarSpaceView: View {
 
     private var spaceHeader: some View {
         HStack(spacing: 6) {
-            if headerHovering && !browserSpace.pinnedTabs.isEmpty {
+            if headerHovering && (!browserSpace.pinnedTabs.isEmpty || !browserSpace.topLevelFolders.isEmpty) {
                 Button {
                     withAnimation(.browserSnappy) {
                         browserSpace.pinnedTabsVisible.toggle()

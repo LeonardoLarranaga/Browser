@@ -43,7 +43,12 @@ struct SidebarTab: View {
                 .padding(.leading, 4)
             }
 
-            SidebarTabTitle(isEditingTitle: $isEditingTitle)
+            SidebarTabTitle(
+                title: $browserTab.customTitle,
+                displayTitle: browserTab.displayTitle,
+                isEditingTitle: $isEditingTitle
+            )
+                .foregroundStyle(colorScheme == .dark && browserSpace.currentTab == browserTab ? .black : .primary)
                 .padding(.leading, 6)
 
             Spacer(minLength: 0)
@@ -72,7 +77,7 @@ struct SidebarTab: View {
         .contentShape(.rect)
         .opacity(isDragging ? 0 : 1)
         .scaleEffect(isPressed ? 0.98 : 1.0)
-        .reportTabFrame(id: browserTab.id, tier: pinState)
+        .reportTabFrame(id: browserTab.id, tier: pinState, folderID: browserTab.folder?.id)
         .simultaneousGesture(TapGesture().onEnded(selectTab))
         .simultaneousGesture(TapGesture(count: 2).onEnded { isEditingTitle = true })
         .tabDragGesture(tab: browserTab, tier: pinState, manager: dragManager, browserSpace: browserSpace)
@@ -101,7 +106,6 @@ struct SidebarTab: View {
     func selectTab() {
         browserSpace.currentTab = browserTab
         if Preferences.disableAnimations { return }
-        // Scale bounce effect
         Task {
             isPressed = true
             try? await Task.sleep(for: .milliseconds(100))

@@ -22,6 +22,14 @@ struct SidebarSpaceContextMenu: ViewModifier {
         content
             .contextMenu {
                 if browserWindow.isMainBrowserWindow {
+                    Button("New Folder") {
+                        withAnimation(.browserDefault) {
+                            browserSpace.createFolder(named: "New Folder")
+                        }
+                    }
+
+                    Divider()
+
                     Button("Edit Space") {
                         withAnimation(.browserDefault) {
                             browserSpace.isEditing = true

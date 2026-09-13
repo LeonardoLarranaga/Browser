@@ -38,7 +38,9 @@ final class BrowserTab: Identifiable, Comparable {
 
     @Relationship private var browserSpace: BrowserSpace
     var spaceId: UUID { browserSpace.id }
-    
+
+    @Relationship var folder: BrowserFolder?
+
     init(
         title: String,
         favicon: Data? = nil,
@@ -46,7 +48,8 @@ final class BrowserTab: Identifiable, Comparable {
         order: Int = 0,
         browserSpace: BrowserSpace,
         contentType: TabContentType = .web,
-        restoredId: UUID? = nil
+        restoredId: UUID? = nil,
+        folder: BrowserFolder? = nil
     ) {
         self.id = restoredId ?? UUID()
         self.title = title
@@ -56,6 +59,7 @@ final class BrowserTab: Identifiable, Comparable {
         self.order = order
         self.pinState = .normal
         self.contentType = contentType
+        self.folder = folder
     }
     
     @Transient weak var webview: MyWKWebView? = nil

@@ -15,14 +15,22 @@ struct SidebarTabList: View {
 
     var tabs: [BrowserTab]
     var pinState: TabPinState
+    var folderID: UUID? = nil
+    var usesSidebarPadding = true
 
     private var isReceivingCrossTierDrag: Bool {
-        guard let dragging = dragManager.draggingTab else { return false }
-        return dragging.pinState != pinState
+        guard folderID == nil,
+              tabs.isEmpty,
+              let draggingTab = dragManager.draggingTab
+        else { return false }
+
+        return draggingTab.pinState != pinState
     }
 
     private var isTierTargeted: Bool {
-        dragManager.isActive && dragManager.dropTier == pinState
+        dragManager.isActive
+            && dragManager.dropTier == pinState
+            && dragManager.dropFolderID == folderID
     }
 
     private func showsIndicator(before tab: BrowserTab) -> Bool {
@@ -33,6 +41,15 @@ struct SidebarTabList: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
+            if isReceivingCrossTierDrag {
+                SidebarEmptyDropTarget(
+                    title: pinState == .pinned ? "Drop to pin" : "Drop here",
+                    rowWidth: dragManager.sourceWidth
+                )
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .transition(.opacity)
+            }
+
             ForEach(tabs) { browserTab in
                 if showsIndicator(before: browserTab) {
                     TabInsertionIndicator()
@@ -45,22 +62,10 @@ struct SidebarTabList: View {
                 )
             }
 
-            if isTierTargeted && dragManager.dropBeforeTabID == nil {
+            if isTierTargeted && dragManager.dropBeforeTabID == nil && !isReceivingCrossTierDrag {
                 TabInsertionIndicator()
             }
 
-            if tabs.isEmpty && isReceivingCrossTierDrag {
-                RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(.primary.opacity(0.25), style: StrokeStyle(lineWidth: 1, dash: [4]))
-                    .frame(height: 40)
-                    .overlay {
-                        Text(pinState == .pinned ? "Drop to pin" : "Drop here")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.trailing, .sidebarPadding)
-                    .browserTransition(.opacity)
-            }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(.rect)
@@ -71,8 +76,8 @@ struct SidebarTabList: View {
             }
         }
         .reportTierZone(pinState)
-        .padding(.leading, .sidebarPadding)
-        .padding(.trailing, Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
+        .padding(.leading, usesSidebarPadding ? .sidebarPadding : 0)
+        .padding(.trailing, usesSidebarPadding && Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
         .animation(.browserSnappy, value: dragManager.dropBeforeTabID)
         .animation(.browserSnappy, value: dragManager.dropTier)
     }

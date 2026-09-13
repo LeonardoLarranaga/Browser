@@ -9,11 +9,14 @@ import SwiftUI
 
 struct SidebarTabTitle: View {
     
-    @Environment(BrowserTab.self) var browserTab
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(BrowserSpace.self) var browserSpace
 
+    @Binding var title: String?
+    let displayTitle: String
     @Binding var isEditingTitle: Bool
+
     @FocusState var isTextFieldFocused: Bool
-    
     @State var customTitle = ""
     
     var body: some View {
@@ -21,24 +24,23 @@ struct SidebarTabTitle: View {
             TextField("", text: $customTitle, onCommit: {
                 isEditingTitle = false
                 if customTitle.isReallyEmpty {
-                    browserTab.customTitle = nil
+                    title = nil
                 } else {
-                    browserTab.customTitle = customTitle
+                    title = customTitle
                 }
             })
             .focused($isTextFieldFocused)
             .onAppear {
                 DispatchQueue.main.async {
-                    customTitle = browserTab.displayTitle
+                    customTitle = title ?? ""
                     isTextFieldFocused = true
                     NSApp.selectAllText()
                 }
             }
         } else {
-            Text(browserTab.displayTitle)
+            Text(displayTitle)
                 .lineLimit(1)
                 .truncationMode(.tail)
-                .foregroundStyle(.primary)
         }
     }
 }

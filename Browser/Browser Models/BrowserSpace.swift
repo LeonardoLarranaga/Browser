@@ -23,7 +23,8 @@ final class BrowserSpace: Identifiable {
     
     @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
     @Relationship var profile: BrowserProfile?
-    
+    @Relationship(deleteRule: .cascade) private var _folders: [BrowserFolder]
+
     var tabs: [BrowserTab] {
         get {
             _tabs.sorted()
@@ -36,15 +37,15 @@ final class BrowserSpace: Identifiable {
     }
     
     var normalTabs: [BrowserTab] {
-        tabs.filter { $0.pinState == .normal }
+        tabs.filter { $0.pinState == .normal && $0.folder == nil }
     }
 
     var pinnedTabs: [BrowserTab] {
-        tabs.filter { $0.pinState == .pinned }
+        tabs.filter { $0.pinState == .pinned && $0.folder == nil }
     }
 
     var favoriteTabs: [BrowserTab] {
-        tabs.filter { $0.pinState == .favorite }
+        tabs.filter { $0.pinState == .favorite && $0.folder == nil }
     }
 
     func tabs(for pinState: TabPinState) -> [BrowserTab] {
@@ -54,7 +55,37 @@ final class BrowserSpace: Identifiable {
         case .favorite: favoriteTabs
         }
     }
-    
+
+    var folders: [BrowserFolder] {
+        get { _folders.sorted() }
+        set {
+            newValue.enumerated().forEach { index, folder in
+                folder.order = index
+            }
+            _folders = newValue
+        }
+    }
+
+    /// Top-level folders shown beside the pinned tabs in the sidebar.
+    var topLevelFolders: [BrowserFolder] {
+        folders.filter { $0.parentFolder == nil }
+    }
+
+    /// All folders in the space, including nested folders.
+    var allFolders: [BrowserFolder] {
+        var result: [BrowserFolder] = []
+        var visited = Set<UUID>()
+
+        func append(_ folder: BrowserFolder) {
+            guard visited.insert(folder.id).inserted else { return }
+            result.append(folder)
+            folder.subfolders.forEach(append)
+        }
+
+        folders.forEach(append)
+        return result
+    }
+
     var pinnedTabsVisible: Bool = true
     
     @Attribute(.ephemeral) var currentTab: BrowserTab? = nil
@@ -72,6 +103,7 @@ final class BrowserSpace: Identifiable {
         self.colorScheme = colorScheme
         self.currentTab = nil
         self._tabs = []
+        self._folders = []
     }
     
     /// Returns the text color of the space based on the colors of the space and the color scheme
@@ -202,6 +234,11 @@ final class BrowserSpace: Identifiable {
 
     func commitDrop(_ sourceTab: BrowserTab, tier: TabPinState, beforeID: UUID?) {
         do {
+            let previousFolder = sourceTab.folder
+            sourceTab.folder = nil
+            if let previousFolder {
+                previousFolder.tabs = previousFolder.tabs.filter { $0.id != sourceTab.id }
+            }
             sourceTab.pinState = tier
             updatePinnedURL(sourceTab, for: tier)
 
@@ -250,5 +287,134 @@ final class BrowserSpace: Identifiable {
         case .normal:
             return tabs.count
         }
+    }
+
+    /// Creates a new folder in the space and saves it.
+    func createFolder(named name: String, in parentFolder: BrowserFolder? = nil) {
+        guard let modelContext else { return }
+        let folder = BrowserFolder(
+            name: name,
+            order: parentFolder?.subfolders.count ?? topLevelFolders.count,
+            space: self,
+            parentFolder: parentFolder
+        )
+        folders.append(folder)
+
+        if let parentFolder {
+            parentFolder.subfolders = parentFolder.subfolders.filter { $0.id != folder.id } + [folder]
+        }
+
+        try? modelContext.save()
+    }
+
+    /// Deletes a folder, all nested folders, and every tab contained in them.
+    func deleteFolder(_ folder: BrowserFolder) {
+        guard let modelContext else { return }
+
+        var foldersToDelete: [BrowserFolder] = []
+
+        func collectFolders(_ folder: BrowserFolder) {
+            foldersToDelete.append(folder)
+            folder.subfolders.forEach(collectFolders)
+        }
+
+        collectFolders(folder)
+
+        let folderIDs = Set(foldersToDelete.map(\.id))
+        let tabsToDelete = foldersToDelete.flatMap(\.tabs)
+        let tabIDs = Set(tabsToDelete.map(\.id))
+        let remainingTabs = tabs.filter { !tabIDs.contains($0.id) }
+
+        if let selectedTab = currentTab, tabIDs.contains(selectedTab.id) {
+            currentTab = loadedTabs.first(where: { !tabIDs.contains($0.id) }) ?? remainingTabs.first
+        }
+        loadedTabs.removeAll { tabIDs.contains($0.id) }
+        tabs = remainingTabs
+
+        let previousParent = folder.parentFolder
+        folder.parentFolder = nil
+        if let previousParent {
+            previousParent.subfolders = previousParent.subfolders.filter { $0.id != folder.id }
+        }
+        folders = folders.filter { !folderIDs.contains($0.id) }
+
+        for tab in tabsToDelete {
+            tab.folder = nil
+            modelContext.delete(tab)
+        }
+
+        for folder in foldersToDelete.reversed() {
+            folder.tabs = []
+            folder.subfolders = []
+            folder.parentFolder = nil
+            modelContext.delete(folder)
+        }
+
+        try? modelContext.save()
+    }
+
+    /// Moves a tab into a folder (or to the top level if folder is nil).
+    func moveTab(_ tab: BrowserTab, to folder: BrowserFolder?, beforeID: UUID? = nil) {
+        let previousFolder = tab.folder
+
+        tab.folder = nil
+        if let previousFolder {
+            previousFolder.tabs = previousFolder.tabs.filter { $0.id != tab.id }
+        }
+
+        if let folder {
+            var folderTabs = folder.tabs.filter { $0.id != tab.id }
+            let insertionIndex = beforeID.flatMap { beforeID in
+                folderTabs.firstIndex { $0.id == beforeID }
+            } ?? folderTabs.endIndex
+            folderTabs.insert(tab, at: insertionIndex)
+            folder.tabs = folderTabs
+            tab.folder = folder
+            tab.order = insertionIndex
+        } else {
+            tab.order = normalTabs.filter { $0.id != tab.id }.count
+        }
+
+        tab.pinState = folder == nil ? .normal : .pinned
+        updatePinnedURL(tab, for: tab.pinState)
+        try? modelContext?.save()
+    }
+
+    /// Moves a subfolder into another folder (or promotes it to top level).
+    func moveFolder(_ source: BrowserFolder, to destination: BrowserFolder?) {
+        guard source.id != destination?.id else { return }
+
+        let previousParent = source.parentFolder
+
+        var ancestor = destination
+        while let current = ancestor {
+            guard current.id != source.id else { return }
+            ancestor = current.parentFolder
+        }
+
+        let siblingCount: Int
+        if let destination {
+            siblingCount = destination.subfolders.filter { $0.id != source.id }.count
+        } else {
+            siblingCount = topLevelFolders.filter { $0.id != source.id }.count
+        }
+
+        source.parentFolder = nil
+        if let previousParent {
+            previousParent.subfolders = previousParent.subfolders.filter { $0.id != source.id }
+        }
+
+        if let destination {
+            destination.subfolders = destination.subfolders.filter { $0.id != source.id } + [source]
+            source.parentFolder = destination
+        }
+
+        source.order = siblingCount
+
+        if destination == nil && !folders.contains(where: { $0.id == source.id }) {
+            folders.append(source)
+        }
+
+        try? modelContext?.save()
     }
 }

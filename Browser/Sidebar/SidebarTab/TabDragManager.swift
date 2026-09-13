@@ -11,10 +11,17 @@ struct TabFrameInfo: Equatable {
     let id: UUID
     let tier: TabPinState
     let frame: CGRect
+    let folderID: UUID?
 }
 
 struct TierZoneInfo: Equatable {
     let tier: TabPinState
+    let frame: CGRect
+}
+
+struct FolderFrameInfo: Equatable {
+    let id: UUID
+    let depth: Int
     let frame: CGRect
 }
 
@@ -32,13 +39,27 @@ struct TierZonePreferenceKey: PreferenceKey {
     }
 }
 
+struct FolderFramePreferenceKey: PreferenceKey {
+    static var defaultValue: [FolderFrameInfo] = []
+    static func reduce(value: inout [FolderFrameInfo], nextValue: () -> [FolderFrameInfo]) {
+        value.append(contentsOf: nextValue())
+    }
+}
+
+enum SidebarDragResult {
+    case tab(BrowserTab, tier: TabPinState, beforeID: UUID?, folderID: UUID?)
+    case folder(BrowserFolder, destinationFolderID: UUID?)
+}
+
 @Observable
 final class TabDragManager {
 
     private(set) var draggingTab: BrowserTab?
+    private(set) var draggingFolder: BrowserFolder?
     private(set) var pointer: CGPoint = .zero
     private(set) var dropTier: TabPinState?
     private(set) var dropBeforeTabID: UUID?
+    private(set) var dropFolderID: UUID?
     private(set) var sourceWidth: CGFloat = 200
 
     var essentialTileWidth: CGFloat? {
@@ -47,15 +68,20 @@ final class TabDragManager {
 
     var tabFrames: [TabFrameInfo] = []
     var tierZones: [TierZoneInfo] = []
+    var folderFrames: [FolderFrameInfo] = []
 
     func isDragging(_ tab: BrowserTab) -> Bool {
         draggingTab?.id == tab.id
     }
 
-    var isActive: Bool { draggingTab != nil }
+    func isDragging(_ folder: BrowserFolder) -> Bool {
+        draggingFolder?.id == folder.id
+    }
+
+    var isActive: Bool { draggingTab != nil || draggingFolder != nil }
 
     var shouldRevealEmptyEssentials: Bool {
-        guard isActive else { return false }
+        guard draggingTab != nil else { return false }
         let tops = tierZones.filter { $0.tier != .favorite }.map { $0.frame.minY }
         guard let topTierMinY = tops.min() else { return false }
         return pointer.y < topTierMinY
@@ -63,6 +89,7 @@ final class TabDragManager {
 
     func begin(_ tab: BrowserTab, at pointer: CGPoint) {
         draggingTab = tab
+        draggingFolder = nil
         self.pointer = pointer
         if let frame = tabFrames.first(where: { $0.id == tab.id })?.frame {
             sourceWidth = frame.width
@@ -70,36 +97,78 @@ final class TabDragManager {
         recompute()
     }
 
+    func begin(_ folder: BrowserFolder, at pointer: CGPoint) {
+        draggingTab = nil
+        draggingFolder = folder
+        self.pointer = pointer
+        if let frame = folderFrames.first(where: { $0.id == folder.id })?.frame {
+            sourceWidth = frame.width
+        }
+        recompute()
+    }
+
     func update(to pointer: CGPoint) {
-        guard draggingTab != nil else { return }
+        guard isActive else { return }
         self.pointer = pointer
         recompute()
     }
 
-    func end() -> (tab: BrowserTab, tier: TabPinState, beforeID: UUID?)? {
+    func end() -> SidebarDragResult? {
         defer { reset() }
-        guard let tab = draggingTab, let tier = dropTier else { return nil }
-        return (tab, tier, dropBeforeTabID)
+
+        if let tab = draggingTab, let tier = dropTier {
+            return .tab(tab, tier: tier, beforeID: dropBeforeTabID, folderID: dropFolderID)
+        }
+
+        if let folder = draggingFolder {
+            return .folder(folder, destinationFolderID: dropFolderID)
+        }
+
+        return nil
     }
 
     func reset() {
         draggingTab = nil
+        draggingFolder = nil
         dropTier = nil
         dropBeforeTabID = nil
+        dropFolderID = nil
     }
 
     private func recompute() {
-        guard let source = draggingTab else { return }
+        dropFolderID = folderTargetID()
 
-        let tier = tier(for: pointer) ?? source.pinState
+        guard let source = draggingTab else {
+            dropTier = nil
+            dropBeforeTabID = nil
+            return
+        }
+
+        let tier = dropFolderID == nil ? (tier(for: pointer) ?? source.pinState) : .pinned
         dropTier = tier
 
         let tierTabs = tabFrames
-            .filter { $0.tier == tier && $0.id != source.id }
+            .filter {
+                $0.tier == tier
+                    && $0.folderID == dropFolderID
+                    && $0.id != source.id
+            }
 
         dropBeforeTabID = tier == .favorite
             ? gridInsertionTarget(in: tierTabs)
             : listInsertionTarget(in: tierTabs)
+    }
+
+    private func folderTargetID() -> UUID? {
+        let sourceFolderID = draggingFolder?.id
+
+        return folderFrames
+            .filter { info in
+                info.frame.contains(pointer) && info.id != sourceFolderID
+            }
+            .max { lhs, rhs in
+                lhs.depth < rhs.depth
+            }?.id
     }
 
     private func tier(for point: CGPoint) -> TabPinState? {
