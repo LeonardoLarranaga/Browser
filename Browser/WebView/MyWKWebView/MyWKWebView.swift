@@ -11,7 +11,6 @@ import WebKit
 class MyWKWebView: WKWebView {
     
     private let zoomFactors: [CGFloat] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6]
-    var scaledZoomFactor: CGFloat = 1.0
     
     /// The "Search With Google" action (passed from the WKWebViewController)
     var searchWebAction: ((String) -> Void)? = nil
@@ -21,6 +20,7 @@ class MyWKWebView: WKWebView {
     var presentActionAlert: ((String, String) -> Void)? = nil
     /// Toggle the Find UI action (passed from the WKWebViewController)
     var toggleFindUI: (() -> Void)? = nil
+    var onZoomChanged: ((CGFloat) -> Void)? = nil
     
     override var isEditable: Bool {
         get {
@@ -41,38 +41,34 @@ class MyWKWebView: WKWebView {
     
     func zoomActualSize() {
         setZoomFactor(1.0)
-        scaledZoomFactor = 1.0
     }
     
     /// Handle Zoom In
     func zoomIn() {
-        let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
-        let nextIndex = currentIndex + 1
-        if nextIndex < zoomFactors.count {
-            let nextZoomFactor = zoomFactors[nextIndex]
-            setZoomFactor(nextZoomFactor)
-            self.scaledZoomFactor = nextZoomFactor
-        }
+        let nextIndex = currentZoomIndex + 1
+        guard zoomFactors.indices.contains(nextIndex) else { return }
+        setZoomFactor(zoomFactors[nextIndex])
     }
     
     /// Handle Zoom Out
     func zoomOut() {
-        let currentIndex = zoomFactors.firstIndex(of: scaledZoomFactor) ?? 3
-        let nextIndex = currentIndex - 1
-        if nextIndex >= 0 {
-            let nextZoomFactor = zoomFactors[nextIndex]
-            setZoomFactor(nextZoomFactor)
-            self.scaledZoomFactor = nextZoomFactor
-        }
+        let previousIndex = currentZoomIndex - 1
+        guard zoomFactors.indices.contains(previousIndex) else { return }
+        setZoomFactor(zoomFactors[previousIndex])
+    }
+
+    private var currentZoomIndex: Int {
+        zoomFactors.enumerated().min {
+            abs($0.element - pageZoom) < abs($1.element - pageZoom)
+        }?.offset ?? zoomFactors.firstIndex(of: 1.0) ?? 0
     }
     
     /// Sets the zoom factor
     /// - Parameter zoomFactor: The zoom factor to set
     func setZoomFactor(_ zoomFactor: CGFloat) {
         let clamped = max(zoomFactors.first!, min(zoomFactor, zoomFactors.last!))
-        let systemImage = clamped > pageZoom ? "plus.magnifyingglass" : "minus.magnifyingglass"
         pageZoom = clamped
-        presentActionAlert?("Zoom Set to \(Int(clamped * 100))%", systemImage)
+        onZoomChanged?(clamped)
     }
     
     /// Toggles the page editable
@@ -82,24 +78,59 @@ class MyWKWebView: WKWebView {
     
     /// Clears the cookies of the specific host and reloads
     func clearCookiesAndReload() {
-        let cookieStore = WKWebsiteDataStore.default().httpCookieStore
-        cookieStore.getAllCookies { cookies in
-            for cookie in cookies where self.url?.host()?.contains(cookie.domain) == true {
-                cookieStore.delete(cookie)
+        let cookieStore = configuration.websiteDataStore.httpCookieStore
+        let host = url?.host()
+
+        cookieStore.getAllCookies { [weak self] cookies in
+            let matchingCookies = cookies.filter { cookie in
+                guard let host else { return false }
+                return host.matchesWebsiteDomain(cookie.domain)
+            }
+
+            guard !matchingCookies.isEmpty else {
+                DispatchQueue.main.async { self?.reload() }
+                return
+            }
+
+            let group = DispatchGroup()
+            for cookie in matchingCookies {
+                group.enter()
+                cookieStore.delete(cookie) {
+                    group.leave()
+                }
+            }
+
+            group.notify(queue: .main) { [weak self] in
+                self?.reload()
             }
         }
-        reload()
     }
     
     /// Clears the cache of the specific host and reloads
     func clearCacheAndReload() {
-        WKWebsiteDataStore.default().fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
-            for record in records where self.url?.host()?.contains(record.displayName) == true {
-                let types = record.dataTypes.filter { $0.contains("Cache") }
-                WKWebsiteDataStore.default().removeData(ofTypes: types, for: [record], completionHandler: {})
+        let dataStore = configuration.websiteDataStore
+        let host = url?.host()
+
+        dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { [weak self] records in
+            guard let host else {
+                DispatchQueue.main.async { self?.reload() }
+                return
+            }
+
+            let matchingRecords = records.filter { host.matchesWebsiteDomain($0.displayName) }
+            let cacheTypes = Set(matchingRecords.flatMap { record in
+                record.dataTypes.filter { $0.contains("Cache") }
+            })
+
+            guard !matchingRecords.isEmpty, !cacheTypes.isEmpty else {
+                DispatchQueue.main.async { self?.reload() }
+                return
+            }
+
+            dataStore.removeData(ofTypes: cacheTypes, for: matchingRecords) {
+                DispatchQueue.main.async { self?.reload() }
             }
         }
-        reload()
     }
     
     /// Toggles the developer tools

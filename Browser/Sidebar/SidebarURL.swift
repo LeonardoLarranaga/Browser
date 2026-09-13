@@ -8,27 +8,58 @@
 import SwiftUI
 
 struct SidebarURL: View {
-    
+
     @Environment(\.colorScheme) var colorScheme
     @Environment(BrowserWindow.self) var browserWindow
-    
+
     @State var hover = false
-    
+    @State private var showSiteSettings = false
+
+    private var currentTab: BrowserTab? {
+        browserWindow.currentSpace?.currentTab
+    }
+
+    private var isSecure: Bool {
+        currentTab?.url.scheme == "https"
+    }
+
     var body: some View {
-        HStack {
-            if let currentTab = browserWindow.currentSpace?.currentTab {
-                Text(currentTab.url.cleanHost)
+        HStack(spacing: 5) {
+            if let currentTab {
+                Image(systemName: isSecure ? "lock.fill" : "exclamationmark.triangle.fill")
+                    .font(.system(size: 10))
+                    .foregroundStyle(.secondary)
                     .padding(.leading, .sidebarPadding)
-                
-                Spacer()
-                
+
+                Text(currentTab.url.cleanHost)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
+
+                Spacer(minLength: 0)
+
+                if currentTab.pageZoomLevel != 1.0 {
+                    Button {
+                        currentTab.webview?.zoomActualSize()
+                    } label: {
+                        Text("\(Int(currentTab.pageZoomLevel * 100))%")
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundStyle(.secondary)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Color.primary.opacity(0.1))
+                            .clipShape(.capsule)
+                    }
+                    .buttonStyle(.plain)
+                    .help("Reset zoom to 100%")
+                    .browserTransition(.opacity)
+                }
+
                 if hover {
                     Button("Refresh", systemImage: "arrow.clockwise", action: browserWindow.refreshButtonAction)
-                        .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
+                        .buttonStyle(.subtleURLBar)
                         .browserTransition(.opacity)
-                    
-                    Button("Copy URL To Clipboard", systemImage: "link", action: browserWindow.copyURLToClipboard)
-                        .buttonStyle(.sidebarHover(hoverStyle: AnyShapeStyle(.ultraThinMaterial) ,cornerRadius: 7))
+
+                    siteMenu
                         .padding(.trailing, .sidebarPadding)
                         .browserTransition(.opacity)
                 }
@@ -62,10 +93,97 @@ struct SidebarURL: View {
                 self.hover = hover
             }
         }
+        .sheet(isPresented: $showSiteSettings) {
+            if let currentTab {
+                SiteSettingsView(tab: currentTab)
+            }
+        }
         .zIndex(-1)
+    }
+
+    private var siteMenu: some View {
+        Menu {
+            Section {
+                Label(isSecure ? "Connection is secure" : "Connection is not secure",
+                      systemImage: isSecure ? "lock.fill" : "lock.open.fill")
+                Label(isSecure ? "Encrypted (HTTPS)" : "Not encrypted (HTTP)",
+                      systemImage: isSecure ? "checkmark.shield.fill" : "xmark.shield.fill")
+            } header: {
+                Text(currentTab?.url.host() ?? "")
+            }
+
+            Section {
+                Button("Copy Link", systemImage: "link", action: browserWindow.copyURLToClipboard)
+                if let url = currentTab?.url {
+                    ShareLink(item: url) {
+                        Label("Share…", systemImage: "square.and.arrow.up")
+                    }
+                }
+                Button("Reload", systemImage: "arrow.clockwise", action: browserWindow.refreshButtonAction)
+            }
+
+            Section {
+                Menu {
+                    Button("Zoom In", systemImage: "plus.magnifyingglass", action: zoomIn)
+                    Button("Actual Size", systemImage: "1.magnifyingglass", action: zoomReset)
+                    Button("Zoom Out", systemImage: "minus.magnifyingglass", action: zoomOut)
+                } label: {
+                    Label("Zoom", systemImage: "textformat.size")
+                }
+
+                Button("Web Inspector", systemImage: "hammer") {
+                    currentTab?.webview?.toggleDeveloperTools()
+                }
+            }
+
+            Section("Privacy") {
+                Button("Clear Cookies & Reload", systemImage: "trash") {
+                    currentTab?.webview?.clearCookiesAndReload()
+                }
+                Button("Clear Cache & Reload", systemImage: "trash.slash") {
+                    currentTab?.webview?.clearCacheAndReload()
+                }
+                Button("Site Settings & Permissions…", systemImage: "gearshape") {
+                    showSiteSettings = true
+                }
+            }
+        } label: {
+            Image(systemName: "gearshape")
+                .font(.system(size: 12))
+                .foregroundStyle(.secondary)
+        }
+        .menuStyle(.borderlessButton)
+        .menuIndicator(.hidden)
+        .fixedSize()
+    }
+
+    private func zoomIn() {
+        currentTab?.webview?.zoomIn()
+    }
+
+    private func zoomOut() {
+        currentTab?.webview?.zoomOut()
+    }
+
+    private func zoomReset() {
+        currentTab?.webview?.zoomActualSize()
     }
 }
 
-#Preview {
-    SidebarURL()
+struct SubtleURLBarButtonStyle: ButtonStyle {
+    @State private var hover = false
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .labelStyle(.iconOnly)
+            .font(.system(size: 12))
+            .foregroundStyle(.secondary)
+            .frame(width: 22, height: 22)
+            .background(hover ? Color.primary.opacity(0.08) : .clear)
+            .clipShape(.rect(cornerRadius: 6))
+            .onHover { hover = $0 }
+    }
+}
+
+extension ButtonStyle where Self == SubtleURLBarButtonStyle {
+    static var subtleURLBar: SubtleURLBarButtonStyle { SubtleURLBarButtonStyle() }
 }

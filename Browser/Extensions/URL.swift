@@ -73,6 +73,15 @@ extension String {
             return false
         }
     }
+
+    /// Returns whether this host is the same as or a subdomain of the supplied domain.
+    func matchesWebsiteDomain(_ domain: String) -> Bool {
+        let host = trimmingCharacters(in: CharacterSet(charactersIn: ".")).lowercased()
+        let normalizedDomain = domain.trimmingCharacters(in: CharacterSet(charactersIn: ".")).lowercased()
+
+        guard !host.isEmpty, !normalizedDomain.isEmpty else { return false }
+        return host == normalizedDomain || host.hasSuffix(".\(normalizedDomain)")
+    }
     
     var startsWithHTTP: Bool {
         hasPrefix("http://") || hasPrefix("https://")

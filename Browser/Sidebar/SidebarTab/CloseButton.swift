@@ -19,22 +19,27 @@ struct SidebarTabCloseButton: View {
     }
     
     var body: some View {
-        Button("Close Tab", systemImage: isPinnedAndLoaded ? "minus" : "xmark") {
+        Button {
             if isPinnedAndLoaded {
                 browserSpace.unloadTab(browserTab)
             } else {
                 browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
             }
+        } label: {
+            Image(systemName: isPinnedAndLoaded ? "minus" : "xmark")
+                .contentTransition(.symbolEffect(.replace.downUp))
+                .frame(width: 20, height: 20)
+                .contentShape(.rect)
         }
-        .font(.title3)
+        .font(.body)
         .buttonStyle(.plain)
         .labelStyle(.iconOnly)
-        .padding(4)
-        .background(.ultraThinMaterial.opacity(isHovering ? 0.5 : 0))
+        .foregroundStyle(.primary)
+        .background(.primary.opacity(isHovering ? 0.12 : 0))
         .clipShape(.rect(cornerRadius: 6))
         .onHover { hover in
             self.isHovering = hover
         }
-        .padding(.trailing, 5)
+        .animation(.snappy(duration: 0.22), value: isPinnedAndLoaded)
     }
 }

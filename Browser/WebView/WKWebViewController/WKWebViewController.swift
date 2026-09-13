@@ -55,6 +55,9 @@ class WKWebViewController: NSViewController {
         webView.openLinkInNewTabAction = coordinator.openLinkInNewTabAction(_:)
         webView.presentActionAlert = coordinator.presentActionAlert(message:systemImage:)
         webView.toggleFindUI = coordinator.toggleFindUI
+        webView.onZoomChanged = { [weak tab] zoom in
+            tab?.pageZoomLevel = zoom
+        }
         
         coordinator.observeWebView(webView)
         
@@ -101,6 +104,7 @@ class WKWebViewController: NSViewController {
             webView.searchWebAction = nil
             webView.openLinkInNewTabAction = nil
             webView.presentActionAlert = nil
+            webView.onZoomChanged = nil
             
             coordinator?.stopObservingWebView()
             

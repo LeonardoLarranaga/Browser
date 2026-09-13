@@ -22,11 +22,11 @@ struct SidebarTabNewButton: View {
             .buttonStyle(.plain)
             .padding(.leading, .sidebarPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .frame(height: 30)
+            .frame(height: 34)
             .padding(3)
             .contentShape(.rect)
-            .background(isHovering ? .white.opacity(0.1) : .clear)
-            .clipShape(.rect(cornerRadius: 10))
+            .background(isHovering ? Color.primary.opacity(0.08) : Color.clear)
+            .clipShape(.rect(cornerRadius: 12))
             .padding(.leading, .sidebarPadding)
             .onHover { isHover in
                 self.isHovering = isHover

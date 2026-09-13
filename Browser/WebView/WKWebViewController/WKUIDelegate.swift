@@ -76,6 +76,28 @@ extension WKWebViewController: WKUIDelegate {
         completionHandler(response == .alertFirstButtonReturn ? inputTextField.stringValue : nil)
     }
     
+    func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin, initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType, decisionHandler: @escaping @MainActor (WKPermissionDecision) -> Void) {
+        let host = origin.host
+
+        let types: [SitePermissionType]
+        switch type {
+        case .camera: types = [.camera]
+        case .microphone: types = [.microphone]
+        case .cameraAndMicrophone: types = [.camera, .microphone]
+        @unknown default: types = []
+        }
+
+        let decisions = types.map { SitePermissionStore.shared.decision(host: host, type: $0) }
+
+        if decisions.contains(.deny) {
+            decisionHandler(.deny)
+        } else if !decisions.isEmpty && decisions.allSatisfy({ $0 == .allow }) {
+            decisionHandler(.grant)
+        } else {
+            decisionHandler(.prompt)
+        }
+    }
+
     /// Handles file uploads
     func webView(_ webView: WKWebView, runOpenPanelWith parameters: WKOpenPanelParameters, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping @MainActor ([URL]?) -> Void) {
         let openPanel = NSOpenPanel()
