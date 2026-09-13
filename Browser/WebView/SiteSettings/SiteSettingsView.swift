@@ -184,7 +184,7 @@ struct SiteSettingsView: View {
     }
 
     private func matchingRecords(_ records: [WKWebsiteDataRecord]) -> [WKWebsiteDataRecord] {
-        records.filter { host.contains($0.displayName) || $0.displayName.contains(host) }
+        records.filter { host.matchesWebsiteDomain($0.displayName) }
     }
 
     private func refreshDataState() {
