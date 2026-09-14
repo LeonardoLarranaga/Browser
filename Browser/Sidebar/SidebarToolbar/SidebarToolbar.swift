@@ -30,7 +30,7 @@ struct SidebarToolbar: ViewModifier {
         browserWindow.currentSpace?.currentTab
     }
     
-    private var sidebarPosition: _Preferences.SidebarPosition {
+    private var sidebarPosition: AppPreferences.SidebarPosition {
         Preferences.sidebarPosition
     }
     

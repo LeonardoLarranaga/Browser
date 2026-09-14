@@ -14,8 +14,8 @@ struct SettingsAppearanceView: View {
         Form {
             Section("App") {
                 Picker("Sidebar Position", systemImage: "sidebar.left", selection: $preferences.sidebarPosition) {
-                    Label("Leading", systemImage: "sidebar.left").tag(_Preferences.SidebarPosition.leading)
-                    Label("Trailing", systemImage: "sidebar.right").tag(_Preferences.SidebarPosition.trailing)
+                    Label("Leading", systemImage: "sidebar.left").tag(AppPreferences.SidebarPosition.leading)
+                    Label("Trailing", systemImage: "sidebar.right").tag(AppPreferences.SidebarPosition.trailing)
                 }
 
                 Toggle("Disable Animations", systemImage: "figure.run", isOn: $preferences.disableAnimations)
@@ -25,7 +25,7 @@ struct SettingsAppearanceView: View {
                 Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $preferences.reverseColorsOnTrailingSidebar)
 
                 Picker("Loading Indicator Position", systemImage: "progress.indicator", selection: $preferences.loadingIndicatorPosition) {
-                    ForEach(_Preferences.LoadingIndicatorPosition.allCases, id: \.self) { position in
+                    ForEach(AppPreferences.LoadingIndicatorPosition.allCases, id: \.self) { position in
                         Label(position.localizedStringKey, systemImage: position.systemImage).tag(position)
                     }
                 }

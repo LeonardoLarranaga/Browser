@@ -37,7 +37,7 @@ extension MyWKWebView {
         let translationMenu = translationMenuItem()
         menu.insertItem(translationMenu, at: 6)
         
-        let findItem = NSMenuItem(title: "Find...", action: #selector(_toggleFindUI), keyEquivalent: "")
+        let findItem = NSMenuItem(title: "Find...", action: #selector(triggerFindUI), keyEquivalent: "")
         menu.insertItem(findItem, at: 7)
     }
     
@@ -268,7 +268,7 @@ extension MyWKWebView {
         }
     }
     
-    @objc private func _toggleFindUI() {
+    @objc private func triggerFindUI() {
         toggleFindUI?()
     }
 }

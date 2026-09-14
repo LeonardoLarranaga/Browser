@@ -17,29 +17,29 @@ final class BrowserFolder: Identifiable, Comparable {
     var order: Int
     private(set) var isExpanded: Bool
 
-    @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
-    @Relationship(deleteRule: .cascade) private var _subfolders: [BrowserFolder]
+    @Relationship(deleteRule: .cascade) private var storedTabs: [BrowserTab]
+    @Relationship(deleteRule: .cascade) private var storedSubfolders: [BrowserFolder]
 
     @Relationship var parentFolder: BrowserFolder?
     @Relationship var space: BrowserSpace?
 
     var tabs: [BrowserTab] {
-        get { _tabs.sorted() }
+        get { storedTabs.sorted() }
         set {
             newValue.enumerated().forEach { index, tab in
                 tab.order = index
             }
-            _tabs = newValue
+            storedTabs = newValue
         }
     }
 
     var subfolders: [BrowserFolder] {
-        get { _subfolders.sorted() }
+        get { storedSubfolders.sorted() }
         set {
             newValue.enumerated().forEach { index, folder in
                 folder.order = index
             }
-            _subfolders = newValue
+            storedSubfolders = newValue
         }
     }
     init(
@@ -54,8 +54,8 @@ final class BrowserFolder: Identifiable, Comparable {
         self.space = space
         self.isExpanded = true
         self.parentFolder = parentFolder
-        self._tabs = []
-        self._subfolders = []
+        self.storedTabs = []
+        self.storedSubfolders = []
     }
 
     var isEmpty: Bool {

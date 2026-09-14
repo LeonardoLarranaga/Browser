@@ -9,14 +9,14 @@ import ObservableDefaults
 import SwiftUI
 
 /// Singleton instance of user preferences
-let Preferences = _Preferences.shared
+let Preferences = AppPreferences.shared
 
-typealias TranslatedLanguage = _Preferences.TranslatedLanguage
+typealias TranslatedLanguage = AppPreferences.TranslatedLanguage
 
 /// User preferences consistent throughout app sessions
 @ObservableDefaults
-class _Preferences {
-    fileprivate static let shared = _Preferences()
+class AppPreferences {
+    fileprivate static let shared = AppPreferences()
 
     enum SidebarPosition: String {
         case leading, trailing

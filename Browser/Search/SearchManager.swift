@@ -35,12 +35,12 @@ class SearchManager {
         return searchSuggestions.first(where: { $0.isHistoryItem && $0.title.lowercased().hasPrefix(searchText.lowercased()) })
     }
     
-    private var _accentColor: Color?
+    private var accentColorOverride: Color?
     var accentColor: Color {
         if isUsingWebsiteSearcher {
             return activeWebsiteSearcher.color
         } else {
-            return _accentColor ?? Preferences.defaultWebsiteSearcher.color
+            return accentColorOverride ?? Preferences.defaultWebsiteSearcher.color
         }
     }
     
@@ -49,10 +49,10 @@ class SearchManager {
         return SearchEngine.allSearchers.first(where: { $0.title.lowercased().hasPrefix(searchText.lowercased()) }) ?? Preferences.defaultWebsiteSearcher
     }
     var isUsingWebsiteSearcher: Bool = false
-    private var _activeWebsiteSearcher: (any WebsiteSearcher)?
+    private var activeWebsiteSearcherOverride: (any WebsiteSearcher)?
     var activeWebsiteSearcher: any WebsiteSearcher {
-        get { _activeWebsiteSearcher ?? Preferences.defaultWebsiteSearcher }
-        set { _activeWebsiteSearcher = newValue }
+        get { activeWebsiteSearcherOverride ?? Preferences.defaultWebsiteSearcher }
+        set { activeWebsiteSearcherOverride = newValue }
     }
     
     var searchTask: URLSessionDataTask?
@@ -61,7 +61,7 @@ class SearchManager {
     /// - Parameter browserWindow: The `BrowserWindow` to get the initial values from
     func setInitialValuesFromWindowState(_ browserWindow: BrowserWindow) {
         if let accentColor = Color(hex: browserWindow.currentSpace?.colors.first ?? "") {
-            self._accentColor = accentColor
+            self.accentColorOverride = accentColor
         }
         
         if browserWindow.searchOpenLocation == .fromURLBar {
@@ -161,7 +161,7 @@ class SearchManager {
     
     func resetWebsiteSearcher() {
         isUsingWebsiteSearcher = false
-        _activeWebsiteSearcher = nil
+        activeWebsiteSearcherOverride = nil
     }
     
     /// Adds history entries that match the search query to the search suggestions

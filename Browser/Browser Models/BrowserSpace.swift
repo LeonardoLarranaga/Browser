@@ -21,18 +21,18 @@ final class BrowserSpace: Identifiable {
     var colorOpacity: Double
     var colorScheme: String
     
-    @Relationship(deleteRule: .cascade) private var _tabs: [BrowserTab]
+    @Relationship(deleteRule: .cascade) private var storedTabs: [BrowserTab]
     @Relationship var profile: BrowserProfile?
-    @Relationship(deleteRule: .cascade) private var _folders: [BrowserFolder]
+    @Relationship(deleteRule: .cascade) private var storedFolders: [BrowserFolder]
 
     var tabs: [BrowserTab] {
         get {
-            _tabs.sorted()
+            storedTabs.sorted()
         } set {
             newValue.enumerated().forEach { index, tab in
                 tab.order = index
             }
-            _tabs = newValue
+            storedTabs = newValue
         }
     }
     
@@ -57,12 +57,12 @@ final class BrowserSpace: Identifiable {
     }
 
     var folders: [BrowserFolder] {
-        get { _folders.sorted() }
+        get { storedFolders.sorted() }
         set {
             newValue.enumerated().forEach { index, folder in
                 folder.order = index
             }
-            _folders = newValue
+            storedFolders = newValue
         }
     }
 
@@ -102,8 +102,8 @@ final class BrowserSpace: Identifiable {
         self.order = order
         self.colorScheme = colorScheme
         self.currentTab = nil
-        self._tabs = []
-        self._folders = []
+        self.storedTabs = []
+        self.storedFolders = []
     }
     
     /// Returns the text color of the space based on the colors of the space and the color scheme
