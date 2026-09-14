@@ -12,7 +12,7 @@ struct SearchSuggestionResultsView: View {
     
     @Environment(BrowserWindow.self) private var browserWindow
     
-    var searchManager: SearchManager
+    let searchManager: SearchManager
     
     var body: some View {
         ScrollViewReader { proxy in

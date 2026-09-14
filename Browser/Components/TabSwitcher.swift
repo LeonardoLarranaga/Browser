@@ -13,7 +13,7 @@ struct TabSwitcher: View {
     
     @Environment(BrowserWindow.self) private var browserWindow
     
-    var browserSpaces: [BrowserSpace]
+    let browserSpaces: [BrowserSpace]
     private var allLoadedTabs: [BrowserTab] {
         browserSpaces.flatMap { $0.loadedTabs }
     }

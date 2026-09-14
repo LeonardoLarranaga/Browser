@@ -58,9 +58,9 @@ enum FeatureFlags {
         }
     }
     
-    static var browserDefaultFeatureFlags: [String: Bool] {
-        ["PreferPageRenderingUpdatesNear60FPSEnabled": false]
-    }
+    static let browserDefaultFeatureFlags: [String: Bool] = [
+        "PreferPageRenderingUpdatesNear60FPSEnabled": false
+    ]
     
     static func isFeatureFlagUserConfigured(_ feature: WKFeature) -> Bool {
         Preferences.configuredFeatureFlags[feature.key] != nil

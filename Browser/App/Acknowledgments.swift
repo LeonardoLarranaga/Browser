@@ -14,13 +14,11 @@ fileprivate struct Acknowledgment: Identifiable {
     let description: String
     let url: String
 
-    static var acknowledgments: [Acknowledgment] {
-        [
-            Acknowledgment(title: "SymbolPicker", author: "Yubo Qin (xnth97)", description: "A simple and cross-platform SFSymbol picker for SwiftUI.", url: "https://github.com/xnth97/SymbolPicker"),
-            Acknowledgment(title: "KeyboardShortcuts", author: "Sindre Sorhus", description: "⌨️ Add user-customizable global keyboard shortcuts (hotkeys) to your macOS app in minutes", url: "https://github.com/sindresorhus/KeyboardShortcuts"),
-            Acknowledgment(title: "Make a floating panel in SwiftUI for macOS", author: "João Gabriel", description: "Learn how to make a versatile floating panel component for Mac using SwiftUI and AppKit.", url: "https://cindori.com/developer/floating-panel")
-        ]
-    }
+    static let acknowledgments: [Acknowledgment] = [
+        Acknowledgment(title: "SymbolPicker", author: "Yubo Qin (xnth97)", description: "A simple and cross-platform SFSymbol picker for SwiftUI.", url: "https://github.com/xnth97/SymbolPicker"),
+        Acknowledgment(title: "KeyboardShortcuts", author: "Sindre Sorhus", description: "⌨️ Add user-customizable global keyboard shortcuts (hotkeys) to your macOS app in minutes", url: "https://github.com/sindresorhus/KeyboardShortcuts"),
+        Acknowledgment(title: "Make a floating panel in SwiftUI for macOS", author: "João Gabriel", description: "Learn how to make a versatile floating panel component for Mac using SwiftUI and AppKit.", url: "https://cindori.com/developer/floating-panel")
+    ]
 }
 
 struct Acknowledgments: View {

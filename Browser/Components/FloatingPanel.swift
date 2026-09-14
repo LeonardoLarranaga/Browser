@@ -132,15 +132,15 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @Binding var isPresented: Bool
 
     /// Determines the size and origin of the panel
-    var origin: CGPoint
-    var size: CGSize
+    let origin: CGPoint
+    let size: CGSize
 
     /// Determines if the panel should be centered in the key window
-    var shouldCenter: Bool
+    let shouldCenter: Bool
 
     /// The liquid glass style of the panel's background
-    var glassStyle: NSGlassEffectView.Style
-    var glassTintColor: Color?
+    let glassStyle: NSGlassEffectView.Style
+    let glassTintColor: Color?
 
     /// Holds the panel content's view closure
     @ViewBuilder let view: () -> PanelContent

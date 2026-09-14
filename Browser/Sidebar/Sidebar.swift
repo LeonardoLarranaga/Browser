@@ -66,7 +66,7 @@ struct Sidebar: View {
         do {
             let nextIndex = browserSpaces.firstIndex(where: { $0.id == browserWindow.currentSpace?.id }) ?? -1 + 1
 
-            var newSpace: BrowserSpace
+            let newSpace: BrowserSpace
 
             if browserWindow.isMainBrowserWindow {
                 newSpace = BrowserSpace(name: "", systemImage: "circle.fill", order: nextIndex, colors: [], colorScheme: "system")

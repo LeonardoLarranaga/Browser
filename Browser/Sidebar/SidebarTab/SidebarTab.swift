@@ -16,7 +16,7 @@ struct SidebarTab: View {
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
 
-    var pinState: TabPinState
+    let pinState: TabPinState
 
     @State private var isEditingTitle = false
     @State private var isHovering = false

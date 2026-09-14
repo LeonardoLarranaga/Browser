@@ -13,8 +13,8 @@ struct SidebarTabList: View {
     @Environment(SidebarModel.self) private var sidebarModel
     @Environment(TabDragManager.self) private var dragManager
 
-    var tabs: [BrowserTab]
-    var pinState: TabPinState
+    let tabs: [BrowserTab]
+    let pinState: TabPinState
     var folderID: UUID? = nil
     var usesSidebarPadding = true
 

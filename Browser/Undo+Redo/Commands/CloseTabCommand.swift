@@ -10,7 +10,7 @@ import SwiftUI
 struct CloseTabCommand: UndoableCommand {
     private let snapshot: ClosedTabSnapshot
     private weak var space: BrowserSpace?
-    private var wasCurrentTab: Bool
+    private let wasCurrentTab: Bool
     
     var description: String {
         "Close Tab \"\(snapshot.title)\""

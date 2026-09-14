@@ -13,7 +13,7 @@ import WebKit
 extension WKWebViewControllerRepresentable {
     /// Coordinator class to handle view controller events between SwiftUI and WebKit
     class Coordinator: NSObject {
-        var parent: WKWebViewControllerRepresentable
+        let parent: WKWebViewControllerRepresentable
         
         private var cancellables = Set<AnyCancellable>()
         

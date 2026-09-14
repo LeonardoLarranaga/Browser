@@ -11,7 +11,7 @@ struct SidebarEssentialsGrid: View {
     @Environment(SidebarModel.self) private var sidebarModel
     @Environment(TabDragManager.self) private var dragManager
 
-    var tabs: [BrowserTab]
+    let tabs: [BrowserTab]
 
     private let maxPerRow = 4
 

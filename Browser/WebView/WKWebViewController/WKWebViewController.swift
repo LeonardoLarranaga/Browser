@@ -14,7 +14,7 @@ class WKWebViewController: NSViewController {
     @Bindable var tab: BrowserTab
     @Bindable var browserSpace: BrowserSpace
     
-    var webView: MyWKWebView
+    let webView: MyWKWebView
     let configuration: WKWebViewConfiguration
     
     weak var coordinator: WKWebViewControllerRepresentable.Coordinator!
