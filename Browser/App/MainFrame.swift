@@ -89,6 +89,12 @@ struct MainFrame: View {
             TabSwitcher(browserSpaces: browserSpaces)
                 .environment(browserWindow)
         }
+        // Show the current page's QR code
+        .sheet(isPresented: $browserWindow.showURLQRCode) {
+            if let currentTab = browserWindow.currentSpace?.currentTab {
+                URLQRCodeView(browserTab: currentTab)
+            }
+        }
         // Show the sidebar by hovering the mouse on the edge of the screen
         .overlay(alignment: Preferences.sidebarPosition == .leading ? .topLeading : .topTrailing) {
             if sidebarModel.sidebarCollapsed && sidebarModel.currentSidebarWidth > 0 {
