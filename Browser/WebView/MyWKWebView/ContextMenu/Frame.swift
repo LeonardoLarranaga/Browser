@@ -110,7 +110,7 @@ extension MyWKWebView {
     
     /// Gets the html content with JavaScript and saves it to a file
     /// - Parameter url: The URL to save the HTML content
-    func savePageAsHTML(_ url: URL) {
+    private func savePageAsHTML(_ url: URL) {
         self.evaluateJavaScript("document.documentElement.outerHTML.toString()") { result, error in
             if let html = result as? String {
                 do {
@@ -126,7 +126,7 @@ extension MyWKWebView {
     
     /// Saves the page as a web archive
     /// - Parameter url: The URL to save the web archive
-    func savePageAsWebArchive(_ url: URL) {
+    private func savePageAsWebArchive(_ url: URL) {
         self.createWebArchiveData { result in
             do {
                 let data = try result.get()
@@ -186,7 +186,7 @@ extension MyWKWebView {
     /// Saves the page as a single-page PDF
     /// - Parameter url: The URL to save the PDF
     /// - Parameter paginated: If the PDF should be paginated
-    func savePageAsPDF(_ url: URL, paginated: Bool = false) {
+    private func savePageAsPDF(_ url: URL, paginated: Bool = false) {
         Task {
             do {
                 var data = try await self.pdf()
@@ -244,7 +244,7 @@ extension MyWKWebView {
         }
     }
     
-    @objc func changeFileFormat(_ sender: Any?) {
+    @objc private func changeFileFormat(_ sender: Any?) {
         guard let formatMenu = sender as? NSPopUpButton else { return }
         guard let savePanel = self.currentNSSavePanel else { return }
         

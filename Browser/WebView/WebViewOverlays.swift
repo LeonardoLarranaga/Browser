@@ -9,7 +9,7 @@ import SwiftUI
 
 struct WebViewOverlays: ViewModifier {
     
-    @Environment(BrowserTab.self) var tab
+    @Environment(BrowserTab.self) private var tab
     
     @Bindable var hover: HoverState
     

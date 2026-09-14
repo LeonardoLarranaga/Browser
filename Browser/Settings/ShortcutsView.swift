@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SettingsShortcutsView: View {
     
-    let allCommands: [(title: LocalizedStringKey, shortcuts: [KeyboardShortcuts.Name])] = [
+    private let allCommands: [(title: LocalizedStringKey, shortcuts: [KeyboardShortcuts.Name])] = [
         ("File", .allFileCommands),
         ("Edit", .allEditCommands),
         ("View", .allViewCommands),
@@ -31,7 +31,7 @@ struct SettingsShortcutsView: View {
     }
     
     @ViewBuilder
-    func ShorcutSection(_ title: LocalizedStringKey, shortcuts: [KeyboardShortcuts.Name]) -> some View {
+    private func ShorcutSection(_ title: LocalizedStringKey, shortcuts: [KeyboardShortcuts.Name]) -> some View {
         Section(title) {
             ForEach(shortcuts, id: \.rawValue) { shortcut in
                 HStack {

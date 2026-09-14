@@ -10,7 +10,7 @@ import SwiftUI
 /// View that displays the search suggestions
 struct SearchSuggestionResultsView: View {
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     var searchManager: SearchManager
     

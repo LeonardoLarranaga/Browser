@@ -10,8 +10,8 @@ import SwiftUI
 
 struct ViewCommands: Commands {
 
-    @FocusedValue(\.browserActiveWindowState) var browserWindow
-    @FocusedValue(\.sidebarModel) var sidebarModel
+    @FocusedValue(\.browserActiveWindowState) private var browserWindow
+    @FocusedValue(\.sidebarModel) private var sidebarModel
 
     private var currentTab: BrowserTab? {
         browserWindow?.currentSpace?.currentTab

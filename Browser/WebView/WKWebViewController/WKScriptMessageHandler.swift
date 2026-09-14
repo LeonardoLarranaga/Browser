@@ -42,7 +42,7 @@ extension WKWebViewController: WKScriptMessageHandler {
     ///   - scriptName: The name of the JavaScript file (without .js extension)
     ///   - handlerName: The name of the message handler
     ///   - injectionTime: When to inject the script (default: .atDocumentEnd)
-    func addUserScript(_ scriptName: String, handlerName: String, injectionTime: WKUserScriptInjectionTime = .atDocumentEnd) {
+    private func addUserScript(_ scriptName: String, handlerName: String, injectionTime: WKUserScriptInjectionTime = .atDocumentEnd) {
         guard let scriptSource = JavaScript.getBundled(scriptName) else { return }
         
         let controller = configuration.userContentController
@@ -60,7 +60,7 @@ extension WKWebViewController: WKScriptMessageHandler {
     
     /// Removes a user script and its message handler
     /// - Parameter handlerName: The name of the message handler to remove
-    func removeUserScript(handlerName: String) {
+    private func removeUserScript(handlerName: String) {
         let controller = configuration.userContentController
         controller.removeScriptMessageHandler(forName: handlerName)
     }
@@ -77,12 +77,12 @@ extension WKWebViewController: WKScriptMessageHandler {
     
     // MARK: - Message Handlers
     
-    func handleHoverURL(_ body: Any) {
+    private func handleHoverURL(_ body: Any) {
         guard let url = body as? String, !url.isEmpty else { return }
         self.coordinator.setHoverURL(to: url)
     }
     
-    func handlePasswordTextFieldShortcut(_ body: Any) {
+    private func handlePasswordTextFieldShortcut(_ body: Any) {
         guard let appURL = Preferences.selectedPasswordApp else { return }
         NSWorkspace.shared.open(appURL)
     }

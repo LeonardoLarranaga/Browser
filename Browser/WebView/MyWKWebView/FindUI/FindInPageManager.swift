@@ -145,7 +145,7 @@ final class FindInPageManager {
     }
     
     /// Gets the current state from JavaScript
-    func refreshState() async {
+    private func refreshState() async {
         guard let webView = webView else { return }
         
         do {

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DownloadsList: View {
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     @State private var downloads: [Download] = []
     

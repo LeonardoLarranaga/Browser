@@ -13,7 +13,7 @@ final class HoverState {
     var url = "" {
         didSet { handleChange() }
     }
-    var timer: Timer?
+    private var timer: Timer?
     
     func handleChange() {
         guard !url.isEmpty else { return }

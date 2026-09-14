@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SidebarURL: View {
 
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(BrowserWindow.self) private var browserWindow
 
-    @State var hover = false
+    @State private var hover = false
     @State private var showSiteSettings = false
 
     private var currentTab: BrowserTab? {

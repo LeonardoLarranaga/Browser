@@ -10,12 +10,12 @@ import SwiftUI
 /// Section to manage the custom website searchers
 struct CustomWebsiteSearchersSection: View {
     
-    @State var showWebsiteSearcherEditor = false
-    @State var selectedWebsiteSearcher: BrowserCustomSearcher?
-    
-    @State var website = ""
-    @State var queryURL = ""
-    @State var hex = Color.blue.hexString()
+    @State private var showWebsiteSearcherEditor = false
+    @State private var selectedWebsiteSearcher: BrowserCustomSearcher?
+
+    @State private var website = ""
+    @State private var queryURL = ""
+    @State private var hex = Color.blue.hexString()
     
     var body: some View {
         Section {
@@ -109,7 +109,7 @@ struct CustomWebsiteSearchersSection: View {
     }
     
     @ViewBuilder
-    func ButtonMakeDefault(_ searcher: any WebsiteSearcher) -> some View {
+    private func ButtonMakeDefault(_ searcher: any WebsiteSearcher) -> some View {
         var isDefault: Bool { searcher.equals(Preferences.defaultWebsiteSearcher) }
         Button(isDefault ? "Default" : "Make Default", systemImage: isDefault ? "checkmark" : "star") {
             Preferences.defaultWebsiteSearcher = searcher

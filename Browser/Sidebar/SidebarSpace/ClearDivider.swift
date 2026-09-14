@@ -10,13 +10,13 @@ import SwiftUI
 /// Divider with a clear button to remove all tabs from a space
 struct SidebarSpaceClearDivider: View {
     
-    @Environment(BrowserSpace.self) var browserSpace
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserSpace.self) private var browserSpace
+    @Environment(BrowserWindow.self) private var browserWindow
     
     let isHovering: Bool
     
-    @State var isHoveringClearButton = false
-    @State var lastTapTime: Date?
+    @State private var isHoveringClearButton = false
+    @State private var lastTapTime: Date?
     
     var body: some View {
         HStack {

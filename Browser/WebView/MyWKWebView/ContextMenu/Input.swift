@@ -19,7 +19,7 @@ extension MyWKWebView {
         }
     }
     
-    @objc func openPasswordsApp() {
+    @objc private func openPasswordsApp() {
         if let passwordAppURL = Preferences.selectedPasswordApp {
             NSWorkspace.shared.open(passwordAppURL)
         }

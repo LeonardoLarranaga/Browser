@@ -31,7 +31,7 @@ extension MyWKWebView {
     }
     
     /// Opens an NSSavePanel and saves the clicked image to disk.
-    @objc func saveImageAs() {
+    @objc private func saveImageAs() {
         getImageURL { imageURL in
             let savePanel = NSSavePanel()
             savePanel.title = "Save Image As..."

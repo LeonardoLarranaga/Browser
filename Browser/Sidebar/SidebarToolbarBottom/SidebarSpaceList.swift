@@ -10,7 +10,7 @@ import SwiftUI
 /// List of spaces in the sidebar
 struct SidebarSpaceList: View {
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     let browserSpaces: [BrowserSpace]
     

@@ -122,7 +122,7 @@ class WKWebViewController: NSViewController {
         cleanup()
     }
     
-    func startSuspendTimer() {
+    private func startSuspendTimer() {
         guard Preferences.automaticPageSuspension else { return }
         suspendTimer?.cancel()
         
@@ -151,7 +151,7 @@ class WKWebViewController: NSViewController {
         startSuspendTimer()
     }
     
-    func cancelSuspendTimer() {
+    private func cancelSuspendTimer() {
         suspendTimer?.cancel()
         suspendTimer = nil
     }

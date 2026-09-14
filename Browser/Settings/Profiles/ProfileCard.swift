@@ -12,18 +12,18 @@ struct ProfileCard: View {
     let profile: BrowserProfile?
     @Binding var selectedProfile: BrowserProfile?
     
-    @State var isHovering = false
+    @State private var isHovering = false
     
     init(_ profile: BrowserProfile?, selectedProfile: Binding<BrowserProfile?>) {
         self.profile = profile
         self._selectedProfile = selectedProfile
     }
     
-    var isSelected: Bool {
+    private var isSelected: Bool {
         selectedProfile?.id == profile?.id
     }
     
-    var color: Color {
+    private var color: Color {
         profile?.color ?? .accentColor
     }
     

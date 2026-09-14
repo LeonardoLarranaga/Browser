@@ -10,15 +10,15 @@ import SwiftUI
 /// Bottom toolbar for the sidebar
 struct SidebarBottomToolbar: View {
     
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(SidebarModel.self) var sidebarModel
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(SidebarModel.self) private var sidebarModel
+    @Environment(BrowserWindow.self) private var browserWindow
     
     let browserSpaces: [BrowserSpace]
     let createSpace: () -> Void
     
-    var foregroundColor: Color {
+    private var foregroundColor: Color {
         browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary
     }
     

@@ -11,17 +11,17 @@ import SwiftUI
 /// A floating panel tht shows a tab switcher with the current loaded tabs
 struct TabSwitcher: View {
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     var browserSpaces: [BrowserSpace]
-    var allLoadedTabs: [BrowserTab] {
+    private var allLoadedTabs: [BrowserTab] {
         browserSpaces.flatMap { $0.loadedTabs }
     }
     
-    @State var selectedTabIndex = 0
-    @State var downEvent: Any?
-    @State var upEvent: Any?
-    @State var closeEvent: Any?
+    @State private var selectedTabIndex = 0
+    @State private var downEvent: Any?
+    @State private var upEvent: Any?
+    @State private var closeEvent: Any?
     
     var body: some View {
         ScrollView(.horizontal) {
@@ -88,13 +88,13 @@ struct TabSwitcher: View {
         }, set: { _ in } ))
     }
     
-    func selectNextTab() {
+    private func selectNextTab() {
         guard !allLoadedTabs.isEmpty else { return }
         selectedTabIndex = (selectedTabIndex + 1) % allLoadedTabs.count
     }
     
     @ViewBuilder
-    func TabView(_ index: Int, _ tab: BrowserTab) -> some View {
+    private func TabView(_ index: Int, _ tab: BrowserTab) -> some View {
         VStack {
             Group {
                 switch tab.contentType {
@@ -159,7 +159,7 @@ struct TabSnapshotView: View {
         }
     }
     
-    func loadSnapshot() {
+    private func loadSnapshot() {
         Task {
             if let image = try await tab.webview?.takeSnapshot(configuration: nil) {
                 DispatchQueue.main.async {

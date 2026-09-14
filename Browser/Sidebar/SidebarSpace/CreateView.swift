@@ -11,20 +11,20 @@ import SymbolPicker
 /// A view to create a new space in the sidebar
 struct SidebarSpaceCreateView: View {
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     let browserSpaces: [BrowserSpace]
     @Bindable var browserSpace: BrowserSpace
-    @State var name = ""
+    @State private var name = ""
     
-    @State var hoverCreateButton = false
+    @State private var hoverCreateButton = false
     
-    @State var showIconPicker = false
-    @State var colorPopoverIndex: Int? = nil
+    @State private var showIconPicker = false
+    @State private var colorPopoverIndex: Int? = nil
     
-    @State var browserSpaceCopy: (name: String, systemImage: String, colors: [String], grainOpacity: Double, colorOpacity: Double, colorScheme: String)!
+    @State private var browserSpaceCopy: (name: String, systemImage: String, colors: [String], grainOpacity: Double, colorOpacity: Double, colorScheme: String)!
     
     var body: some View {
         VStack {

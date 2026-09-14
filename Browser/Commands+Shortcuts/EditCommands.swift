@@ -10,9 +10,9 @@ import SwiftUI
 
 struct EditCommands: Commands {
     
-    @FocusedValue(\.browserActiveWindowState) var browserWindow
-    
-    @State var isEditable = false
+    @FocusedValue(\.browserActiveWindowState) private var browserWindow
+
+    @State private var isEditable = false
     
     var body: some Commands {
         let webView = browserWindow?.currentSpace?.currentTab?.webview
@@ -63,23 +63,23 @@ struct EditCommands: Commands {
         }
     }
     
-    var currentTab: BrowserTab? {
+    private var currentTab: BrowserTab? {
         browserWindow?.currentSpace?.currentTab
     }
     
-    func findNext() {
+    private func findNext() {
         Task {
             await currentTab?.findInPageManager?.goToNextMatch()
         }
     }
     
-    func findPrevious() {
+    private func findPrevious() {
         Task {
             await currentTab?.findInPageManager?.goToPreviousMatch()
         }
     }
     
-    func useSelectionForFind() {
+    private func useSelectionForFind() {
         guard let tab = currentTab, let webView = tab.webview else { return }
         
         Task {

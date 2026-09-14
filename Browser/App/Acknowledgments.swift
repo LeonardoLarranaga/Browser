@@ -25,7 +25,7 @@ fileprivate struct Acknowledgment: Identifiable {
 
 struct Acknowledgments: View {
 
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
 
     var body: some View {
         VStack {
@@ -43,7 +43,7 @@ struct Acknowledgments: View {
     }
 
     @ViewBuilder
-    fileprivate func AcknowledgmentRow(_ acknowledgment: Acknowledgment) -> some View {
+    private func AcknowledgmentRow(_ acknowledgment: Acknowledgment) -> some View {
         HStack {
             VStack(alignment: .leading) {
                 Text(acknowledgment.title)
@@ -71,7 +71,7 @@ struct Acknowledgments: View {
         .padding(5)
     }
 
-    fileprivate func visit(_ a: Acknowledgment) {
+    private func visit(_ a: Acknowledgment) {
         guard let currentSpace = browserWindow.currentSpace else { return }
         let newTab = BrowserTab(title: a.title, url: URL(string: a.url)!, browserSpace: currentSpace)
         browserWindow.currentSpace?.openNewTab(newTab)

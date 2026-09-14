@@ -13,17 +13,17 @@ struct SettingsProfilesView: View {
 
     @Environment(\.modelContext) private var modelContext
 
-    @Query var profiles: [BrowserProfile]
-    @Query(sort: \BrowserSpace.order) var spaces: [BrowserSpace]
+    @Query private var profiles: [BrowserProfile]
+    @Query(sort: \BrowserSpace.order) private var spaces: [BrowserSpace]
 
-    @State var showAddProfile = false
-    @State var showEditProfile = false
-    @State var selectedProfile: BrowserProfile? = nil
+    @State private var showAddProfile = false
+    @State private var showEditProfile = false
+    @State private var selectedProfile: BrowserProfile? = nil
 
-    @State var showDeleteProfileAlert = false
-    @State var showManageWebsiteData = false
+    @State private var showDeleteProfileAlert = false
+    @State private var showManageWebsiteData = false
 
-    var selectedProfileSpaces: [BrowserSpace] {
+    private var selectedProfileSpaces: [BrowserSpace] {
         if let selectedProfile { selectedProfile.browserSpaces }
         else { spaces.filter { $0.profile == nil } }
     }
@@ -91,7 +91,7 @@ struct SettingsProfilesView: View {
         }
     }
 
-    func deleteSelectedProfile() {
+    private func deleteSelectedProfile() {
         guard let selectedProfile else { return }
 
         // 1. Wipe the isolated WKWebsiteDataStore (cookies, cache, IndexedDB, etc.)

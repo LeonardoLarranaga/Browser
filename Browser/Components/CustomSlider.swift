@@ -91,7 +91,7 @@ struct CustomSlider<V: BinaryFloatingPoint>: View where V.Stride: BinaryFloating
 
 #Preview {
     struct CustomSlider_Preview: View {
-        @State var number = 0.0
+        @State private var number = 0.0
         var body: some View {
             CustomSlider(value: $number, in: 0...1, backgroundColor: .secondary.opacity(0.2), valueColor: .primary.opacity(0.6))
                 .padding(.horizontal)

@@ -9,10 +9,10 @@ import SwiftUI
 
 struct SettingsFeatureFlagsView: View {
     
-    let groupedFeatureFlags = Array(FeatureFlags.getAllGrouped())
-    
-    @State var showGrouped = true
-    @State var searchText = ""
+    private let groupedFeatureFlags = Array(FeatureFlags.getAllGrouped())
+
+    @State private var showGrouped = true
+    @State private var searchText = ""
     
     var body: some View {
         VStack {
@@ -36,7 +36,7 @@ struct SettingsFeatureFlagsView: View {
         }
     }
     
-    func filteredFeatureFlags(for featureFlags: [WKFeature]) -> [WKFeature] {
+    private func filteredFeatureFlags(for featureFlags: [WKFeature]) -> [WKFeature] {
         featureFlags.filter { featureFlag in
             searchText.isReallyEmpty || featureFlag.name.localizedCaseInsensitiveContains(searchText) ||
             "\(featureFlag.status.localizedStringKey)".localizedCaseInsensitiveContains(searchText)

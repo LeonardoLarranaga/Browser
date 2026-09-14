@@ -10,8 +10,8 @@ import SwiftUI
 /// Icon for a browser space in the sidebar space list
 struct SidebarSpaceIcon: View {
 
-    @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(\.modelContext) private var modelContext
+    @Environment(BrowserWindow.self) private var browserWindow
 
     let browserSpaces: [BrowserSpace]
     @Bindable var browserSpace: BrowserSpace

@@ -10,13 +10,13 @@ import SwiftUI
 /// A collapsible folder row in the sidebar that contains tabs and sub-folders.
 struct SidebarFolder: View {
 
-    @Environment(BrowserSpace.self) var space
-    @Environment(TabDragManager.self) var dragManager
+    @Environment(BrowserSpace.self) private var space
+    @Environment(TabDragManager.self) private var dragManager
 
     @Bindable var folder: BrowserFolder
 
-    @State var isEditingTitle = false
-    @State var isHovering = false
+    @State private var isEditingTitle = false
+    @State private var isHovering = false
 
     private var isDropTarget: Bool {
         dragManager.dropFolderID == folder.id && !dragManager.isDragging(folder)

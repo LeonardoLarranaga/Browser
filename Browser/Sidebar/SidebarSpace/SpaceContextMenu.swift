@@ -10,13 +10,13 @@ import SwiftUI
 /// Context menu for the sidebar space and space icon
 struct SidebarSpaceContextMenu: ViewModifier {
     
-    @Environment(BrowserWindow.self) var browserWindow
-    @Environment(\.modelContext) var modelContext
+    @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(\.modelContext) private var modelContext
     
     let browserSpaces: [BrowserSpace]
     @Bindable var browserSpace: BrowserSpace
     
-    @State var showDeleteAlert = false
+    @State private var showDeleteAlert = false
     
     func body(content: Content) -> some View {
         content
@@ -52,7 +52,7 @@ struct SidebarSpaceContextMenu: ViewModifier {
     }
     
     /// Deletes the current space, selects a new space and scrolls to it
-    func deleteSpace() {
+    private func deleteSpace() {
         if browserWindow.currentSpace == browserSpace {
             guard let index = browserSpaces.firstIndex(where: { $0.id == browserSpace.id }) else { return }
             let newSpace = browserSpaces[safe: index == 0 ? 1 : index - 1]

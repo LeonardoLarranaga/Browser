@@ -90,7 +90,7 @@ class AppPreferences {
         downloadLocationBookmark != nil
     }
 
-    func changeTrafficLightsTrailingAppearance() {
+    private func changeTrafficLightsTrailingAppearance() {
         if sidebarPosition == .trailing {
             NSApp.setBrowserWindowControls(hidden: !showWindowControlsOnTrailingSidebar)
         }
@@ -143,7 +143,7 @@ class AppPreferences {
     }
 
     /// Ensures the default website searcher identifier is valid after custom searchers are modified
-    func ensureValidDefaultWebsiteSearcherIdentifier() {
+    private func ensureValidDefaultWebsiteSearcherIdentifier() {
         if let customId = defaultCustomSearcherId,
            !customWebsiteSearchers.contains(where: { $0.id == customId }) {
             defaultCustomSearcherId = nil

@@ -65,7 +65,7 @@ class MyWKWebView: WKWebView {
     
     /// Sets the zoom factor
     /// - Parameter zoomFactor: The zoom factor to set
-    func setZoomFactor(_ zoomFactor: CGFloat) {
+    private func setZoomFactor(_ zoomFactor: CGFloat) {
         let clamped = max(zoomFactors.first!, min(zoomFactor, zoomFactors.last!))
         pageZoom = clamped
         onZoomChanged?(clamped)

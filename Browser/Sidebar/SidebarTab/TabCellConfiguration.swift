@@ -13,7 +13,7 @@ struct TabCellConfiguration<Background: ShapeStyle>: ViewModifier {
     let onDoubleTap: (() -> Void)
     let background: Background
 
-    @State var isPressed = false
+    @State private var isPressed = false
 
     func body(content: Content) -> some View {
         content

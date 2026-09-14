@@ -10,11 +10,11 @@ import SwiftUI
 /// The main sidebar view
 struct Sidebar: View {
 
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
 
-    @Environment(SidebarModel.self) var sidebarModel
+    @Environment(SidebarModel.self) private var sidebarModel
 
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
 
     let browserSpaces: [BrowserSpace]
 
@@ -62,7 +62,7 @@ struct Sidebar: View {
         }
     }
 
-    func createSpace() {
+    private func createSpace() {
         do {
             let nextIndex = browserSpaces.firstIndex(where: { $0.id == browserWindow.currentSpace?.id }) ?? -1 + 1
 

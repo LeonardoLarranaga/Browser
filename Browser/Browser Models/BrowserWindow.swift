@@ -72,7 +72,7 @@ import SwiftUI
     }
 
     /// Checks if the current space can open a new tab
-    func spaceCanOpenNewTab() -> Bool {
+    private func spaceCanOpenNewTab() -> Bool {
         !(currentSpace == nil || currentSpace?.name.isEmpty == true)
     }
 

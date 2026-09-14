@@ -10,7 +10,7 @@ import SwiftUI
 /// Search text field that shows the favicon of the search engine
 struct SearchTextField: View {
     
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserWindow.self) private var browserWindow
     
     /// Enum to focus the search text field when it appears
     enum FocusedField {
@@ -74,7 +74,7 @@ struct SearchTextField: View {
         }
     }
     
-    var searchIcon: some View {
+    private var searchIcon: some View {
         Group {
             if let favicon = searchManager.favicon, let nsImage = NSImage(data: favicon) {
                 Image(nsImage: nsImage)

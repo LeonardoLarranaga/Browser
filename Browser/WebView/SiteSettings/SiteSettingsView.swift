@@ -8,7 +8,7 @@ import WebKit
 
 struct SiteSettingsView: View {
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
 
     @Bindable var tab: BrowserTab
 

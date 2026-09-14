@@ -10,9 +10,9 @@ import SwiftUI
 
 struct FileCommands: Commands {
     
-    @Environment(\.openWindow) var openWindow
-    
-    @FocusedValue(\.browserActiveWindowState) var browserWindow
+    @Environment(\.openWindow) private var openWindow
+
+    @FocusedValue(\.browserActiveWindowState) private var browserWindow
     
     var body: some Commands {
         CommandGroup(replacing: .newItem) {

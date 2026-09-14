@@ -10,11 +10,11 @@ import SwiftUI
 
 struct URLQRCodeView: View {
     
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
     
     let browserTab: BrowserTab
     
-    @State var nsImage = NSImage()
+    @State private var nsImage = NSImage()
     
     var body: some View {
         NavigationStack {

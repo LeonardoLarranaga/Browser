@@ -10,13 +10,13 @@ import SwiftUI
 /// Context menu for a tab in the sidebar
 struct SidebarTabContextMenu: View {
     
-    @Environment(BrowserTab.self) var browserTab
-    @Environment(BrowserSpace.self) var browserSpace
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(BrowserTab.self) private var browserTab
+    @Environment(BrowserSpace.self) private var browserSpace
+    @Environment(BrowserWindow.self) private var browserWindow
     
     @Binding var isEditingTitle: Bool
     
-    var canCloseTabsAbove: Bool {
+    private var canCloseTabsAbove: Bool {
         guard browserTab.pinState == .normal else { return false }
         
         let normalTabs = browserSpace.normalTabs
@@ -27,7 +27,7 @@ struct SidebarTabContextMenu: View {
         return false
     }
     
-    var canCloseTabsBelow: Bool {
+    private var canCloseTabsBelow: Bool {
         guard browserTab.pinState == .normal else { return false }
         
         let normalTabs = browserSpace.normalTabs
@@ -91,36 +91,36 @@ struct SidebarTabContextMenu: View {
         }
     }
     
-    func startEditingTitle() {
+    private func startEditingTitle() {
         isEditingTitle = true
     }
     
-    func pinTab() {
+    private func pinTab() {
         withAnimation(.browserDefault) {
             browserSpace.pinTab(browserTab)
         }
     }
     
-    func unpinTab() {
+    private func unpinTab() {
         withAnimation(.browserDefault) {
             browserSpace.unpinTab(browserTab)
         }
     }
 
-    func favoriteTab() {
+    private func favoriteTab() {
         withAnimation(.browserDefault) {
             browserSpace.favoriteTab(browserTab)
         }
     }
 
-    func unfavoriteTab() {
+    private func unfavoriteTab() {
         withAnimation(.browserDefault) {
             browserSpace.unfavoriteTab(browserTab)
         }
     }
     
     /// Duplicate the tab and selects the new tab
-    func duplicateTab() {
+    private func duplicateTab() {
         let duplicateTab = BrowserTab(
             title: browserTab.title,
             favicon: browserTab.favicon,
@@ -134,12 +134,12 @@ struct SidebarTabContextMenu: View {
     }
     
     /// Close (delete) the tab and selects the next tab
-    func closeTab() {
+    private func closeTab() {
         browserSpace.closeTab(browserTab, tabUndoManager: browserWindow.tabUndoManager)
     }
     
     /// Close (delete) the tabs below the current tab
-    func closeTabsBelow() {
+    private func closeTabsBelow() {
         let normalTabs = browserSpace.normalTabs
         guard let index = normalTabs.firstIndex(where: { $0.id == browserTab.id })
         else { return }
@@ -156,7 +156,7 @@ struct SidebarTabContextMenu: View {
     }
     
     /// Close (delete) the tabs above the current tab
-    func closeTabsAbove() {
+    private func closeTabsAbove() {
         let normalTabs = browserSpace.normalTabs
         guard let index = normalTabs.firstIndex(where: { $0.id == browserTab.id })
         else { return }

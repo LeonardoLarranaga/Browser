@@ -37,15 +37,15 @@ struct ProfileSpacesView: View {
 
 private struct SpaceRow: View {
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     
     let space: BrowserSpace
     let profiles: [BrowserProfile]
     
-    @State var showMoveAlert = false
-    @State var profileToMoveTo: BrowserProfile?
-    
-    var spaceColor: Color {
+    @State private var showMoveAlert = false
+    @State private var profileToMoveTo: BrowserProfile?
+
+    private var spaceColor: Color {
         space.getColors.first ?? .primary
     }
     
@@ -91,12 +91,12 @@ private struct SpaceRow: View {
         }
     }
     
-    func startMovingSpace(to profile: BrowserProfile?) {
+    private func startMovingSpace(to profile: BrowserProfile?) {
         profileToMoveTo = profile
         showMoveAlert = true
     }
     
-    func moveSpace() {
+    private func moveSpace() {
         space.profile = profileToMoveTo
         try? modelContext.save()
     }

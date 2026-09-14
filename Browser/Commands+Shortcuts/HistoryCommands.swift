@@ -12,9 +12,9 @@ import SwiftUI
 /// Commands for the history menu
 struct HistoryCommands: Commands {
     
-    @Environment(\.modelContext) var modelContext
-    
-    @FocusedValue(\.browserActiveWindowState) var browserWindow: BrowserWindow?
+    @Environment(\.modelContext) private var modelContext
+
+    @FocusedValue(\.browserActiveWindowState) private var browserWindow: BrowserWindow?
     
     var body: some Commands {
         CommandMenu("History") {
@@ -36,7 +36,7 @@ struct HistoryCommands: Commands {
         }
     }
     
-    func showHistory() {
+    private func showHistory() {
         guard let currentSpace = browserWindow?.currentSpace else { return }
         
         let favicon = ImageRenderer(content: Image(systemName: "arrow.counterclockwise.square.fill").resizable().frame(width: 32, height: 32).scaledToFit().foregroundStyle(.gray)).nsImage?.pngData

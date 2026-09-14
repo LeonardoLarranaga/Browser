@@ -7,7 +7,7 @@ import SwiftUI
 
 struct SidebarDragPreview: View {
 
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
 
     let tab: BrowserTab
     let tier: TabPinState
@@ -67,7 +67,7 @@ struct SidebarDragPreview: View {
 
 struct SidebarFolderDragPreview: View {
 
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) private var colorScheme
 
     let folder: BrowserFolder
     let rowWidth: CGFloat
@@ -162,7 +162,7 @@ extension View {
     }
 }
 
-func applySidebarDragResult(_ result: SidebarDragResult, in browserSpace: BrowserSpace) {
+private func applySidebarDragResult(_ result: SidebarDragResult, in browserSpace: BrowserSpace) {
     switch result {
     case let .tab(tab, tier, beforeID, folderID):
         if let folderID,

@@ -10,7 +10,7 @@ import SymbolPicker
 
 struct NewProfileView: View {
     
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
     
     @Binding var selectedProfile: BrowserProfile?
     @Binding var isPresented: Bool
@@ -18,15 +18,15 @@ struct NewProfileView: View {
     /// When non-nil, we are editing an existing profile instead of creating one.
     var editingProfile: BrowserProfile? = nil
     
-    @State var name = ""
-    @State var systemImage = "person.crop.circle"
-    @State var color = Color.blue
-    
-    @FocusState var focusedField: Bool
-    @State var showSymbolPicker = false
-    @State var showColorPicker = false
-    
-    var isEditing: Bool { editingProfile != nil }
+    @State private var name = ""
+    @State private var systemImage = "person.crop.circle"
+    @State private var color = Color.blue
+
+    @FocusState private var focusedField: Bool
+    @State private var showSymbolPicker = false
+    @State private var showColorPicker = false
+
+    private var isEditing: Bool { editingProfile != nil }
     
     var body: some View {
         Section(isEditing ? "Edit Profile" : "New Profile") {
@@ -81,7 +81,7 @@ struct NewProfileView: View {
         }
     }
     
-    func saveProfile() {
+    private func saveProfile() {
         if let profile = editingProfile {
             // Edit existing profile
             profile.name = name

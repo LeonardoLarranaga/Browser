@@ -10,19 +10,19 @@ import SwiftUI
 // View that represents a space in the sidebar
 struct SidebarSpaceView: View {
 
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.modelContext) private var modelContext
 
     let browserSpaces: [BrowserSpace]
 
     @Bindable var browserSpace: BrowserSpace
 
-    @Environment(SidebarModel.self) var sidebarModel
+    @Environment(SidebarModel.self) private var sidebarModel
 
     @State private var dragManager = TabDragManager()
 
-    @State var isHovering = false
-    @State var isHoveringClearButton = false
+    @State private var isHovering = false
+    @State private var isHoveringClearButton = false
     @State private var headerHovering = false
 
     var body: some View {

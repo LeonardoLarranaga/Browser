@@ -11,7 +11,7 @@ import SwiftUI
 struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     
     @Environment(\.modelContext) var modelContext
-    
+
     @Environment(BrowserWindow.self) var browserWindow
     @Environment(BrowserSpace.self) var browserSpace
     @Environment(BrowserTab.self) var tab
@@ -19,7 +19,7 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     
     @Bindable var hover: HoverState
     
-    var noTrace: Bool { browserWindow.isNoTraceWindow }
+    private var noTrace: Bool { browserWindow.isNoTraceWindow }
     
     func makeNSViewController(context: Context) -> WKWebViewController {
         let wkWebViewController = WKWebViewController(

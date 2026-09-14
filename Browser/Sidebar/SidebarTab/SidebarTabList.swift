@@ -9,9 +9,9 @@ import SwiftUI
 
 struct SidebarTabList: View {
 
-    @Environment(BrowserSpace.self) var browserSpace
-    @Environment(SidebarModel.self) var sidebarModel
-    @Environment(TabDragManager.self) var dragManager
+    @Environment(BrowserSpace.self) private var browserSpace
+    @Environment(SidebarModel.self) private var sidebarModel
+    @Environment(TabDragManager.self) private var dragManager
 
     var tabs: [BrowserTab]
     var pinState: TabPinState

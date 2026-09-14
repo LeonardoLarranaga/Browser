@@ -53,7 +53,7 @@ struct DownloadFolderSection: View {
         }
     }
     
-    func chooseDownloadLocation() {
+    private func chooseDownloadLocation() {
         let panel = NSOpenPanel()
         panel.canChooseFiles = false
         panel.canChooseDirectories = true

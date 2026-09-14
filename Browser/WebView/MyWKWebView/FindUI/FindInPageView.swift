@@ -10,10 +10,10 @@ import SwiftUI
 /// A custom view to find text in a web page.
 struct FindInPageView: View {
     
-    @Environment(BrowserTab.self) var tab
-    
-    @State var searchText: String = ""
-    @FocusState var isFocused: Bool
+    @Environment(BrowserTab.self) private var tab
+
+    @State private var searchText: String = ""
+    @FocusState private var isFocused: Bool
     @State private var isSearching: Bool = false
     
     /// Debounce task for search

@@ -10,15 +10,15 @@ import SwiftUI
 /// A view that represents a search suggestion result item
 struct SearchSuggestionResultItem: View {
     
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(BrowserWindow.self) private var browserWindow
     
     @Bindable var searchManager: SearchManager
     let index: Int
     let searchSuggestion: SearchSuggestion
     let searchOpenLocation: SearchOpenLocation?
     
-    @State var isHovering = false
+    @State private var isHovering = false
     
     var body: some View {
         HStack {

@@ -10,15 +10,15 @@ import SwiftUI
 
 struct HistoryView: View {
 
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
 
-    @Environment(BrowserWindow.self) var browserWindow
-    @Environment(BrowserTab.self) var browserTab
+    @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(BrowserTab.self) private var browserTab
 
-    @Query(sort: \BrowserHistoryEntry.date, order: .reverse) var history: [BrowserHistoryEntry]
+    @Query(sort: \BrowserHistoryEntry.date, order: .reverse) private var history: [BrowserHistoryEntry]
 
-    var groupedHistory: [Date: [BrowserHistoryEntry]] {
+    private var groupedHistory: [Date: [BrowserHistoryEntry]] {
         Dictionary(grouping: history.filter {
             searchText.isEmpty || $0.title.localizedCaseInsensitiveContains(searchText) || $0.url.absoluteString.localizedCaseInsensitiveContains(searchText)
         }) { entry in
@@ -27,12 +27,12 @@ struct HistoryView: View {
         }
     }
 
-    var allHistoryEntries: [BrowserHistoryEntry] {
+    private var allHistoryEntries: [BrowserHistoryEntry] {
         groupedHistory.values.flatMap { $0 }
     }
 
-    @State var selectedHistoryEntries = Set<BrowserHistoryEntry>()
-    @State var searchText = ""
+    @State private var selectedHistoryEntries = Set<BrowserHistoryEntry>()
+    @State private var searchText = ""
 
     var body: some View {
         VStack {
@@ -96,7 +96,7 @@ struct HistoryView: View {
         }
     }
 
-    func handleSelection(for entry: BrowserHistoryEntry) {
+    private func handleSelection(for entry: BrowserHistoryEntry) {
         let isCommandPressed = NSEvent.modifierFlags.contains(.command)
         let isShiftPressed = NSEvent.modifierFlags.contains(.shift)
 

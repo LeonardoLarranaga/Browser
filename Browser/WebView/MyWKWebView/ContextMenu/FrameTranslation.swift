@@ -230,7 +230,7 @@ extension MyWKWebView {
         return item
     }
     
-    @objc func translate(_ sender: NSMenuItem) {
+    @objc private func translate(_ sender: NSMenuItem) {
         guard let language = sender.representedObject as? TranslatedLanguage else { return }
         
         Preferences.recentlyTranslatedLanguages.removeAll { $0.code == language.code }

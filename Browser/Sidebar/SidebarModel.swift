@@ -51,14 +51,14 @@ import SwiftUI
     }
     
     /// Start the mouse monitor
-    func startMouseMonitor() {
+    private func startMouseMonitor() {
         mouseMonitor = NSEvent.addLocalMonitorForEvents(matching: .mouseMoved, handler: handleMouseMovement)
     }
     
     /// Handle the mouse movement
     /// Only show the sidebar when the cursor is near the window's edge + threshold
     /// - Parameter event: The mouse movement event
-    func handleMouseMovement(event: NSEvent) -> NSEvent? {
+    private func handleMouseMovement(event: NSEvent) -> NSEvent? {
         guard let keyWindow = NSApp.keyWindow else { return event }
         let sidebarPosition = Preferences.sidebarPosition
         
@@ -89,7 +89,7 @@ import SwiftUI
     }
     
     /// Stop the mouse monitor
-    func stopMouseMonitor() {
+    private func stopMouseMonitor() {
         NSEvent.removeMonitor(mouseMonitor as Any)
     }
 }

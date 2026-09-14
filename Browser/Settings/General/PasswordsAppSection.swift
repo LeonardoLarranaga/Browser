@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PasswordsAppSection: View {
     
-    @State var showFileImporter = false
+    @State private var showFileImporter = false
     
     var body: some View {
         @Bindable var preferences = Preferences

@@ -10,8 +10,8 @@ import AppKit
 /// The app delegate is responsible for handling window events and saving the window position and size
 class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
 
-    var lastWindows: [NSWindow] = []
-    var windowWasClosed = false
+    private var lastWindows: [NSWindow] = []
+    private var windowWasClosed = false
 
     // Track windows in fullscreen transition to avoid setFrame/layout churn.
     private var windowsTransitioningFullScreen = Set<ObjectIdentifier>()
@@ -155,7 +155,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         windowWasClosed = NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("Browser") == true }.count - 1 == 0
     }
 
-    @objc func checkForNewWindows(_ sender: NSWindow) {
+    @objc private func checkForNewWindows(_ sender: NSWindow) {
         let currentWindows = NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("Browser") == true }
         lastWindows = currentWindows
     }
@@ -163,7 +163,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     /// Save the window position and size when the window is closed
     /// - Parameter window: The window to save the position and size
     /// - Note: Only save the window position and size if the window is a BrowserWindow
-    func saveWindowPositionAndSize(_ window: NSWindow) {
+    private func saveWindowPositionAndSize(_ window: NSWindow) {
         guard !windowWasClosed else { return }
         guard NSWindow.hasPrefix("BrowserWindow", in: window) else { return }
 
@@ -176,17 +176,17 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         )
     }
 
-    func closeNotMainWindows() {
+    private func closeNotMainWindows() {
         NSApp.windows.filter { $0.identifier?.rawValue.hasPrefix("BrowserWindow") == false }.forEach {
             $0.close()
         }
     }
 
-    @objc func setWarnBeforeQuitting(_ sender: NSButton) {
+    @objc private func setWarnBeforeQuitting(_ sender: NSButton) {
         Preferences.warnBeforeQuitting = sender.state == .on
     }
 
-    func deleteTemporaryImages() {
+    private func deleteTemporaryImages() {
         let temporaryDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
         let fileManager = FileManager.default
         do {

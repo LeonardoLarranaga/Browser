@@ -22,7 +22,7 @@ extension EnvironmentValues {
 
 /// An NSPanel subclass that implements floating panel traits.
 class FloatingPanel<Content: View>: NSPanel {
-    @Binding var isPresented: Bool
+    @Binding private var isPresented: Bool
 
     init(
         isPresented: Binding<Bool>,
@@ -126,7 +126,7 @@ class FloatingPanel<Content: View>: NSPanel {
 fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
 
     /// The app model context for SwiftData support
-    @Environment(\.modelContext) var modelContext
+    @Environment(\.modelContext) private var modelContext
 
     /// Determines wheter the panel should be presented or not
     @Binding var isPresented: Bool
@@ -146,7 +146,7 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
     @ViewBuilder let view: () -> PanelContent
 
     /// Stores the panel instance with the same generic type as the view closure
-    @State var panel: FloatingPanel<PanelContent>?
+    @State private var panel: FloatingPanel<PanelContent>?
 
     // Coalesce geometry mutations to avoid fighting AppKit's layout/constraint passes.
     @State private var pendingPresentationWorkID = UUID()

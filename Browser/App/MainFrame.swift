@@ -11,14 +11,14 @@ import SwiftData
 /// Main frame of the browser.
 struct MainFrame: View {
 
-    @Environment(BrowserWindow.self) var browserWindow
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(\.colorScheme) private var colorScheme
 
-    @State var sidebarModel = SidebarModel()
+    @State private var sidebarModel = SidebarModel()
 
-    @Query(sort: \BrowserSpace.order) var browserSpaces: [BrowserSpace]
+    @Query(sort: \BrowserSpace.order) private var browserSpaces: [BrowserSpace]
 
-    var isImmersive: Bool {
+    private var isImmersive: Bool {
         browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.immersiveViewOnFullscreen
     }
 
@@ -113,7 +113,7 @@ struct MainFrame: View {
         .foregroundStyle(browserWindow.currentSpace?.textColor(in: colorScheme) ?? .primary)
     }
 
-    var sidebar: some View {
+    private var sidebar: some View {
         Sidebar(browserSpaces: browserSpaces)
             .frame(width: sidebarModel.currentSidebarWidth)
             .readingWidth(width: $sidebarModel.currentSidebarWidth)

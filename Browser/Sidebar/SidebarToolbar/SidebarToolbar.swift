@@ -14,19 +14,19 @@ import SwiftUI
 /// so the current implementation is very repetitive.
 struct SidebarToolbar: ViewModifier {
     
-    @Environment(\.modelContext) var modelContext
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
     
-    @Environment(SidebarModel.self) var sidebarModel
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(SidebarModel.self) private var sidebarModel
+    @Environment(BrowserWindow.self) private var browserWindow
     
-    var toolbarColorScheme: ColorScheme {
+    private var toolbarColorScheme: ColorScheme {
         browserWindow.currentSpace?.textColor(in: colorScheme) == .black ? .light : .dark
     }
     
     let browserSpaces: [BrowserSpace]
     
-    var currentTab: BrowserTab? {
+    private var currentTab: BrowserTab? {
         browserWindow.currentSpace?.currentTab
     }
     
@@ -58,21 +58,21 @@ struct SidebarToolbar: ViewModifier {
             .windowToolbarFullScreenVisibility(.onHover)
     }
     
-    func SidebarButton() -> some View {
+    private func SidebarButton() -> some View {
         Button("Toggle Sidebar", systemImage: sidebarIcon, action: sidebarModel.toggleSidebar)
     }
     
-    func BackButton() -> some View {
+    private func BackButton() -> some View {
         Button("Go Back", systemImage: "chevron.left", action: browserWindow.backButtonAction)
             .disabled(currentTab == nil || currentTab?.canGoBack == false)
     }
     
-    func ForwardButton() -> some View {
+    private func ForwardButton() -> some View {
         Button("Go Forward", systemImage: "chevron.right", action: browserWindow.forwardButtonAction)
             .disabled(currentTab == nil || currentTab?.canGoForward == false)
     }
     
-    func SmallToolbar() -> some View {
+    private func SmallToolbar() -> some View {
         Menu("Sidebar Options", systemImage: "ellipsis") {
             SidebarButton()
                 .labelStyle(.titleAndIcon)
@@ -84,7 +84,7 @@ struct SidebarToolbar: ViewModifier {
         .labelStyle(.iconOnly)
     }
     
-    func Toolbar(addSpacer: Bool = false) -> some View {
+    private func Toolbar(addSpacer: Bool = false) -> some View {
         Group {
             if sidebarModel.currentSidebarWidth < 205 {
                 SmallToolbar()

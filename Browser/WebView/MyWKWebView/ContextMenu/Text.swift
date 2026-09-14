@@ -18,7 +18,7 @@ extension MyWKWebView {
         menu.insertItem(searchWebItem, at: 2)
     }
     
-    @objc func searchWeb() {
+    @objc private func searchWeb() {
         getSelectedText { selectedText in
             if let selectedText {
                 self.searchWebAction?(selectedText)

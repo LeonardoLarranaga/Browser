@@ -9,9 +9,9 @@ import SwiftUI
 
 struct BrowserCommands: Commands {
     
-    @FocusedValue(\.browserActiveWindowState) var browserActiveWindowState
-    
-    var isDefaultBrowser: Bool {
+    @FocusedValue(\.browserActiveWindowState) private var browserActiveWindowState
+
+    private var isDefaultBrowser: Bool {
         NSWorkspace.shared.urlForDefaultBrowser == Bundle.main.bundleURL
     }
     

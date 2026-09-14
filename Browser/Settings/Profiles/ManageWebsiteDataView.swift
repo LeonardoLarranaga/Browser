@@ -9,20 +9,20 @@ import SwiftUI
 
 struct ManageWebsiteDataView: View {
 
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) private var dismiss
 
     let profile: BrowserProfile?
     let dataStore: WKWebsiteDataStore
 
-    @State var searchText = ""
-    @State var isLoading = false
-    @State var hasLoaded = false
-    @State var records: [WKWebsiteDataRecord] = []
-    @State var selectedRecords = Set<WKWebsiteDataRecord>()
+    @State private var searchText = ""
+    @State private var isLoading = false
+    @State private var hasLoaded = false
+    @State private var records: [WKWebsiteDataRecord] = []
+    @State private var selectedRecords = Set<WKWebsiteDataRecord>()
 
-    @State var showRemoveAllConfirmation = false
+    @State private var showRemoveAllConfirmation = false
 
-    var displayedRecords: [WKWebsiteDataRecord] {
+    private var displayedRecords: [WKWebsiteDataRecord] {
         records.filter { record in
             searchText.isReallyEmpty || record.displayName.localizedCaseInsensitiveContains(searchText)
         }
@@ -97,7 +97,7 @@ struct ManageWebsiteDataView: View {
         .searchable(text: $searchText)
     }
 
-    @Sendable func load() async {
+    @Sendable private func load() async {
         isLoading = true
         records = await withCheckedContinuation { continuation in
             dataStore.fetchDataRecords(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes()) { records in
@@ -108,7 +108,7 @@ struct ManageWebsiteDataView: View {
         hasLoaded = true
     }
 
-    func remove(_ records: [WKWebsiteDataRecord]) {
+    private func remove(_ records: [WKWebsiteDataRecord]) {
         Task {
             await dataStore.removeData(ofTypes: WKWebsiteDataStore.allWebsiteDataTypes(), for: records)
             await load()
@@ -116,11 +116,11 @@ struct ManageWebsiteDataView: View {
         }
     }
 
-    func removeSelected() {
+    private func removeSelected() {
         remove(Array(selectedRecords))
     }
 
-    func removeAll() {
+    private func removeAll() {
         remove(records)
     }
 }

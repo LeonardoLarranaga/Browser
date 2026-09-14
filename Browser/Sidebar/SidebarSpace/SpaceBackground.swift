@@ -39,15 +39,15 @@ struct SidebarSpaceBackground: View {
         }
     }
     
-    var gradient: some View {
+    private var gradient: some View {
         LinearGradient(colors: Preferences.sidebarPosition == .trailing && Preferences.reverseColorsOnTrailingSidebar ? browserSpace.getColors.reversed() : browserSpace.getColors, startPoint: .leading, endPoint: .trailing).opacity(browserSpace.colorOpacity)
     }
     
-    var color: some View {
+    private var color: some View {
         browserSpace.getColors.first?.opacity(browserSpace.colorOpacity) ?? .clear
     }
     
-    var background: some View {
+    private var background: some View {
         Group {
             if isSidebarCollapsed {
                 color

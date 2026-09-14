@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct BrowserApp: App {
 
-    @NSApplicationDelegateAdaptor(BrowserAppDelegate.self) var appDelegate
+    @NSApplicationDelegateAdaptor(BrowserAppDelegate.self) private var appDelegate
 
     var body: some Scene {
         BrowserWindow("BrowserWindow")
@@ -24,7 +24,7 @@ struct BrowserApp: App {
     }
 
     @SceneBuilder
-    func BrowserWindow(_ id: String, inMemory: Bool = false) -> some Scene {
+    private func BrowserWindow(_ id: String, inMemory: Bool = false) -> some Scene {
         WindowGroup(id: id) {
             ContentView()
                 .transaction {
@@ -37,7 +37,7 @@ struct BrowserApp: App {
     }
 
     @SceneBuilder
-    func SettingsWindow() -> some Scene {
+    private func SettingsWindow() -> some Scene {
         Settings {
             SettingsView()
                 .frame(width: 750, height: 550)

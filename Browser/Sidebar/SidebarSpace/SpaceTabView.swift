@@ -10,13 +10,13 @@ import SwiftUI
 /// Horizontal scrollable collection of spaces in the sidebar
 struct SidebarSpacesTabView: View {
     
-    @Environment(\.modelContext) var modelContext
-    @Environment(BrowserWindow.self) var browserWindow
+    @Environment(\.modelContext) private var modelContext
+    @Environment(BrowserWindow.self) private var browserWindow
     
     let browserSpaces: [BrowserSpace]
     
-    @State var appeared = false
-    @State var lastWidth = CGFloat.zero
+    @State private var appeared = false
+    @State private var lastWidth = CGFloat.zero
     
     var body: some View {
         ScrollView(.horizontal) {

@@ -10,7 +10,7 @@ import SwiftUI
 struct WheelColorPicker: View {
     
     let radius: CGFloat
-    var diameter: CGFloat {
+    private var diameter: CGFloat {
         radius * 2
     }
     
@@ -23,7 +23,7 @@ struct WheelColorPicker: View {
         self.hex = hex
     }
     
-    @State var location = CGPoint.zero
+    @State private var location = CGPoint.zero
     
     var body: some View {
         GeometryReader { geometry in

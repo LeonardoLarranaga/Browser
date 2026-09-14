@@ -21,10 +21,10 @@ struct CloseMultipleTabsCommand: UndoableCommand {
         }
     }
     
-    let snapshots: [ClosedTabSnapshot]
-    weak var space: BrowserSpace?
-    let currentTabId: UUID?
-    let commandType: CommandType
+    private let snapshots: [ClosedTabSnapshot]
+    private weak var space: BrowserSpace?
+    private let currentTabId: UUID?
+    private let commandType: CommandType
     
     var description: String {
         commandType.description(tabCount: snapshots.count)

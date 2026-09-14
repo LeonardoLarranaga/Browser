@@ -7,9 +7,9 @@ import SwiftUI
 
 struct SidebarEssentialsGrid: View {
 
-    @Environment(BrowserSpace.self) var browserSpace
-    @Environment(SidebarModel.self) var sidebarModel
-    @Environment(TabDragManager.self) var dragManager
+    @Environment(BrowserSpace.self) private var browserSpace
+    @Environment(SidebarModel.self) private var sidebarModel
+    @Environment(TabDragManager.self) private var dragManager
 
     var tabs: [BrowserTab]
 
@@ -98,9 +98,9 @@ private struct EssentialDropGap: View {
 
 private struct SidebarEssentialTile: View {
 
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindow.self) var browserWindow
-    @Environment(TabDragManager.self) var dragManager
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(TabDragManager.self) private var dragManager
 
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab

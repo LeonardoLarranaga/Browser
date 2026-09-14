@@ -10,11 +10,11 @@ import SwiftUI
 /// A made-from-scratch view that allows the user to resize the sidebar
 struct SidebarResizer: View {
     
-    @Environment(SidebarModel.self) var sidebarModel
-    
-    @State var isDragging = false
-    @State var isHovering = false
-    @State var hoverTask: Task<Void, Never>? = nil
+    @Environment(SidebarModel.self) private var sidebarModel
+
+    @State private var isDragging = false
+    @State private var isHovering = false
+    @State private var hoverTask: Task<Void, Never>? = nil
     
     var body: some View {
         // View base

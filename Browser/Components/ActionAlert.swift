@@ -32,9 +32,9 @@ struct ActionAlert {
 /// An alert that displays an action that was performed by the user
 fileprivate struct ActionAlertView: ViewModifier {
     
-    @Environment(BrowserWindow.self) var browserWindow
-    
-    @State var dismissTimer: Timer?
+    @Environment(BrowserWindow.self) private var browserWindow
+
+    @State private var dismissTimer: Timer?
     
     func body(content: Content) -> some View {
         content
@@ -80,13 +80,13 @@ fileprivate struct ActionAlertView: ViewModifier {
             }
     }
     
-    func dismiss() {
+    private func dismiss() {
         withAnimation(.browserDefault) {
             browserWindow.actionAlert.dismiss()
         }
     }
     
-    func startDismissTimer() {
+    private func startDismissTimer() {
         dismissTimer?.invalidate()
         dismissTimer = Timer.scheduledTimer(withTimeInterval: 3, repeats: false) { _ in
             dismiss()

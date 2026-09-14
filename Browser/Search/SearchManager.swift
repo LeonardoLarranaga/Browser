@@ -159,7 +159,7 @@ class SearchManager {
         }
     }
     
-    func resetWebsiteSearcher() {
+    private func resetWebsiteSearcher() {
         isUsingWebsiteSearcher = false
         activeWebsiteSearcherOverride = nil
     }

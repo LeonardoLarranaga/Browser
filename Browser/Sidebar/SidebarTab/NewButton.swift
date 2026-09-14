@@ -10,12 +10,12 @@ import SwiftUI
 /// Button to open the search bar for a new tab
 struct SidebarTabNewButton: View {
     
-    @Environment(\.modelContext) var modelContext
-    
-    @Environment(BrowserSpace.self) var browserSpace
-    @Environment(BrowserWindow.self) var browserWindow
-    
-    @State var isHovering = false
+    @Environment(\.modelContext) private var modelContext
+
+    @Environment(BrowserSpace.self) private var browserSpace
+    @Environment(BrowserWindow.self) private var browserWindow
+
+    @State private var isHovering = false
     
     var body: some View {
         Label("New Tab", systemImage: "plus")
@@ -34,7 +34,7 @@ struct SidebarTabNewButton: View {
             .onTapGesture(perform: openNewTabSearch)
     }
     
-    func openNewTabSearch() {
+    private func openNewTabSearch() {
         browserWindow.searchOpenLocation = .fromNewTab
     }
 }

@@ -9,18 +9,18 @@ import SwiftUI
 
 struct SidebarTab: View {
 
-    @Environment(\.colorScheme) var colorScheme
-    @Environment(BrowserWindow.self) var browserWindow
-    @Environment(TabDragManager.self) var dragManager
+    @Environment(\.colorScheme) private var colorScheme
+    @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(TabDragManager.self) private var dragManager
 
     @Bindable var browserSpace: BrowserSpace
     @Bindable var browserTab: BrowserTab
 
     var pinState: TabPinState
 
-    @State var isEditingTitle = false
-    @State var isHovering = false
-    @State var isPressed = false
+    @State private var isEditingTitle = false
+    @State private var isHovering = false
+    @State private var isPressed = false
 
     private var isSelected: Bool {
         browserSpace.currentTab == browserTab
@@ -103,7 +103,7 @@ struct SidebarTab: View {
         }
     }
 
-    func selectTab() {
+    private func selectTab() {
         browserSpace.currentTab = browserTab
         if Preferences.disableAnimations { return }
         Task {

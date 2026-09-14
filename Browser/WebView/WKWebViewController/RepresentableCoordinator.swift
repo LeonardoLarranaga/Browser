@@ -78,7 +78,7 @@ extension WKWebViewControllerRepresentable {
         
         /// Closes the current tab (freshly opened by another tab) and returns to the opener tab.
         /// Called when the user swipes right on a tab with no back history.
-        func closeAndReturnToOpener() {
+        private func closeAndReturnToOpener() {
             self.parent.browserWindow.backButtonAction()
         }
         
