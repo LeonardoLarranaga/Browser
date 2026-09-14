@@ -170,22 +170,22 @@ fileprivate struct FloatingPanelModifier<PanelContent: View>: ViewModifier {
                 panel?.close()
                 panel = nil
             }
-            .onChange(of: isPresented) { _, newValue in
-                if newValue {
+            .onChange(of: isPresented) {
+                if isPresented {
                     schedulePresentationUpdate()
                 } else {
                     panel?.close()
                 }
             }
-            .onChange(of: origin) { _, _ in
+            .onChange(of: origin) {
                 guard isPresented else { return }
                 schedulePresentationUpdate()
             }
-            .onChange(of: size) { _, _ in
+            .onChange(of: size) {
                 guard isPresented else { return }
                 schedulePresentationUpdate()
             }
-            .onChange(of: shouldCenter) { _, _ in
+            .onChange(of: shouldCenter) {
                 guard isPresented else { return }
                 schedulePresentationUpdate()
             }

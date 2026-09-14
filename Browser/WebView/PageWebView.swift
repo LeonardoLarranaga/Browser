@@ -36,8 +36,8 @@ struct PageWebView: View {
         .scrollContentBackground(.hidden)
         .scrollIndicators(.hidden)
         .scrollTargetBehavior(.paging)
-        .onChange(of: browserWindow.currentSpace) { _, newValue in
-            scrollState = newValue?.id
+        .onChange(of: browserWindow.currentSpace) {
+            scrollState = browserWindow.currentSpace?.id
         }
         .transaction { $0.disablesAnimations = true }
         // Try to enter Picture in Picture of current tab when tab changes or app goes to background

@@ -52,9 +52,9 @@ struct SearchView: View {
         .onKeyPress(.upArrow, action: searchManager.handleUpArrow)
         .onKeyPress(.downArrow, action: searchManager.handleDownArrow)
         .onKeyPress(.tab, action: searchManager.handleTab)
-        .onChange(of: searchManager.searchText) { _, newValue in
-            if newValue.last != " " {
-                searchManager.fetchSearchSuggestions(newValue, historyEntries: historyEntries)
+        .onChange(of: searchManager.searchText) {
+            if searchManager.searchText.last != " " {
+                searchManager.fetchSearchSuggestions(searchManager.searchText, historyEntries: historyEntries)
             }
         }
         .onChange(of: browserWindow.searchOpenLocation) {

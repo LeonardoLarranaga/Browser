@@ -56,9 +56,9 @@ struct SidebarBottomToolbar: View {
                     .offset(y: sidebarModel.isAnimatingDownloads ? -125 : 0)
                     .rotationEffect(.degrees(sidebarModel.isAnimatingDownloads ? 20 : 0))
                     .animation(.interpolatingSpring(stiffness: 200, damping: 6), value: sidebarModel.isAnimatingDownloads)
-                    .onChange(of: sidebarModel.isAnimatingDownloads) { _, newValue in
+                    .onChange(of: sidebarModel.isAnimatingDownloads) {
                         // Reverse animation
-                        if newValue {
+                        if sidebarModel.isAnimatingDownloads {
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
                                 sidebarModel.isAnimatingDownloads.toggle()
                             }

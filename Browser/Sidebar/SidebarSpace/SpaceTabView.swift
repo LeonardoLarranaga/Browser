@@ -45,11 +45,11 @@ struct SidebarSpacesTabView: View {
         .scrollTargetBehavior(.paging)
         .scrollDisabled(browserSpaces.count < 2)
         // Scroll to the selected space when the viewScrollState changes
-        .onChange(of: browserWindow.viewScrollState) { oldValue, newValue in
-            if let newValue {
+        .onChange(of: browserWindow.viewScrollState) {
+            if let viewScrollState = browserWindow.viewScrollState {
                 withAnimation(appeared ? .browserDefault : nil) {
-                    browserWindow.viewScrollState = newValue
-                    browserWindow.currentSpace = browserSpaces.first { $0.id == newValue }
+                    browserWindow.viewScrollState = viewScrollState
+                    browserWindow.currentSpace = browserSpaces.first { $0.id == viewScrollState }
                 }
             }
             

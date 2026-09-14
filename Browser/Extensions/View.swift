@@ -29,8 +29,8 @@ extension View {
                     .onAppear {
                         updateWidthIfNeeded(geometry.size.width, into: width)
                     }
-                    .onChange(of: geometry.size.width) { _, newValue in
-                        updateWidthIfNeeded(newValue, into: width)
+                    .onChange(of: geometry.size.width) {
+                        updateWidthIfNeeded(geometry.size.width, into: width)
                     }
             }
         }

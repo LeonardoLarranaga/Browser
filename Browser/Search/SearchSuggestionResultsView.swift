@@ -32,9 +32,9 @@ struct SearchSuggestionResultsView: View {
             .scrollIndicators(.never)
             .scrollContentBackground(.hidden)
             // Scroll to the highlighted search suggestion
-            .onChange(of: searchManager.highlightedSearchSuggestionIndex) { _, newValue in
+            .onChange(of: searchManager.highlightedSearchSuggestionIndex) {
                 withAnimation(.browserDefault) {
-                    proxy.scrollTo(newValue, anchor: .bottom)
+                    proxy.scrollTo(searchManager.highlightedSearchSuggestionIndex, anchor: .bottom)
                 }
             }
         }

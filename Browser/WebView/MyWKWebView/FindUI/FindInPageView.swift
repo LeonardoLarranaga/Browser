@@ -42,8 +42,8 @@ struct FindInPageView: View {
                     }
                     .textFieldStyle(.plain)
                     .frame(maxWidth: 200)
-                    .onChange(of: searchText) { _, newValue in
-                        performSearch(query: newValue)
+                    .onChange(of: searchText) {
+                        performSearch(query: searchText)
                     }
                     .onSubmit {
                         goToNext()
