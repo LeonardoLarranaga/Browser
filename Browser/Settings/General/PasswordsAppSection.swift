@@ -31,7 +31,7 @@ struct PasswordsAppSection: View {
                 }
             }
         } footer: {
-            Text("Due to system limitations, autofill is not supported. Enabling this option will add a shortcut to open your selected passwords app from text fields.")
+            Text("macOS AutoFill is available for webpage text fields from the Edit menu. This option adds a shortcut to open your selected passwords app from those fields.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

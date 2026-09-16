@@ -58,6 +58,8 @@ class WKWebViewController: NSViewController {
         webView.onZoomChanged = { [weak tab] zoom in
             tab?.pageZoomLevel = zoom
         }
+
+        addWebPageAutoFillListener()
         
         coordinator.observeWebView(webView)
         
@@ -98,6 +100,8 @@ class WKWebViewController: NSViewController {
             webView.uiDelegate = nil
             
             webView.stopLoading()
+            webView.autoFillBridge?.cancel()
+            webView.focusedAutoFillElement = nil
             webView.removeFromSuperview()
             
             // Clear closure references

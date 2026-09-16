@@ -11,12 +11,50 @@ extension MyWKWebView {
         // Copy (1)
         // Paste (2)
         if Preferences.injectOpenPasswordsApp {
-            menu.insertItem(.separator(), at: 3)
-            
             let passwordAppItem = NSMenuItem(title: "Open Passwords App", action: #selector(openPasswordsApp), keyEquivalent: "")
             passwordAppItem.image = NSImage(systemSymbolName: "key.fill", accessibilityDescription: nil)
-            menu.insertItem(passwordAppItem, at: 4)
+            passwordAppItem.target = self
+            menu.addItem(passwordAppItem)
         }
+
+        menu.addItem(.separator())
+        menu.addItem(makeAutoFillMenuItem())
+    }
+
+    private func makeAutoFillMenuItem() -> NSMenuItem {
+        let autoFillMenu = NSMenu(title: "AutoFill")
+        autoFillMenu.autoenablesItems = false
+        autoFillMenu.addItem(makeAutoFillItem(
+            title: "Contact…",
+            systemImage: "person.crop.circle",
+            action: WebPageAutoFillAction.contacts
+        ))
+        autoFillMenu.addItem(makeAutoFillItem(
+            title: "Passwords…",
+            systemImage: "key.dots",
+            action: WebPageAutoFillAction.passwords
+        ))
+        autoFillMenu.addItem(makeAutoFillItem(
+            title: "Credit Card…",
+            systemImage: "creditcard",
+            action: WebPageAutoFillAction.creditCards
+        ))
+
+        let autoFillItem = NSMenuItem(title: "AutoFill", action: nil, keyEquivalent: "")
+        autoFillItem.image = NSImage(
+            systemSymbolName: "rectangle.and.pencil.and.ellipsis",
+            accessibilityDescription: nil
+        )
+        autoFillItem.submenu = autoFillMenu
+        return autoFillItem
+    }
+
+    private func makeAutoFillItem(title: String, systemImage: String, action: Selector) -> NSMenuItem {
+        let item = NSMenuItem(title: title, action: action, keyEquivalent: "")
+        item.image = NSImage(systemSymbolName: systemImage, accessibilityDescription: nil)
+        item.target = self
+        item.isEnabled = true
+        return item
     }
     
     @objc private func openPasswordsApp() {

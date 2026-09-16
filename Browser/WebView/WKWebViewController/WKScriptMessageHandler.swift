@@ -30,6 +30,8 @@ extension WKWebViewController: WKScriptMessageHandler {
             handleHoverURL(message.body)
         case "passwordTextFieldShortcut":
             handlePasswordTextFieldShortcut(message.body)
+        case "webPageAutoFill":
+            webView.updateAutoFillFocus(from: message.body)
         default:
             break
         }
@@ -73,6 +75,10 @@ extension WKWebViewController: WKScriptMessageHandler {
     
     func addPasswordTextFieldShortcut() {
         addUserScript("PasswordTextFieldShortcut", handlerName: "passwordTextFieldShortcut")
+    }
+
+    func addWebPageAutoFillListener() {
+        addUserScript("WebPageAutoFill", handlerName: "webPageAutoFill", injectionTime: .atDocumentStart)
     }
     
     // MARK: - Message Handlers

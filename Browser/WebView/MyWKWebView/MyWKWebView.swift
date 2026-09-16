@@ -9,6 +9,9 @@ import WebKit
 
 /// Custom WKWebView subclass to handle context menus
 class MyWKWebView: WKWebView {
+
+    var focusedAutoFillElement: WebPageAutoFillElement?
+    var autoFillBridge: WebPageAutoFillBridge?
     
     private let zoomFactors: [CGFloat] = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4, 5, 6]
     
@@ -37,6 +40,29 @@ class MyWKWebView: WKWebView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func validateUserInterfaceItem(_ item: any NSValidatedUserInterfaceItem) -> Bool {
+        if let action = item.action, WebPageAutoFillAction.all.contains(action) {
+            return window?.firstResponder === self && focusedAutoFillElement != nil
+        }
+
+        return super.validateUserInterfaceItem(item)
+    }
+
+    @objc(_handleInsertFromContactsCommand:)
+    private func handleInsertFromContactsCommand(_ sender: Any?) {
+        beginWebPageAutoFill(action: WebPageAutoFillAction.contacts, sender: sender)
+    }
+
+    @objc(_handleInsertFromPasswordsCommand:)
+    private func handleInsertFromPasswordsCommand(_ sender: Any?) {
+        beginWebPageAutoFill(action: WebPageAutoFillAction.passwords, sender: sender)
+    }
+
+    @objc(_handleInsertFromCreditCardsCommand:)
+    private func handleInsertFromCreditCardsCommand(_ sender: Any?) {
+        beginWebPageAutoFill(action: WebPageAutoFillAction.creditCards, sender: sender)
     }
     
     func zoomActualSize() {
