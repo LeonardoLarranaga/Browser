@@ -1,41 +1,11 @@
 {
   "fill-specializations" : [
     {
-      "value" : {
-        "linear-gradient" : [
-          "extended-gray:1.00000,1.00000",
-          "extended-srgb:0.00000,0.53333,1.00000,1.00000"
-        ],
-        "orientation" : {
-          "start" : {
-            "x" : 0.5,
-            "y" : 0
-          },
-          "stop" : {
-            "x" : 0.5,
-            "y" : 0.7
-          }
-        }
-      }
+      "value" : "automatic"
     },
     {
       "appearance" : "dark",
-      "value" : {
-        "linear-gradient" : [
-          "extended-gray:0.00000,1.00000",
-          "extended-srgb:0.00000,0.53333,1.00000,1.00000"
-        ],
-        "orientation" : {
-          "start" : {
-            "x" : 0.5,
-            "y" : 0
-          },
-          "stop" : {
-            "x" : 0.5,
-            "y" : 0.7
-          }
-        }
-      }
+      "value" : "automatic"
     }
   ],
   "groups" : [
@@ -69,9 +39,19 @@
               "value" : "screen"
             }
           ],
-          "fill" : {
-            "automatic-gradient" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
-          },
+          "fill-specializations" : [
+            {
+              "value" : {
+                "solid" : "extended-gray:0.00000,1.00000"
+              }
+            },
+            {
+              "appearance" : "dark",
+              "value" : {
+                "solid" : "extended-gray:0.75000,1.00000"
+              }
+            }
+          ],
           "glass" : true,
           "hidden" : false,
           "image-name" : "Group 2.png",
