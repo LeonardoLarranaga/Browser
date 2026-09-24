@@ -17,10 +17,6 @@ struct BrowserCommands: Commands {
     
     var body: some Commands {
         CommandGroup(after: .appInfo) {
-            Button("Acknowledgements...") {
-                browserActiveWindowState?.showAcknowledgements.toggle()
-            }
-            
             Button("Set as Default Browser") {
                 let appURL = Bundle.main.bundleURL
                 let schemes = ["http", "https", "html"]

@@ -30,7 +30,6 @@ import SwiftUI
     }
 
     var showURLQRCode = false
-    var showAcknowledgements = false
 
     var actionAlert = ActionAlert()
 

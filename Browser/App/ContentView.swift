@@ -15,9 +15,5 @@ struct ContentView: View {
             .ignoresSafeArea(.container, edges: .top)
             .focusedSceneValue(\.browserActiveWindowState, browserWindow)
             .environment(browserWindow)
-            .floatingPanel(isPresented: $browserWindow.showAcknowledgements, size: CGSize(width: 500, height: 300)) {
-                Acknowledgments()
-                    .environment(browserWindow)
-            }
     }
 }
