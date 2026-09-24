@@ -9,9 +9,52 @@ import SwiftUI
 
 struct SidebarSpaceBackground: View {
     
+    private let browserSpaces: [BrowserSpace]
+    private let scrollProgress: CGFloat
+    let isSidebarCollapsed: Bool
+
+    init(browserSpace: BrowserSpace, isSidebarCollapsed: Bool) {
+        self.browserSpaces = [browserSpace]
+        self.scrollProgress = 0
+        self.isSidebarCollapsed = isSidebarCollapsed
+    }
+
+    init(browserSpaces: [BrowserSpace], scrollProgress: CGFloat, isSidebarCollapsed: Bool) {
+        self.browserSpaces = browserSpaces
+        self.scrollProgress = scrollProgress
+        self.isSidebarCollapsed = isSidebarCollapsed
+    }
+
+    var body: some View {
+        let lowerIndex = min(max(Int(scrollProgress.rounded(.down)), 0), max(browserSpaces.count - 1, 0))
+        let upperIndex = min(lowerIndex + 1, max(browserSpaces.count - 1, 0))
+        let blend = min(max(scrollProgress - CGFloat(lowerIndex), 0), 1)
+
+        ZStack {
+            if browserSpaces.indices.contains(lowerIndex) {
+                SidebarSpaceBackgroundLayer(
+                    browserSpace: browserSpaces[lowerIndex],
+                    isSidebarCollapsed: isSidebarCollapsed
+                )
+                .opacity(1 - blend)
+            }
+
+            if upperIndex != lowerIndex, browserSpaces.indices.contains(upperIndex) {
+                SidebarSpaceBackgroundLayer(
+                    browserSpace: browserSpaces[upperIndex],
+                    isSidebarCollapsed: isSidebarCollapsed
+                )
+                .opacity(blend)
+            }
+        }
+    }
+}
+
+private struct SidebarSpaceBackgroundLayer: View {
+
     let browserSpace: BrowserSpace
     let isSidebarCollapsed: Bool
-    
+
     var body: some View {
         TimelineView(.periodic(from: .now, by: 10)) { _ in
             if !browserSpace.colors.isEmpty && browserSpace.colorOpacity > 0 {

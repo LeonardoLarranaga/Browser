@@ -44,6 +44,15 @@ struct SidebarSpacesTabView: View {
         .scrollIndicators(.hidden)
         .scrollTargetBehavior(.paging)
         .scrollDisabled(browserSpaces.count < 2)
+        .onScrollGeometryChange(for: CGFloat.self) { geometry in
+            let pageWidth = geometry.containerSize.width
+            guard pageWidth > 0 else { return browserWindow.spaceScrollProgress ?? 0 }
+
+            let page = geometry.contentOffset.x / pageWidth
+            return min(max(page, 0), CGFloat(max(browserSpaces.count - 1, 0)))
+        } action: { _, progress in
+            browserWindow.spaceScrollProgress = progress
+        }
         // Scroll to the selected space when the viewScrollState changes
         .onChange(of: browserWindow.viewScrollState) {
             if let viewScrollState = browserWindow.viewScrollState {
@@ -64,6 +73,12 @@ struct SidebarSpacesTabView: View {
                     space.order = index
                 }
                 try? modelContext.save()
+            }
+        }
+        .onChange(of: browserSpaces.map(\.id)) {
+            if let currentSpace = browserWindow.currentSpace,
+               let index = browserSpaces.firstIndex(where: { $0.id == currentSpace.id }) {
+                browserWindow.spaceScrollProgress = CGFloat(index)
             }
         }
         // This is a workaround to prevent the animation when the view first appears

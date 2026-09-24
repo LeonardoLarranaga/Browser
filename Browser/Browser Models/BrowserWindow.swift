@@ -19,6 +19,7 @@ import SwiftUI
         }
     }
     var viewScrollState: UUID?
+    var spaceScrollProgress: CGFloat?
 
     var searchOpenLocation: SearchOpenLocation? = .none
     var searchPanelOrigin: CGPoint {

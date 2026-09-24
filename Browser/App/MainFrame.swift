@@ -22,6 +22,11 @@ struct MainFrame: View {
         browserWindow.isFullScreen && sidebarModel.sidebarCollapsed && Preferences.immersiveViewOnFullscreen
     }
 
+    private var spaceBackgroundProgress: CGFloat {
+        browserWindow.spaceScrollProgress
+            ?? CGFloat(browserSpaces.firstIndex(where: { $0.id == browserWindow.currentSpace?.id }) ?? 0)
+    }
+
     var body: some View {
         @Bindable var browserWindow = browserWindow
 
@@ -69,8 +74,12 @@ struct MainFrame: View {
         .frame(maxWidth: .infinity)
         .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .background {
-            if let currentSpace = browserWindow.currentSpace {
-                SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: false)
+            if browserWindow.currentSpace != nil {
+                SidebarSpaceBackground(
+                    browserSpaces: browserSpaces,
+                    scrollProgress: spaceBackgroundProgress,
+                    isSidebarCollapsed: false
+                )
             }
         }
         // Show the search view
@@ -100,8 +109,12 @@ struct MainFrame: View {
             if sidebarModel.sidebarCollapsed && sidebarModel.currentSidebarWidth > 0 {
                 sidebar
                     .background {
-                        if let currentSpace = browserWindow.currentSpace {
-                            SidebarSpaceBackground(browserSpace: currentSpace, isSidebarCollapsed: true)
+                        if browserWindow.currentSpace != nil {
+                            SidebarSpaceBackground(
+                                browserSpaces: browserSpaces,
+                                scrollProgress: spaceBackgroundProgress,
+                                isSidebarCollapsed: true
+                            )
                         }
                     }
                     .background(GlassEffectView())
