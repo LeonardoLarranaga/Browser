@@ -31,6 +31,10 @@ struct SettingsView: View {
                     SettingsFeatureFlagsView()
                 }
             }
+
+            Tab("Legal", systemImage: "doc.plaintext") {
+                SettingsLegalView()
+            }
         }
     }
 }

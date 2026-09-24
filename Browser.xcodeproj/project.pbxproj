@@ -12,6 +12,7 @@
 		4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 4A62F7192D5349EE0084D3A2 /* SymbolPicker */; };
 		4AA1C0BC2F414EF20056B8DA /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4AA1C0BB2F414EF20056B8DA /* README.md */; };
 		4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */ = {isa = PBXBuildFile; productRef = 4AC77A852D573849005BEF25 /* KeyboardShortcuts */; };
+		4AD97D853064B854007A026F /* LicenseList in Frameworks */ = {isa = PBXBuildFile; productRef = 4AD97D843064B854007A026F /* LicenseList */; };
 		4AE5103C2F14446F00BCE2D0 /* ObservableDefaults in Frameworks */ = {isa = PBXBuildFile; productRef = 4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */; };
 		4AE511572F148E4700BCE2D0 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AE511562F148E4700BCE2D0 /* WebKit.framework */; };
 /* End PBXBuildFile section */
@@ -50,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AD97D853064B854007A026F /* LicenseList in Frameworks */,
 				4AE511572F148E4700BCE2D0 /* WebKit.framework in Frameworks */,
 				4A62F71A2D5349EE0084D3A2 /* SymbolPicker in Frameworks */,
 				4AC77A862D573849005BEF25 /* KeyboardShortcuts in Frameworks */,
@@ -111,6 +113,7 @@
 				4A62F7192D5349EE0084D3A2 /* SymbolPicker */,
 				4AC77A852D573849005BEF25 /* KeyboardShortcuts */,
 				4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */,
+				4AD97D843064B854007A026F /* LicenseList */,
 			);
 			productName = Browser;
 			productReference = 4AC596AD2D3C6DC400FF0326 /* Eva.app */;
@@ -145,6 +148,7 @@
 				4A62F7182D5349EE0084D3A2 /* XCRemoteSwiftPackageReference "SymbolPicker" */,
 				4AC77A842D573849005BEF25 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */,
 				4AE5103A2F14446F00BCE2D0 /* XCRemoteSwiftPackageReference "ObservableDefaults" */,
+				4AD97D833064B854007A026F /* XCRemoteSwiftPackageReference "LicenseList" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 4AC596AE2D3C6DC400FF0326 /* Products */;
@@ -453,6 +457,14 @@
 				minimumVersion = 2.2.4;
 			};
 		};
+		4AD97D833064B854007A026F /* XCRemoteSwiftPackageReference "LicenseList" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cybozu/LicenseList.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.0;
+			};
+		};
 		4AE5103A2F14446F00BCE2D0 /* XCRemoteSwiftPackageReference "ObservableDefaults" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/fatbobman/ObservableDefaults";
@@ -473,6 +485,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 4AC77A842D573849005BEF25 /* XCRemoteSwiftPackageReference "KeyboardShortcuts" */;
 			productName = KeyboardShortcuts;
+		};
+		4AD97D843064B854007A026F /* LicenseList */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4AD97D833064B854007A026F /* XCRemoteSwiftPackageReference "LicenseList" */;
+			productName = LicenseList;
 		};
 		4AE5103B2F14446F00BCE2D0 /* ObservableDefaults */ = {
 			isa = XCSwiftPackageProductDependency;
