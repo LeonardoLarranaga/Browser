@@ -1,5 +1,5 @@
 //
-//  JavaScript.swift
+//  JavaScriptExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 4/2/26.

@@ -1,5 +1,5 @@
 //
-//  ColorString.swift
+//  ColorStringExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 1/30/25.

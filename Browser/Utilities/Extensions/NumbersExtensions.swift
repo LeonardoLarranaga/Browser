@@ -1,5 +1,5 @@
 //
-//  Numbers.swift
+//  NumbersExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 1/18/25.

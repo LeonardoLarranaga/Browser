@@ -1,5 +1,5 @@
 //
-//  Collection.swift
+//  CollectionExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 2/1/25.

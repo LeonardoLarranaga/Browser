@@ -1,5 +1,5 @@
 //
-//  Error.swift
+//  ErrorExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 2/4/25.

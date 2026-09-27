@@ -25,6 +25,7 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
         let wkWebViewController = WKWebViewController(
             tab: tab,
             browserSpace: browserSpace,
+            browserWindow: browserWindow,
             noTrace: noTrace
         )
         wkWebViewController.coordinator = context.coordinator
@@ -32,9 +33,17 @@ struct WKWebViewControllerRepresentable: NSViewControllerRepresentable {
     }
     
     func updateNSViewController(_ nsViewController: WKWebViewController, context: Context) {
-        nsViewController.webView.isHidden = tab != browserSpace.currentTab
+        let isSelected = tab == browserSpace.currentTab
+        nsViewController.webView.isHidden = !isSelected
         || tab.webviewErrorDescription != nil
         || tab.webviewErrorCode != nil
+        SafariExtensions.shared.setSelected(
+            isSelected,
+            for: tab,
+            webView: nsViewController.webView,
+            browserWindow: browserWindow,
+            browserSpace: browserSpace
+        )
     }
     
     static func dismantleNSViewController(_ nsViewController: WKWebViewController, coordinator: Coordinator) {

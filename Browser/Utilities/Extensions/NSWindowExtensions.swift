@@ -1,5 +1,5 @@
 //
-//  NSWindow.swift
+//  NSWindowExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 3/5/25.

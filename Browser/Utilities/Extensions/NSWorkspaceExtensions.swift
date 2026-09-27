@@ -1,5 +1,5 @@
 //
-//  NSWorkspace.swift
+//  NSWorkspaceExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 3/9/25.

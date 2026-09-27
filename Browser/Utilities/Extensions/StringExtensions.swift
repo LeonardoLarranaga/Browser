@@ -1,5 +1,5 @@
 //
-//  String.swift
+//  StringExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 11/1/26.

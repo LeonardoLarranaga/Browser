@@ -132,6 +132,20 @@ https://github.com/user-attachments/assets/60328d5f-e233-45c8-a9bd-fa149fb99ed0
 </td>
 </tr>
 
+<tr>
+<td width="50%" style="background-color: transparent; border: none;">
+<div align="leading">
+<h3 style="margin-bottom: 0;"><b>Safari Extensions</b></h3>
+<p style="margin-top: 4px;">Add and manage Safari web extensions from apps on your Mac.</p>
+</div>
+</td>
+<td width="50%" style="background-color: transparent; border: none;">
+
+https://github.com/user-attachments/assets/18195712-e2cb-4aaf-8904-28e90ed3a6c0
+
+</td>
+</tr>
+
 </table>
 
 ### And More!

@@ -1,5 +1,5 @@
 //
-//  WKWebsiteDataType.swift
+//  WKWebsiteDataRecordExtensions.swift
 //  Eva
 //
 //  Created by Leonardo Larrañaga on 27/2/26.

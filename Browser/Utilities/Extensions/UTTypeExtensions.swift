@@ -1,5 +1,5 @@
 //
-//  UTType.swift
+//  UTTypeExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 3/2/25.

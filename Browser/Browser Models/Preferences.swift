@@ -232,6 +232,7 @@ class AppPreferences {
     var configuredFeatureFlags: [String: Bool] = [:]
 
     var injectOpenPasswordsApp = true
+    var safariExtensionInstallations: [SafariExtensionInstallation] = []
     private var passwordAppBundleIdentifier = "com.apple.Passwords"
     @Ignore
     var selectedPasswordApp: URL? {

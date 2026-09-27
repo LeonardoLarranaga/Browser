@@ -8,10 +8,15 @@
 import WebKit
 
 /// Factory that creates WKWebViewConfiguration instances
+@MainActor
 enum WebViewConfiguration {
     
-    static func make(profile: BrowserProfile?) -> WKWebViewConfiguration {
+    static func make(profile: BrowserProfile?, supportsExtensions: Bool = true) -> WKWebViewConfiguration {
         let config = WKWebViewConfiguration()
+
+        if supportsExtensions {
+            config.webExtensionController = SafariExtensions.shared.controller
+        }
         
         config.allowsInlinePredictions = true
         config.allowsAirPlayForMediaPlayback = true

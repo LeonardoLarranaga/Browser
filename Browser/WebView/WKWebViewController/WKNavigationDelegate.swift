@@ -27,6 +27,8 @@ extension WKWebViewController: WKNavigationDelegate {
         if Preferences.injectOpenPasswordsApp {
             addPasswordTextFieldShortcut()
         }
+
+        SafariExtensions.shared.tab(tab, changed: [.URL, .loading])
         
         // Clear find in page state when navigating to a new page
         if let findManager = self.tab.findInPageManager {
@@ -42,6 +44,8 @@ extension WKWebViewController: WKNavigationDelegate {
         print("Finished loading \(url.absoluteString)")
         
         coordinator.addTabToHistory()
+
+        SafariExtensions.shared.tab(tab, changed: [.URL, .title, .loading])
         
         self.tab.webviewErrorCode = nil
         self.tab.webviewErrorDescription = nil

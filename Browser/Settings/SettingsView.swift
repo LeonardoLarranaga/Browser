@@ -21,6 +21,10 @@ struct SettingsView: View {
             Tab("Profiles", systemImage: "person") {
                 SettingsProfilesView()
             }
+
+            Tab("Extensions", systemImage: "puzzlepiece.extension") {
+                SettingsExtensionsView()
+            }
             
             Tab("Keyboard Shortcuts", systemImage: "command") {
                 SettingsShortcutsView()

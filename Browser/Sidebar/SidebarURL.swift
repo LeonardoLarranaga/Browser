@@ -11,6 +11,7 @@ struct SidebarURL: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @Environment(BrowserWindow.self) private var browserWindow
+    @State private var safariExtensions = SafariExtensions.shared
 
     @State private var hover = false
     @State private var showSiteSettings = false
@@ -59,10 +60,10 @@ struct SidebarURL: View {
                         .buttonStyle(.subtleURLBar)
                         .browserTransition(.opacity)
 
-                    siteMenu
-                        .padding(.trailing, .sidebarPadding)
-                        .browserTransition(.opacity)
                 }
+
+                siteMenu
+                    .padding(.trailing, .sidebarPadding)
             }
         }
         .frame(maxWidth: .infinity)
@@ -75,6 +76,12 @@ struct SidebarURL: View {
             AnyShapeStyle(.gray).opacity(hover ? 0.3 : 0.2) :
                 AnyShapeStyle(Color.white).opacity(hover ? 0.1 : 0.05)
         )
+        .background(alignment: .trailing) {
+            SafariExtensionPopoverAnchor(manager: safariExtensions)
+                .frame(width: 18, height: 18)
+                .padding(.trailing, .sidebarPadding + 3)
+                .allowsHitTesting(false)
+        }
         .overlay(alignment: .bottom) {
             if Preferences.loadingIndicatorPosition == .onURL && browserWindow.currentSpace?.currentTab?.isLoading == true {
                 ProgressView(value: browserWindow.currentSpace?.currentTab?.estimatedProgress ?? 0)
@@ -136,6 +143,14 @@ struct SidebarURL: View {
                 }
             }
 
+            if let currentTab, !browserWindow.isNoTraceWindow, !safariExtensions.entries.isEmpty {
+                Section("Extensions") {
+                    ForEach(safariExtensions.entries.filter(\.installation.isExtensionEnabled)) { entry in
+                        SafariExtensionToolbarMenu(manager: safariExtensions, entry: entry, tab: currentTab)
+                    }
+                }
+            }
+
             Section("Privacy") {
                 Button("Clear Cookies & Reload", systemImage: "trash") {
                     currentTab?.webview?.clearCookiesAndReload()
@@ -155,6 +170,8 @@ struct SidebarURL: View {
         .menuStyle(.borderlessButton)
         .menuIndicator(.hidden)
         .fixedSize()
+        .accessibilityLabel("Website Settings and Extensions")
+        .help("Website Settings and Extensions")
     }
 
     private func zoomIn() {

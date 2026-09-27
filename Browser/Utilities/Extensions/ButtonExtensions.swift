@@ -1,5 +1,5 @@
 //
-//  Button.swift
+//  ButtonExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 2/8/25.

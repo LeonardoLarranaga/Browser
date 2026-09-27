@@ -37,8 +37,8 @@ enum FeatureFlags {
         if let userConfigured = Preferences.configuredFeatureFlags[feature.key] {
             return userConfigured
         }
-        // Fall back to the actual WKPreferences state
-        return WebViewConfiguration.make(profile: nil).preferences._isEnabled(for: feature)
+        // Fall back to WebKit's declared default without reading private WKPreferences state.
+        return browserDefaultFeatureFlags[feature.key] ?? feature.defaultValue
     }
     
     static func getFeature(key: String) -> WKFeature? {

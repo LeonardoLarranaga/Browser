@@ -1,5 +1,5 @@
 //
-//  PDF.swift
+//  PDFExtensions.swift
 //  Browser
 //
 //  Created by Leonardo LarraNaga on 2/4/25.

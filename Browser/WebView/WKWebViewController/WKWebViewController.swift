@@ -13,6 +13,7 @@ class WKWebViewController: NSViewController {
     
     @Bindable var tab: BrowserTab
     @Bindable var browserSpace: BrowserSpace
+    let browserWindow: BrowserWindow
     
     let webView: MyWKWebView
     let configuration: WKWebViewConfiguration
@@ -23,11 +24,15 @@ class WKWebViewController: NSViewController {
     private var suspendTimer: DispatchSourceTimer?
     private var hasRegisteredWindowObserver = false
     
-    init(tab: BrowserTab, browserSpace: BrowserSpace, noTrace: Bool = false) {
+    init(tab: BrowserTab, browserSpace: BrowserSpace, browserWindow: BrowserWindow, noTrace: Bool = false) {
         self.tab = tab
         self.browserSpace = browserSpace
-        
-        self.configuration = WebViewConfiguration.make(profile: browserSpace.profile)
+        self.browserWindow = browserWindow
+
+        self.configuration = WebViewConfiguration.make(
+            profile: browserSpace.profile,
+            supportsExtensions: !noTrace
+        )
         if noTrace {
             self.configuration.websiteDataStore = .nonPersistent()
         }
@@ -58,10 +63,21 @@ class WKWebViewController: NSViewController {
         }
 
         addWebPageAutoFillListener()
-        
+
         coordinator.observeWebView(webView)
+        SafariExtensions.shared.opened(
+            tab,
+            webView: webView,
+            selected: browserSpace.currentTab == tab,
+            browserWindow: browserWindow,
+            browserSpace: browserSpace
+        )
         
-        webView.load(URLRequest(url: tab.url))
+        Task { @MainActor [weak self] in
+            await SafariExtensions.shared.restoreInstallationsIfNeeded()
+            guard let self else { return }
+            self.webView.load(URLRequest(url: self.tab.url))
+        }
         
         startSuspendTimer()
     }
@@ -73,13 +89,14 @@ class WKWebViewController: NSViewController {
         // This ensures we observe the correct window.
         guard !hasRegisteredWindowObserver, let window = view.window else { return }
         hasRegisteredWindowObserver = true
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(windowWillClose(_:)),
             name: NSWindow.willCloseNotification,
             object: window
         )
+
     }
     
     deinit {
@@ -91,6 +108,7 @@ class WKWebViewController: NSViewController {
         // Only deinit if the tab is not loaded or was closed
         if !browserSpace.loadedTabs.contains(tab) {
             print("WKWebViewController cleanup \(tab.title)")
+            SafariExtensions.shared.closed(tab)
             cancelSuspendTimer()
             
             // Break delegate retain cycles

@@ -1,5 +1,5 @@
 //
-//  URL.swift
+//  URLExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 2/2/25.

@@ -1,5 +1,5 @@
 //
-//  ReadSize.swift
+//  ViewExtensions.swift
 //  Browser
 //
 //  Created by Leonardo Larrañaga on 1/23/25.
