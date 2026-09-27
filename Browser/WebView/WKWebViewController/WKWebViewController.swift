@@ -20,8 +20,6 @@ class WKWebViewController: NSViewController {
     weak var coordinator: WKWebViewControllerRepresentable.Coordinator!
     var weakScriptMessageHandler: WeakScriptMessageHandler?
     
-    var activeDownloads: [(download: WKDownload, bookmarkData: Data, fileName: String)] = []
-    
     private var suspendTimer: DispatchSourceTimer?
     private var hasRegisteredWindowObserver = false
     

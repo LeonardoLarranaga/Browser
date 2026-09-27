@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var browserWindow = BrowserWindow()
+
     var body: some View {
         MainFrame()
             .background(GlassEffectView())

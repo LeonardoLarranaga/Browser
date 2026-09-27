@@ -14,6 +14,7 @@ struct SidebarBottomToolbar: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(SidebarModel.self) private var sidebarModel
     @Environment(BrowserWindow.self) private var browserWindow
+    @State private var downloadAnimationResetDate: Date?
     
     let browserSpaces: [BrowserSpace]
     let createSpace: () -> Void
@@ -25,6 +26,10 @@ struct SidebarBottomToolbar: View {
     var body: some View {
         HStack {
             Button("Downloads", systemImage: "circle") {
+                if !sidebarModel.showDownloads {
+                    DownloadManager.shared.refreshDownloads()
+                }
+
                 withAnimation(.browserDefault) {
                     sidebarModel.showDownloads.toggle()
                     if !sidebarModel.showDownloads {
@@ -38,13 +43,7 @@ struct SidebarBottomToolbar: View {
             }
             .buttonStyle(.sidebarHover(padding: 2, enabledColor: foregroundColor))
             .contextMenu {
-                Button("Open Downloads Folder") {
-                    if let downloadURL = Preferences.downloadURL {
-                        guard downloadURL.startAccessingSecurityScopedResource() else { return }
-                        NSWorkspace.shared.open(downloadURL)
-                        downloadURL.stopAccessingSecurityScopedResource()
-                    }
-                }
+                Button("Open Downloads Folder", action: DownloadManager.shared.openDownloadsFolder)
             }
             .overlay {
                 Image(systemName: "arrow.down")
@@ -52,18 +51,10 @@ struct SidebarBottomToolbar: View {
                     .fontWeight(.bold)
                     .scaledToFit()
                     .foregroundStyle(foregroundColor)
-                    .frame(width: sidebarModel.isAnimatingDownloads ? 125 : 7)
-                    .offset(y: sidebarModel.isAnimatingDownloads ? -125 : 0)
-                    .rotationEffect(.degrees(sidebarModel.isAnimatingDownloads ? 20 : 0))
-                    .animation(.interpolatingSpring(stiffness: 200, damping: 6), value: sidebarModel.isAnimatingDownloads)
-                    .onChange(of: sidebarModel.isAnimatingDownloads) {
-                        // Reverse animation
-                        if sidebarModel.isAnimatingDownloads {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
-                                sidebarModel.isAnimatingDownloads.toggle()
-                            }
-                        }
-                    }
+                    .frame(width: sidebarModel.isAnimatingDownloads ? 22 : 7)
+                    .offset(y: sidebarModel.isAnimatingDownloads ? -40 : 0)
+                    .rotationEffect(.degrees(sidebarModel.isAnimatingDownloads ? 12 : 0))
+                    .animation(.interpolatingSpring(stiffness: 220, damping: 12), value: sidebarModel.isAnimatingDownloads)
                     .allowsHitTesting(false)
             }
             
@@ -77,9 +68,22 @@ struct SidebarBottomToolbar: View {
             }
         }
         .padding(.leading, .sidebarPadding)
+        .onChange(of: DownloadManager.shared.lastStartedDownloadID) {
+            let resetDate = Date().addingTimeInterval(0.75)
+            downloadAnimationResetDate = resetDate
+            sidebarModel.isAnimatingDownloads = true
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.75) {
+                if downloadAnimationResetDate == resetDate {
+                    sidebarModel.isAnimatingDownloads = false
+                }
+            }
+        }
     }
 }
 
 #Preview {
     SidebarBottomToolbar(browserSpaces: [], createSpace: {})
+        .environment(BrowserWindow())
+        .environment(SidebarModel())
 }

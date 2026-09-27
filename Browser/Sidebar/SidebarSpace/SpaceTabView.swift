@@ -12,6 +12,7 @@ struct SidebarSpacesTabView: View {
     
     @Environment(\.modelContext) private var modelContext
     @Environment(BrowserWindow.self) private var browserWindow
+    @Environment(SidebarModel.self) private var sidebarModel
     
     let browserSpaces: [BrowserSpace]
     
@@ -90,6 +91,42 @@ struct SidebarSpacesTabView: View {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                 self.appeared = true
+            }
+        }
+        .overlay(alignment: .bottomLeading) {
+            if sidebarModel.showDownloads && !DownloadManager.shared.downloads.isEmpty {
+                DownloadsList()
+                    .padding(.leading, .sidebarPadding)
+                    .padding(.top, 64)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background {
+                        Group {
+                            if let currentSpace = browserWindow.currentSpace,
+                               !currentSpace.colors.isEmpty,
+                               currentSpace.colorOpacity > 0 {
+                                SidebarSpaceBackground(
+                                    browserSpace: currentSpace,
+                                    isSidebarCollapsed: sidebarModel.sidebarCollapsed
+                                )
+                            } else {
+                                Color(nsColor: .windowBackgroundColor)
+                            }
+                        }
+                        .mask {
+                            VStack(spacing: 0) {
+                                LinearGradient(
+                                    colors: [.clear, .black],
+                                    startPoint: .top,
+                                    endPoint: .bottom
+                                )
+                                .frame(height: 64)
+
+                                Rectangle().fill(.black)
+                                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                        }
+                    }
             }
         }
     }

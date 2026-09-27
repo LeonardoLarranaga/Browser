@@ -14,42 +14,48 @@ struct DownloadFolderSection: View {
         Section {
             HStack {
                 Label("File Download Location", systemImage: "arrowshape.down.circle")
-                
-                Menu(content: {
-                    if Preferences.hasDownloadLocationSet {
-                        Button {
-                        } label: {
-                            HStack {
-                                Image(systemName: "checkmark")
-                                downloadLabel
-                            }
+
+                Menu {
+                    Button(action: Preferences.useDefaultDownloadLocation) {
+                        if Preferences.isUsingDefaultDownloadLocation {
+                            Label("Downloads", systemImage: "checkmark")
+                        } else {
+                            Label("Downloads", systemImage: "folder")
                         }
                     }
-                    
-                    Button("Ask for each download", action: Preferences.removeDownloadLocation)
+
+                    Button(action: Preferences.removeDownloadLocation) {
+                        if Preferences.askForDownloadLocation {
+                            Label("Ask for each download", systemImage: "checkmark")
+                        } else {
+                            Text("Ask for each download")
+                        }
+                    }
+
                     Button("Choose...", action: chooseDownloadLocation)
-                }, label: {
+                } label: {
                     downloadLabel
-                })
+                }
             }
         }
     }
     
+    @ViewBuilder
     var downloadLabel: some View {
-        Group {
-            if let downloadLocation = Preferences.downloadURL {
-                Label {
-                    Text(downloadLocation.path())
-                } icon: {
-                    if downloadLocation.hasDirectoryPath {
-                        Image(nsImage: NSWorkspace.shared.icon(for: .folder))
-                    } else {
-                        Image(nsImage: NSWorkspace.shared.icon(forFile: downloadLocation.path()))
-                    }
+        if Preferences.askForDownloadLocation {
+            Text("Ask for each download")
+        } else if let downloadLocation = Preferences.downloadURL {
+            Label {
+                Text((downloadLocation.path() as NSString).abbreviatingWithTildeInPath)
+            } icon: {
+                if downloadLocation.hasDirectoryPath {
+                    Image(nsImage: NSWorkspace.shared.icon(for: .folder))
+                } else {
+                    Image(nsImage: NSWorkspace.shared.icon(forFile: downloadLocation.path()))
                 }
-            } else {
-                Text("Ask for each download")
             }
+        } else {
+            Text("Ask for each download")
         }
     }
     

@@ -29,7 +29,7 @@ extension URL {
         let filename = deletingPathExtension().lastPathComponent
         let fileExtension = pathExtension.isEmpty ? "" : ".\(pathExtension)"
         
-        while fileManager.fileExists(atPath: path) {
+        while fileManager.fileExists(atPath: url.path) {
             let newFilename = "\(filename) (\(count))\(fileExtension)"
             url = directory.appendingPathComponent(newFilename)
             count += 1

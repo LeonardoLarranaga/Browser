@@ -18,7 +18,7 @@ extension MyWKWebView {
         
         if let downloadImageItem = menu.items.first(where: { $0.identifier?.rawValue == "WKMenuItemIdentifierDownloadImage" }),
            let copy = downloadImageItem.copy() as? NSMenuItem {
-            copy.isEnabled = Preferences.hasDownloadLocationSet
+            copy.isEnabled = true
             menu.insertItem(copy, at: 1)
             menu.removeItem(downloadImageItem)
         }

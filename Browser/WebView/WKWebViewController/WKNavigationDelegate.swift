@@ -94,9 +94,18 @@ extension WKWebViewController: WKNavigationDelegate {
     }
     
     func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: any Error) {
-        let error = error as NSError
-        self.tab.webviewErrorDescription = error.localizedDescription
-        self.tab.webviewErrorCode = error.code
-        print("Failed provisional navigation with error: \(error.localizedDescription) with code \(error.code)")
+        let navigationError = error as NSError
+
+        // WebKit reports this when a navigation is handed off as a download.
+        // It is a policy interruption, not a page load failure.
+        if navigationError.domain == "WebKitErrorDomain", navigationError.code == 102 {
+            tab.webviewErrorDescription = nil
+            tab.webviewErrorCode = nil
+            return
+        }
+
+        tab.webviewErrorDescription = navigationError.localizedDescription
+        tab.webviewErrorCode = navigationError.code
+        print("Failed provisional navigation with error: \(navigationError.localizedDescription) with code \(navigationError.code)")
     }
 }

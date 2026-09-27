@@ -78,16 +78,47 @@ class AppPreferences {
     var showHoverURL = true
 
     private var downloadLocationBookmark: Data? = nil
+    var askForDownloadLocation = false
+    private var rememberedDownloadFolderBookmarks: [Data] = []
     var downloadURL: URL? {
         get { getDownloadsFolder() }
         set {
             downloadLocationBookmark = try? newValue?.bookmarkData(options: .withSecurityScope)
+            askForDownloadLocation = false
         }
     }
 
     @Ignore
-    var hasDownloadLocationSet: Bool {
-        downloadLocationBookmark != nil
+    var isUsingDefaultDownloadLocation: Bool {
+        !askForDownloadLocation && downloadLocationBookmark == nil
+    }
+
+    @Ignore
+    var downloadLocationRequiresSecurityScope: Bool {
+        guard !askForDownloadLocation, downloadLocationBookmark != nil else { return false }
+        guard let downloadLocation = getDownloadsFolder() else { return false }
+        return downloadLocationNeedsSecurityScope(downloadLocation)
+    }
+
+    @Ignore
+    var defaultDownloadURL: URL? {
+        FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Downloads", isDirectory: true)
+    }
+
+    @Ignore
+    var downloadHistoryFolders: [URL] {
+        var folders = [downloadURL, defaultDownloadURL].compactMap { $0 }
+        folders.append(contentsOf: resolveRememberedDownloadFolders())
+
+        var seenPaths = Set<String>()
+        return folders.filter { seenPaths.insert($0.standardizedFileURL.path).inserted }
+    }
+
+    func downloadLocationNeedsSecurityScope(_ location: URL) -> Bool {
+        guard let defaultDownloadURL else { return true }
+        let defaultPath = defaultDownloadURL.standardizedFileURL.path
+        let locationPath = location.standardizedFileURL.path
+        return locationPath != defaultPath && !locationPath.hasPrefix(defaultPath + "/")
     }
 
     private func changeTrafficLightsTrailingAppearance() {
@@ -97,26 +128,73 @@ class AppPreferences {
     }
 
     private func getDownloadsFolder() -> URL? {
-        guard let downloadLocationBookmark else { return nil }
+        guard !askForDownloadLocation else { return nil }
+        guard let downloadLocationBookmark else { return defaultDownloadURL }
         var isStale = false
         guard let url = try? URL(
             resolvingBookmarkData: downloadLocationBookmark,
             options: .withSecurityScope,
             bookmarkDataIsStale: &isStale) else {
             self.downloadLocationBookmark = nil
-            return nil
+            return defaultDownloadURL
+        }
+
+        if isLegacySandboxDownloadsURL(url) {
+            self.downloadLocationBookmark = nil
+            return defaultDownloadURL
         }
 
         if isStale {
             self.downloadLocationBookmark = nil
-            return nil
+            return defaultDownloadURL
         }
 
         return url
     }
 
     func removeDownloadLocation() {
+        askForDownloadLocation = true
+    }
+
+    func useDefaultDownloadLocation() {
         downloadLocationBookmark = nil
+        askForDownloadLocation = false
+    }
+
+    func rememberDownloadFolder(_ folderURL: URL) {
+        let folderPath = folderURL.standardizedFileURL.path
+        if folderPath == defaultDownloadURL?.standardizedFileURL.path { return }
+
+        guard !resolveRememberedDownloadFolders().contains(where: {
+            $0.standardizedFileURL.path == folderPath
+        }),
+        let bookmark = try? folderURL.bookmarkData(options: .withSecurityScope) else { return }
+
+        rememberedDownloadFolderBookmarks.append(bookmark)
+    }
+
+    private func resolveRememberedDownloadFolders() -> [URL] {
+        rememberedDownloadFolderBookmarks.compactMap { bookmark in
+            var isStale = false
+            guard let url = try? URL(
+                resolvingBookmarkData: bookmark,
+                options: .withSecurityScope,
+                bookmarkDataIsStale: &isStale
+            ), !isStale else { return nil }
+
+            if isLegacySandboxDownloadsURL(url) {
+                return defaultDownloadURL
+            }
+            return url
+        }
+    }
+
+    private func isLegacySandboxDownloadsURL(_ url: URL) -> Bool {
+        let bundleIdentifier = Bundle.main.bundleIdentifier ?? "swift.eva.browser"
+        let containerDownloadsSuffix = "/Library/Containers/\(bundleIdentifier)/Data/Downloads"
+        let path = url.standardizedFileURL.path
+        return path.hasSuffix(containerDownloadsSuffix)
+            && path != defaultDownloadURL?.standardizedFileURL.path
     }
 
     private var defaultSearchEngine = SearchEngine.google

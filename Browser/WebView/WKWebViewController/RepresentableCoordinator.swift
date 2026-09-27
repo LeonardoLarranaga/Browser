@@ -72,10 +72,6 @@ extension WKWebViewControllerRepresentable {
             }
         }
         
-        func toggleDownloadAnimation() {
-            self.parent.sidebarModel.isAnimatingDownloads.toggle()
-        }
-        
         /// Closes the current tab (freshly opened by another tab) and returns to the opener tab.
         /// Called when the user swipes right on a tab with no back history.
         private func closeAndReturnToOpener() {
