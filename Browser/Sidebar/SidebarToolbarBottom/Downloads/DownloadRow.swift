@@ -82,6 +82,27 @@ struct DownloadRow: View {
         .clipShape(.rect(cornerRadius: 10))
         .onHover { hover = $0 }
         .disabled(!sidebarModel.allowDownloadHover)
+        .contextMenu {
+            if download.state == .downloading {
+                Button("Cancel Download", role: .destructive) {
+                    DownloadManager.shared.cancelDownload(download.id)
+                }
+            } else {
+                Button("Open in \(defaultApplicationName)") {
+                    DownloadManager.shared.open(download)
+                }
+
+                Button("Show in Finder") {
+                    DownloadManager.shared.showInFinder(download)
+                }
+
+                Divider()
+
+                Button("Move to Trash", role: .destructive) {
+                    DownloadManager.shared.moveToTrash(download)
+                }
+            }
+        }
     }
 
     private var rowActionLabel: String {
@@ -100,6 +121,17 @@ struct DownloadRow: View {
                 : "Opening when download finishes"
         }
         return "Opening in \(formatTimeRemaining(interval))"
+    }
+
+    private var defaultApplicationName: String {
+        guard let applicationURL = NSWorkspace.shared.urlForApplication(toOpen: download.url) else {
+            return "Default App"
+        }
+
+        let applicationBundle = Bundle(url: applicationURL)
+        return applicationBundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+            ?? applicationBundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+            ?? applicationURL.deletingPathExtension().lastPathComponent
     }
 
     @ViewBuilder

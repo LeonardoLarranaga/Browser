@@ -68,19 +68,40 @@ final class DownloadManager: NSObject, WKDownloadDelegate {
     }
 
     func open(_ download: Download) {
-        guard download.state == .completed else { return }
-
-        let itemFolder = download.url.deletingLastPathComponent().standardizedFileURL
-        if let configuredFolder = Preferences.downloadURL,
-           configuredFolder.standardizedFileURL == itemFolder,
-           Preferences.downloadLocationRequiresSecurityScope {
-            guard configuredFolder.startAccessingSecurityScopedResource() else { return }
-            defer { configuredFolder.stopAccessingSecurityScopedResource() }
-            NSWorkspace.shared.open(download.url)
-            return
+        guard download.state != .downloading else { return }
+        do {
+            let didOpen = try withAccessToFile(download.url) { url in
+                NSWorkspace.shared.open(url)
+            }
+            if !didOpen {
+                NSAlert(error: "Could not open \(download.name).").runModal()
+            }
+        } catch {
+            NSAlert(error: error).runModal()
         }
+    }
 
-        NSWorkspace.shared.open(download.url)
+    func showInFinder(_ download: Download) {
+        guard download.state != .downloading else { return }
+        do {
+            try withAccessToFile(download.url) { url in
+                NSWorkspace.shared.activateFileViewerSelecting([url])
+            }
+        } catch {
+            NSAlert(error: error).runModal()
+        }
+    }
+
+    func moveToTrash(_ download: Download) {
+        guard download.state != .downloading else { return }
+        do {
+            try withAccessToFile(download.url) { url in
+                try FileManager.default.trashItem(at: url, resultingItemURL: nil)
+            }
+            downloads.removeAll { $0.id == download.id }
+        } catch {
+            NSAlert(error: error).runModal()
+        }
     }
 
     func download(
@@ -424,5 +445,24 @@ final class DownloadManager: NSObject, WKDownloadDelegate {
             print("Failed to read download folder at \(folderURL.path): \(error.localizedDescription)")
             return []
         }
+    }
+
+    private func withAccessToFile<T>(_ fileURL: URL, operation: (URL) throws -> T) throws -> T {
+        let parentFolder = fileURL.deletingLastPathComponent()
+        guard Preferences.downloadLocationNeedsSecurityScope(parentFolder) else {
+            return try operation(fileURL)
+        }
+
+        let standardizedParent = parentFolder.standardizedFileURL
+        guard let bookmarkedFolder = Preferences.downloadHistoryFolders.first(where: {
+            $0.standardizedFileURL == standardizedParent
+        }) else {
+            throw NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError)
+        }
+        guard bookmarkedFolder.startAccessingSecurityScopedResource() else {
+            throw NSError(domain: NSCocoaErrorDomain, code: NSFileReadNoPermissionError)
+        }
+        defer { bookmarkedFolder.stopAccessingSecurityScopedResource() }
+        return try operation(fileURL)
     }
 }
