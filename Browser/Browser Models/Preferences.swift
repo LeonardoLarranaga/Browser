@@ -35,28 +35,6 @@ class AppPreferences {
         didSet { changeTrafficLightsTrailingAppearance() }
     }
 
-    enum LoadingIndicatorPosition: Int, CaseIterable {
-        case onURL, onTab, onWebView
-
-        var localizedStringKey: LocalizedStringKey {
-            switch self {
-            case .onURL: "URL Bar"
-            case .onTab: "Sidebar Tab"
-            case .onWebView: "Above Web Content"
-            }
-        }
-
-        var systemImage: String {
-            switch self {
-            case .onURL: "link"
-            case .onTab: "sidebar.squares.left"
-            case .onWebView: "arrow.trianglehead.rectanglepath"
-            }
-        }
-    }
-
-    var loadingIndicatorPosition = LoadingIndicatorPosition.onURL
-
     // Web appearance preferences
     var roundedCorners = true
     var enablePadding = true

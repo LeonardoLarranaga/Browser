@@ -83,8 +83,8 @@ struct SidebarURL: View {
                 .allowsHitTesting(false)
         }
         .overlay(alignment: .bottom) {
-            if Preferences.loadingIndicatorPosition == .onURL && browserWindow.currentSpace?.currentTab?.isLoading == true {
-                ProgressView(value: browserWindow.currentSpace?.currentTab?.estimatedProgress ?? 0)
+            if let currentTab, currentTab.isLoading {
+                ProgressView(value: currentTab.estimatedProgress)
                     .progressViewStyle(.linear)
                     .frame(height: 2)
                     .tint(browserWindow.currentSpace?.getColors.first ?? .accentColor)

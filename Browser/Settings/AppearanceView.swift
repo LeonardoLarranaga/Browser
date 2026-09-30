@@ -23,12 +23,6 @@ struct SettingsAppearanceView: View {
                 Toggle("Show Window Controls On Trailling Sidebar", systemImage: "macwindow", isOn: $preferences.showWindowControlsOnTrailingSidebar)
 
                 Toggle("Reverse Background Colors on Trailing Sidebar", systemImage: "paintpalette", isOn: $preferences.reverseColorsOnTrailingSidebar)
-
-                Picker("Loading Indicator Position", systemImage: "progress.indicator", selection: $preferences.loadingIndicatorPosition) {
-                    ForEach(AppPreferences.LoadingIndicatorPosition.allCases, id: \.self) { position in
-                        Label(position.localizedStringKey, systemImage: position.systemImage).tag(position)
-                    }
-                }
             }
 
             Section {
