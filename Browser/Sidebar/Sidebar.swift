@@ -29,7 +29,9 @@ struct Sidebar: View {
         .padding(.bottom, 10)
         .opacity(sidebarModel.currentSidebarWidth == 0 ? 0 : 1)
         .padding(.trailing, Preferences.sidebarPosition == .trailing ? .sidebarPadding * 2 : 0)
-        .sidebarToolbar(browserSpaces: browserSpaces)
+        .overlay(alignment: .topTrailing) {
+            SidebarToolbar(browserSpaces: browserSpaces)
+        }
         .gesture(WindowDragGesture()) // Move the browser window by dragging the sidebar
         .task {
             if browserSpaces.isEmpty {

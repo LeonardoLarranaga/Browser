@@ -72,7 +72,6 @@ struct MainFrame: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .toolbarBackgroundVisibility(.hidden, for: .windowToolbar)
         .background {
             if browserWindow.currentSpace != nil {
                 SidebarSpaceBackground(

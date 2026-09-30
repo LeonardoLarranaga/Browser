@@ -89,7 +89,6 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
         }
 
         window.backgroundColor = .clear
-        window.toolbar?.allowsDisplayModeCustomization = false
 
         if Preferences.sidebarPosition == .trailing {
             NSApp.setBrowserWindowControls(hidden: !Preferences.showWindowControlsOnTrailingSidebar)
@@ -112,6 +111,7 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     @objc internal func windowWillEnterFullScreen(_ notification: Notification) {
         guard let window = notification.object as? NSWindow else { return }
         windowsTransitioningFullScreen.insert(ObjectIdentifier(window))
+        window.toolbar?.isVisible = false
     }
 
     @objc internal func windowWillExitFullScreen(_ notification: Notification) {
@@ -137,6 +137,8 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
             pendingFrameRestore.remove(windowID)
             restoreWindowFrame(window)
         }
+
+        window.toolbar?.isVisible = true
     }
 
     @objc func windowDidResizeOrMove(_ notification: Notification) {
