@@ -14,6 +14,7 @@ struct SidebarResizer: View {
 
     @State private var isDragging = false
     @State private var isHovering = false
+    @State private var isAtPreferredWidth = false
     @State private var hoverTask: Task<Void, Never>? = nil
     
     var body: some View {
@@ -72,6 +73,7 @@ struct SidebarResizer: View {
         // This is used to animate the sidebar back to its original width
         if isDragging == false {
             sidebarModel.lastSidebarWidth = sidebarModel.currentSidebarWidth
+            isAtPreferredWidth = sidebarModel.currentSidebarWidth == .preferredSidebarWidth
         } else {
             setResizeLeftRightNSCursor()
         }
@@ -83,11 +85,17 @@ struct SidebarResizer: View {
             // Snap the sidebar width to the preferred width
             let fixedWidth = newWidth / .preferredSidebarWidth
             if fixedWidth > 0.95 && fixedWidth < 1.06 {
+                if !isAtPreferredWidth {
+                    NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+                }
+                isAtPreferredWidth = true
                 sidebarModel.currentSidebarWidth = .preferredSidebarWidth
             } else {
+                isAtPreferredWidth = false
                 sidebarModel.currentSidebarWidth = newWidth
             }
         } else {
+            isAtPreferredWidth = false
             // Collapse the sidebar if the width is less than half of the minimum width
             if newWidth < .minimumSidebarWidth * 0.5 {
                 sidebarModel.currentSidebarWidth = 0

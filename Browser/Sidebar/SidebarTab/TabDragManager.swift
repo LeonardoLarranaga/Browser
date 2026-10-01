@@ -109,8 +109,20 @@ final class TabDragManager {
 
     func update(to pointer: CGPoint) {
         guard isActive else { return }
+        let previousDropTier = dropTier
+        let previousDropBeforeTabID = dropBeforeTabID
+        let previousDropFolderID = dropFolderID
         self.pointer = pointer
         recompute()
+
+        guard draggingTab != nil,
+              let previousDropTier,
+              previousDropTier != dropTier
+                || previousDropBeforeTabID != dropBeforeTabID
+                || previousDropFolderID != dropFolderID
+        else { return }
+
+        NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
     }
 
     func end() -> SidebarDragResult? {

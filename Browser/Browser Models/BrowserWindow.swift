@@ -13,6 +13,10 @@ import SwiftUI
 
     var currentSpace: BrowserSpace? = nil {
         didSet {
+            if let oldValue, let currentSpace, oldValue != currentSpace {
+                NSHapticFeedbackManager.defaultPerformer.perform(.alignment, performanceTime: .now)
+            }
+
             if isMainBrowserWindow && !isNoTraceWindow {
                 Preferences.currentBrowserSpace = currentSpace?.id
             }
