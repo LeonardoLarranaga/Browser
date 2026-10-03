@@ -5,10 +5,9 @@
 //  Created by Leonardo Larrañaga on 1/23/25.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
-/// Main frame of the browser.
 struct MainFrame: View {
 
     @Environment(BrowserWindow.self) private var browserWindow
@@ -41,14 +40,14 @@ struct MainFrame: View {
             PageWebView(browserSpaces: browserSpaces)
                 .clipShape(.rect(corners: isImmersive ? .fixed(0) : Preferences.roundedCorners ? .concentric(minimum: 8) : .fixed(0)))
                 .shadow(radius: isImmersive ? 0 : Preferences.enableShadow ? 3 : 0)
-                .padding([.top, .bottom], isImmersive ? 0 : Preferences.enablePadding ? 10 : 0)
+                .padding([.top, .bottom], isImmersive ? 0 : Preferences.enablePadding ? 8 : 0)
                 .padding(
                     Preferences.sidebarPosition == .leading ? .leading : .trailing,
-                    isImmersive ? 0 : sidebarModel.sidebarCollapsed ? 10 : 5
+                    isImmersive ? 0 : sidebarModel.sidebarCollapsed ? 8 : 5
                 )
                 .padding(
                     Preferences.sidebarPosition == .leading ? .trailing : .leading,
-                    isImmersive ? 0 : Preferences.enablePadding ? 10 : 0
+                    isImmersive ? 0 : Preferences.enablePadding ? 8 : 0
                 )
                 .onReceive(NotificationCenter.default.publisher(for: NSWindow.didEnterFullScreenNotification)) { _ in
                     // Defer to get out of AppKit's fullscreen constraint/layout pass.
