@@ -119,18 +119,8 @@ struct SidebarTabContextMenu: View {
         }
     }
     
-    /// Duplicate the tab and selects the new tab
     private func duplicateTab() {
-        let duplicateTab = BrowserTab(
-            title: browserTab.title,
-            favicon: browserTab.favicon,
-            url: browserTab.url,
-            order: browserTab.order + 1,
-            browserSpace: browserSpace
-        )
-        
-        browserSpace.tabs.insert(duplicateTab, at: duplicateTab.order)
-        browserSpace.currentTab = duplicateTab
+        browserSpace.duplicateTab(browserTab)
     }
     
     /// Close (delete) the tab and selects the next tab

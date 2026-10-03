@@ -417,4 +417,21 @@ final class BrowserSpace: Identifiable {
 
         try? modelContext?.save()
     }
+
+    func duplicateTab(_ browserTab: BrowserTab?) {
+        guard let browserTab else { return }
+
+        let duplicateTab = BrowserTab(
+            title: browserTab.title,
+            favicon: browserTab.favicon,
+            url: browserTab.url,
+            order: browserTab.order + 1,
+            browserSpace: self
+        )
+
+        withAnimation(.browserDefault) {
+            tabs.insert(duplicateTab, at: duplicateTab.order)
+            currentTab = duplicateTab
+        }
+    }
 }

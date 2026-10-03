@@ -7,16 +7,23 @@
 
 import KeyboardShortcuts
 import SwiftUI
+import WebKit
 
 struct EditCommands: Commands {
     
     @FocusedValue(\.browserActiveWindowState) private var browserWindow
 
     @State private var isEditable = false
-    
+
+    private var currentTab: BrowserTab? {
+        browserWindow?.currentSpace?.currentTab
+    }
+
+    private var webView: MyWKWebView? {
+        currentTab?.webview
+    }
+
     var body: some Commands {
-        let webView = browserWindow?.currentSpace?.currentTab?.webview
-        
         CommandGroup(replacing: .undoRedo) {
             let tabUndoManager = browserWindow?.tabUndoManager
             Button("\(tabUndoManager?.undoDescription ?? "")", action: tabUndoManager?.undo)
@@ -31,21 +38,25 @@ struct EditCommands: Commands {
         }
         
         CommandGroup(after: .undoRedo) {
-            Button("Copy Current URL", action: browserWindow?.copyURLToClipboard)
-                .globalKeyboardShortcut(.copyCurrentURL)
-            
-            Divider()
-            
-            if let webView {
+            Group {
+                Button("Copy Current URL", action: browserWindow?.copyURLToClipboard)
+                    .globalKeyboardShortcut(.copyCurrentURL)
+
+                Button("Duplicate Tab") { browserWindow?.currentSpace?.duplicateTab(currentTab) }
+                    .globalKeyboardShortcut(.duplicateTab)
+
+                Divider()
+
                 Button(isEditable ? "Stop Editing Text On Page" : "Edit Text On Page") {
                     isEditable.toggle()
-                    webView.toggleEditable()
+                    webView?.toggleEditable()
                     browserWindow?.presentActionAlert(message: isEditable ? "You Can Now Edit The Text On The Page" : "You Are No Longer Editing The Text On The Page", systemImage: isEditable ? "pencil.and.outline" : "pencil.slash")
                 }
                 .globalKeyboardShortcut(.toggleEditing)
             }
+            .disabled(webView == nil)
         }
-        
+
         CommandGroup(before: .textEditing) {
             Menu("Find") {
                 Button("Find...", action: webView?.toggleFindUI)
@@ -62,11 +73,7 @@ struct EditCommands: Commands {
             .id("BrowserFindMenu")
         }
     }
-    
-    private var currentTab: BrowserTab? {
-        browserWindow?.currentSpace?.currentTab
-    }
-    
+
     private func findNext() {
         Task {
             await currentTab?.findInPageManager?.goToNextMatch()
@@ -105,7 +112,8 @@ extension KeyboardShortcuts.Name {
     static let redoCloseTab = Self("redo_close_tab", default: .init(.z, modifiers: [.command, .shift]))
     
     static let copyCurrentURL = Self("copy_current_url", default: .init(.c, modifiers: [.command, .shift]))
-    
+    static let duplicateTab = Self("duplicate_tab", default: .init(.d, modifiers: [.command]))
+
     static let toggleEditing = Self("toggle_editing")
     
     static let find = Self("find", default: .init(.f, modifiers: [.command]))
@@ -117,7 +125,7 @@ extension KeyboardShortcuts.Name {
 extension [KeyboardShortcuts.Name] {
     static let allEditCommands: [KeyboardShortcuts.Name] = [
         .undoCloseTab, .redoCloseTab,
-        .copyCurrentURL, .toggleEditing,
+        .copyCurrentURL, .duplicateTab, .toggleEditing,
         .find, .findNext, .findPrevious, .useSelectionForFind
     ]
 }
