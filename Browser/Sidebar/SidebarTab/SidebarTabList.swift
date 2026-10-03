@@ -80,6 +80,7 @@ struct SidebarTabList: View {
         .padding(.trailing, usesSidebarPadding && Preferences.sidebarPosition == .leading && sidebarModel.sidebarCollapsed ? 5 : 0)
         .animation(.browserSnappy, value: dragManager.dropBeforeTabID)
         .animation(.browserSnappy, value: dragManager.dropTier)
+        .animation(.browserSnappy, value: tabs.count)
     }
 }
 

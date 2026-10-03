@@ -32,17 +32,17 @@ struct CloseTabCommand: UndoableCommand {
         let index = space.loadedTabs.firstIndex(of: tab) ?? 0
         let newTab = space.loadedTabs[safe: index == 0 ? 1 : index - 1]
         
-        space.unloadTab(tab)
-        
-        do {
-            space.tabs.removeAll(where: { $0.id == tab.id })
-            modelContext.delete(tab)
-            try modelContext.save()
-        } catch {
-            print("Error deleting tab: \(error)")
-        }
-        
         withAnimation(.browserDefault) {
+            space.unloadTab(tab)
+
+            do {
+                space.tabs.removeAll(where: { $0.id == tab.id })
+                modelContext.delete(tab)
+                try modelContext.save()
+            } catch {
+                print("Error deleting tab: \(error)")
+            }
+
             space.currentTab = newTab
         }
     }
