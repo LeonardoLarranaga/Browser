@@ -36,6 +36,12 @@
             "state" : "new",
             "value" : "Eva needs access to use your camera in websites."
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eva necesita acceso a tu cámara para usarla en sitios web."
+          }
         }
       }
     },
@@ -46,6 +52,12 @@
         "en" : {
           "stringUnit" : {
             "state" : "new",
+            "value" : "Leonardo Larrañaga"
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Leonardo Larrañaga"
           }
         }
@@ -60,6 +72,12 @@
             "state" : "new",
             "value" : "Eva needs access to use your location in websites."
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eva necesita acceso a tu ubicación en sitios web."
+          }
         }
       }
     },
@@ -72,6 +90,12 @@
             "state" : "new",
             "value" : "Browser needs access to use your location in websites."
           }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Browser necesita acceso a tu ubicación en sitios web."
+          }
         }
       }
     },
@@ -83,6 +107,12 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "Eva needs access to use your microphone on websites."
+          }
+        },
+        "es-419" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eva necesita acceso a tu micrófono en sitios web."
           }
         }
       }
