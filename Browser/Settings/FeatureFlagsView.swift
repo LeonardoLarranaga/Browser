@@ -65,7 +65,7 @@ private struct FeatureFlagRow: View {
                 .labelStyle(.iconOnly)
                 .buttonStyle(.plain)
                 .popover(isPresented: $showPopover, arrowEdge: .bottom) {
-                    Text(featureFlag.details ?? "No details available.")
+                    Text(featureFlag.details ?? String(localized: "No details available."))
                         .padding()
                 }
             }

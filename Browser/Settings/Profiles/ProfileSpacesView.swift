@@ -60,7 +60,7 @@ private struct SpaceRow: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text(space.name)
                     .fontWeight(.medium)
-                Text("\(space.tabs.count) tab\(space.tabs.count == 1 ? "" : "s")")
+                Text("^[\(space.tabs.count) tab](inflect: true)")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -83,7 +83,7 @@ private struct SpaceRow: View {
         }
         .padding(.horizontal, 4)
         .padding(.vertical, 6)
-        .alert("Move \(space.name) to \(profileToMoveTo?.name ?? "Default")", isPresented: $showMoveAlert) {
+        .alert("Move \(space.name) to \(profileToMoveTo.displayName)", isPresented: $showMoveAlert) {
             Button(role: .cancel, action: {})
             Button("Move", role: .confirm, action: moveSpace)
         } message: {

@@ -33,3 +33,9 @@ final class BrowserProfile {
         set { colorHex = newValue.hexString() }
     }
 }
+
+extension Optional where Wrapped == BrowserProfile {
+    var displayName: String {
+        self?.name ?? String(localized: "Default")
+    }
+}

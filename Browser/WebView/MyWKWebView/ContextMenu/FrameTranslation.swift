@@ -9,8 +9,9 @@ import WebKit
 
 extension MyWKWebView {
     func translationMenuItem() -> NSMenuItem {
-        let item = NSMenuItem(title: "Translate Using Google", action: nil, keyEquivalent: "")
-        let menu = NSMenu(title: "Translate Using Google")
+        let title = String(localized: "Translate Using Google")
+        let item = NSMenuItem(title: title, action: nil, keyEquivalent: "")
+        let menu = NSMenu(title: title)
         item.submenu = menu
         
         let languages = [
@@ -207,15 +208,21 @@ extension MyWKWebView {
             ("Yoruba", "yo"),
             ("Yucatec Maya", "yua"),
             ("Zulu", "zu")
-        ].map { TranslatedLanguage(code: $0.1, name: $0.0) }
+        ].map { language in
+            TranslatedLanguage(
+                code: language.1,
+                name: Locale.current.localizedString(forIdentifier: language.1) ?? language.0
+            )
+        }.sorted { $0.name.localizedStandardCompare($1.name) == .orderedAscending }
         
         let recentlyTranslatedLanguages = Preferences.recentlyTranslatedLanguages
         if !recentlyTranslatedLanguages.isEmpty {
-            menu.addItem(NSMenuItem(title: "Recent", action: nil, keyEquivalent: ""))
+            menu.addItem(NSMenuItem(title: String(localized: "Recent"), action: nil, keyEquivalent: ""))
             
             for language in recentlyTranslatedLanguages {
-                let item = NSMenuItem(title: language.name, action: #selector(translate(_:)), keyEquivalent: "")
-                item.representedObject = language
+                let name = Locale.current.localizedString(forIdentifier: language.code) ?? language.name
+                let item = NSMenuItem(title: name, action: #selector(translate(_:)), keyEquivalent: "")
+                item.representedObject = TranslatedLanguage(code: language.code, name: name)
                 menu.addItem(item)
             }
             menu.addItem(.separator())
@@ -318,7 +325,7 @@ extension MyWKWebView {
                     
                     self.evaluateJavaScript(replaceScript) { _, error in
                         if error == nil {
-                            self.presentActionAlert?("Page Translated! Refresh To Revert", "translate")
+                            self.presentActionAlert?("Page Translated. Refresh To Revert", "translate")
                         }
                     }
                 }

@@ -74,7 +74,7 @@ final class DownloadManager: NSObject, WKDownloadDelegate {
                 NSWorkspace.shared.open(url)
             }
             if !didOpen {
-                NSAlert(error: "Could not open \(download.name).").runModal()
+                NSAlert(error: String(localized: "Could not open \(download.name).")).runModal()
             }
         } catch {
             NSAlert(error: error).runModal()
@@ -125,7 +125,7 @@ final class DownloadManager: NSObject, WKDownloadDelegate {
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.canCreateDirectories = true
-        panel.title = "Select Download Location For \"\(suggestedFilename)\""
+        panel.title = String(localized:"Select Download Location For \"\(suggestedFilename)\"")
         panel.begin { [weak self] response in
             guard let self, response == .OK, let folderURL = panel.url else {
                 completionHandler(nil)
@@ -266,7 +266,7 @@ final class DownloadManager: NSObject, WKDownloadDelegate {
         Preferences.rememberDownloadFolder(folderURL)
 
         let safeFilename = (suggestedFilename as NSString).lastPathComponent
-        let filename = safeFilename.isEmpty || safeFilename == "." || safeFilename == ".." ? "Download" : safeFilename
+        let filename = safeFilename.isEmpty || safeFilename == "." || safeFilename == ".." ? String(localized: "Download") : safeFilename
         let temporaryURL = reserveTemporaryURL(in: folderURL, suggestedFilename: filename)
         let itemID = UUID()
         let item = Download(

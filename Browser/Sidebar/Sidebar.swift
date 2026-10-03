@@ -66,9 +66,9 @@ struct Sidebar: View {
             if browserWindow.isMainBrowserWindow {
                 newSpace = BrowserSpace(name: "", systemImage: "circle.fill", order: nextIndex, colors: [], colorScheme: "system")
             } else if browserWindow.isNoTraceWindow {
-                newSpace = BrowserSpace(name: "No-Trace Window", systemImage: "sunglasses.fill", order: 0, colors: [.black], colorScheme: "system")
+                newSpace = BrowserSpace(name: String(localized: "No-Trace Window"), systemImage: "sunglasses.fill", order: 0, colors: [.black], colorScheme: "system")
             } else {
-                newSpace = BrowserSpace(name: "Temporary Window", systemImage: "circle.fill", order: 0, colors: [], colorScheme: "system")
+                newSpace = BrowserSpace(name: String(localized: "Temporary Window"), systemImage: "circle.fill", order: 0, colors: [], colorScheme: "system")
             }
 
             modelContext.insert(newSpace)

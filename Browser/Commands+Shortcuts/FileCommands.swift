@@ -60,7 +60,7 @@ struct FileCommands: Commands {
                 ShareLink("Share", item: url)
                     .globalKeyboardShortcut(.share)
                 
-                Button("Snaphost Current Page Portion", action: copyCurrentPagePortion)
+                Button("Snapshot Current Page Portion", action: copyCurrentPagePortion)
                     .globalKeyboardShortcut(.snapshotCurrentPagePortion)
                 Button("Snapshot Full Page", action: copyFullPage)
                     .globalKeyboardShortcut(.snapshotFullPage)
@@ -96,25 +96,25 @@ struct FileCommands: Commands {
 }
 
 extension KeyboardShortcuts.Name {
-    static let newTab = Self("new_tab", default: .init(.t, modifiers: .command))
-    static let newWindow = Self("new_window", default: .init(.n, modifiers: [.command]))
-    static let newTemporaryWindow = Self("new_temporary_window", default: .init(.n, modifiers: [.command, .option]))
-    static let newNoTraceWindow = Self("new_notrace_window", default: .init(.n, modifiers: [.command, .shift]))
+    static let newTab = Self(localized: "New Tab", default: .init(.t, modifiers: .command))
+    static let newWindow = Self(localized: "New Window", default: .init(.n, modifiers: [.command]))
+    static let newTemporaryWindow = Self(localized: "New Temporary Window", default: .init(.n, modifiers: [.command, .option]))
+    static let newNoTraceWindow = Self(localized: "New No-Trace Window", default: .init(.n, modifiers: [.command, .shift]))
     
-    static let openFile = Self("open_file", default: .init(.o, modifiers: .command))
+    static let openFile = Self(localized: "Open File", default: .init(.o, modifiers: .command))
     
-    static let closeTab = Self("close_tab", default: .init(.w, modifiers: .command))
-    static let closeWindow = Self("close_window", default: .init(.w, modifiers: [.command, .shift]))
-    static let closeAllWindows = Self("close_all_windows", default: .init(.w, modifiers: [.command, .option]))
+    static let closeTab = Self(localized: "Close Tab", default: .init(.w, modifiers: .command))
+    static let closeWindow = Self(localized: "Close Window", default: .init(.w, modifiers: [.command, .shift]))
+    static let closeAllWindows = Self(localized: "Close All Windows", default: .init(.w, modifiers: [.command, .option]))
     
-    static let createQRCode = Self("create_qr_code")
-    static let share = Self("share")
-    static let snapshotCurrentPagePortion = Self("snapshot_current_page_portion")
-    static let snapshotFullPage = Self("snapshot_full_page", default: .init(.two, modifiers: [.command, .shift]))
+    static let createQRCode = Self(localized: "Create QR Code")
+    static let share = Self(localized: "Share")
+    static let snapshotCurrentPagePortion = Self(localized: "Snapshot Current Page Portion")
+    static let snapshotFullPage = Self(localized: "Snapshot Full Page", default: .init(.two, modifiers: [.command, .shift]))
     
-    static let savePageAs = Self("save_page_as", default: .init(.s, modifiers: [.command, .shift]))
+    static let savePageAs = Self(localized: "Save Page As...", default: .init(.s, modifiers: [.command, .shift]))
     
-    static let print = Self("print", default: .init(.p, modifiers: .command))
+    static let print = Self(localized: "Print", default: .init(.p, modifiers: .command))
 }
 
 extension [KeyboardShortcuts.Name] {

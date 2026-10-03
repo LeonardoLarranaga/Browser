@@ -108,18 +108,18 @@ struct EditCommands: Commands {
 }
 
 extension KeyboardShortcuts.Name {
-    static let undoCloseTab = Self("undo_close_tab", default: .init(.z, modifiers: [.command]))
-    static let redoCloseTab = Self("redo_close_tab", default: .init(.z, modifiers: [.command, .shift]))
+    static let undoCloseTab = Self(localized: "Undo Close Tab", default: .init(.z, modifiers: [.command]))
+    static let redoCloseTab = Self(localized: "Redo Close Tab", default: .init(.z, modifiers: [.command, .shift]))
     
-    static let copyCurrentURL = Self("copy_current_url", default: .init(.c, modifiers: [.command, .shift]))
-    static let duplicateTab = Self("duplicate_tab", default: .init(.d, modifiers: [.command]))
+    static let copyCurrentURL = Self(localized: "Copy Current URL", default: .init(.c, modifiers: [.command, .shift]))
+    static let duplicateTab = Self(localized: "Duplicate Tab", default: .init(.d, modifiers: [.command]))
 
-    static let toggleEditing = Self("toggle_editing")
+    static let toggleEditing = Self(localized: "Toggle Editing")
     
-    static let find = Self("find", default: .init(.f, modifiers: [.command]))
-    static let findNext = Self("find_next", default: .init(.g, modifiers: [.command]))
-    static let findPrevious = Self("find_previous", default: .init(.g, modifiers: [.command, .shift]))
-    static let useSelectionForFind = Self("use_selection_for_find", default: .init(.e, modifiers: [.command]))
+    static let find = Self(localized: "Find...", default: .init(.f, modifiers: [.command]))
+    static let findNext = Self(localized: "Find Next", default: .init(.g, modifiers: [.command]))
+    static let findPrevious = Self(localized: "Find Previous", default: .init(.g, modifiers: [.command, .shift]))
+    static let useSelectionForFind = Self(localized: "Use Selection For Find", default: .init(.e, modifiers: [.command]))
 }
 
 extension [KeyboardShortcuts.Name] {

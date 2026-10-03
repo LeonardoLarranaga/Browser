@@ -11,7 +11,7 @@ extension MyWKWebView {
         // Copy (1)
         // Paste (2)
         if Preferences.injectOpenPasswordsApp {
-            let passwordAppItem = NSMenuItem(title: "Open Passwords App", action: #selector(openPasswordsApp), keyEquivalent: "")
+            let passwordAppItem = NSMenuItem(title: String(localized: "Open Passwords App"), action: #selector(openPasswordsApp), keyEquivalent: "")
             passwordAppItem.image = NSImage(systemSymbolName: "key.fill", accessibilityDescription: nil)
             passwordAppItem.target = self
             menu.addItem(passwordAppItem)
@@ -22,25 +22,25 @@ extension MyWKWebView {
     }
 
     private func makeAutoFillMenuItem() -> NSMenuItem {
-        let autoFillMenu = NSMenu(title: "AutoFill")
+        let autoFillMenu = NSMenu(title: String(localized: "AutoFill"))
         autoFillMenu.autoenablesItems = false
         autoFillMenu.addItem(makeAutoFillItem(
-            title: "Contact…",
+            title: String(localized: "Contact…"),
             systemImage: "person.crop.circle",
             action: WebPageAutoFillAction.contacts
         ))
         autoFillMenu.addItem(makeAutoFillItem(
-            title: "Passwords…",
+            title: String(localized: "Passwords…"),
             systemImage: "key.dots",
             action: WebPageAutoFillAction.passwords
         ))
         autoFillMenu.addItem(makeAutoFillItem(
-            title: "Credit Card…",
+            title: String(localized: "Credit Card…"),
             systemImage: "creditcard",
             action: WebPageAutoFillAction.creditCards
         ))
 
-        let autoFillItem = NSMenuItem(title: "AutoFill", action: nil, keyEquivalent: "")
+        let autoFillItem = NSMenuItem(title: String(localized: "AutoFill"), action: nil, keyEquivalent: "")
         autoFillItem.image = NSImage(
             systemSymbolName: "rectangle.and.pencil.and.ellipsis",
             accessibilityDescription: nil

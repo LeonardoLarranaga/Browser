@@ -22,7 +22,7 @@ extension WKWebViewControllerRepresentable {
         }
         
         /// Presents an alert with a message and a system image
-        func presentActionAlert(message: String, systemImage: String) {
+        func presentActionAlert(message: LocalizedStringResource, systemImage: String) {
             self.parent.browserWindow.presentActionAlert(message: message, systemImage: systemImage)
         }
         

@@ -35,7 +35,7 @@ struct ProfileCard: View {
                 Image(systemName: profile?.systemImage ?? "person.crop.circle")
                     .font(.system(size: 40))
                 Spacer()
-                Text(profile?.name ?? "Default")
+                Text(profile.displayName)
                     .fontWeight(isSelected ? .semibold : .regular)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)

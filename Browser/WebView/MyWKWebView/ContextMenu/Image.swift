@@ -9,9 +9,9 @@ extension MyWKWebView {
     /// Creates the custom context menu for images
     /// - Parameter menu: The context menu to modify
     func handleImageContextMenu(_ menu: NSMenu) {
-        let openInWindowItem = menu.items.first { $0.title.contains("Window") }
+        let openInWindowItem = menu.items.first { $0.identifier?.rawValue.hasSuffix("OpenImageInNewWindow") == true }
         if let openInWindowItem, let copy = openInWindowItem.copy() as? NSMenuItem {
-            copy.title = "Open Image in New Tab"
+            copy.title = String(localized: "Open Image in New Tab")
             menu.insertItem(copy, at: 1)
             menu.removeItem(openInWindowItem)
         }
@@ -23,7 +23,7 @@ extension MyWKWebView {
             menu.removeItem(downloadImageItem)
         }
         
-        let saveImageAsItem = NSMenuItem(title: "Save Image As...", action: #selector(saveImageAs), keyEquivalent: "")
+        let saveImageAsItem = NSMenuItem(title: String(localized: "Save Image As..."), action: #selector(saveImageAs), keyEquivalent: "")
         saveImageAsItem.target = self
         menu.insertItem(saveImageAsItem, at: 2)
         
@@ -34,7 +34,7 @@ extension MyWKWebView {
     @objc private func saveImageAs() {
         getImageURL { imageURL in
             let savePanel = NSSavePanel()
-            savePanel.title = "Save Image As..."
+            savePanel.title = String(localized: "Save Image As...")
             savePanel.canCreateDirectories = true
             savePanel.nameFieldStringValue = imageURL.lastPathComponent + (imageURL.pathExtension.isReallyEmpty ? ".jpg" : "")
             savePanel.allowedContentTypes = [.image]
@@ -67,7 +67,7 @@ extension MyWKWebView {
             guard error == nil,
                   let urlString = result as? String,
                   let url = URL(string: urlString) else {
-                NSAlert(error: "Couldn't get image URL.").runModal()
+                NSAlert(error: String(localized: "Couldn't get image URL.")).runModal()
                 return
             }
             

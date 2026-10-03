@@ -140,7 +140,7 @@ struct SettingsExtensionsView: View {
 
     private func versionDescription(for entry: SafariExtensionEntry) -> String {
         if let version = entry.version {
-            return "Version \(version) · \(entry.installation.allWebsitesChoice.title)"
+            return String(localized: "Version \(version) · \(entry.installation.allWebsitesChoice.title)")
         }
         return entry.installation.allWebsitesChoice.title
     }
@@ -151,7 +151,7 @@ struct SettingsExtensionsView: View {
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.allowedContentTypes = [.applicationBundle]
-        panel.prompt = "Add Safari Extension"
+        panel.prompt = String(localized: "Add Safari Extension")
 
         panel.begin { response in
             guard response == .OK, let applicationURL = panel.url else { return }

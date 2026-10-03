@@ -64,7 +64,7 @@ struct SettingsProfilesView: View {
                     }
                 }
             } header: {
-                Text("\(selectedProfile?.name ?? "Default") Spaces")
+                Text("\(selectedProfile.displayName) Spaces")
             } footer: {
                 Text("You may only delete a profile if it has no associated spaces.")
             }
@@ -80,11 +80,11 @@ struct SettingsProfilesView: View {
             showEditProfile = false
             showAddProfile = false
         }
-        .alert("Delete \(selectedProfile?.name ?? "")", isPresented: $showDeleteProfileAlert) {
+        .alert("Delete \(selectedProfile.displayName)", isPresented: $showDeleteProfileAlert) {
             Button(role: .cancel, action: {})
             Button("Delete", role: .destructive, action: deleteSelectedProfile)
         } message: {
-            Text("Are you sure you want to delete the \(selectedProfile?.name ?? "") profile? This will also delete all your history, cookies, and other browsing data associated with this profile. This action cannot be undone.")
+            Text("Are you sure you want to delete the \(selectedProfile.displayName) profile? This will also delete all your history, cookies, and other browsing data associated with this profile. This action cannot be undone.")
         }
         .sheet(isPresented: $showManageWebsiteData) {
             ManageWebsiteDataView(profile: selectedProfile)

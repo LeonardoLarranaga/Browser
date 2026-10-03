@@ -32,7 +32,7 @@ struct SidebarURL: View {
                     .foregroundStyle(.secondary)
                     .padding(.leading, .sidebarPadding)
 
-                Text(currentTab.url.cleanHost)
+                Text(currentTab.contentType == .history ? String(localized: "History") : currentTab.url.cleanHost)
                     .lineLimit(1)
                     .truncationMode(.tail)
 
@@ -42,7 +42,7 @@ struct SidebarURL: View {
                     Button {
                         currentTab.webview?.zoomActualSize()
                     } label: {
-                        Text("\(Int(currentTab.pageZoomLevel * 100))%")
+                        Text(Double(currentTab.pageZoomLevel).formatted(.percent.precision(.fractionLength(0))))
                             .font(.system(size: 10, weight: .medium))
                             .foregroundStyle(.secondary)
                             .padding(.horizontal, 6)
@@ -51,7 +51,7 @@ struct SidebarURL: View {
                             .clipShape(.capsule)
                     }
                     .buttonStyle(.plain)
-                    .help("Reset zoom to 100%")
+                    .help("Reset zoom to \(Double(1).formatted(.percent.precision(.fractionLength(0))))")
                     .browserTransition(.opacity)
                 }
 

@@ -5,9 +5,11 @@
 //  Created by Leonardo Larrañaga on 27/2/26.
 //
 
+import Foundation
+
 extension WKWebsiteDataRecord {
-    var dataTypesDescriptions: [String] {
-        Set(dataTypes.map {
+    var dataTypesDescriptions: [LocalizedStringResource] {
+        dataTypes.map {
             switch $0 {
             case WKWebsiteDataTypeFetchCache,
                 WKWebsiteDataTypeDiskCache,
@@ -26,6 +28,6 @@ extension WKWebsiteDataRecord {
             case WKWebsiteDataTypeScreenTime: "Screen Time"
             default: "Other"
             }
-        }).sorted()
+        }
     }
 }

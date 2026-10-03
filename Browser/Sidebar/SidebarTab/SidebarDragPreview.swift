@@ -98,7 +98,7 @@ struct SidebarFolderDragPreview: View {
 
 struct SidebarEmptyDropTarget: View {
 
-    let title: String
+    let title: LocalizedStringResource
     let rowWidth: CGFloat
 
     var body: some View {

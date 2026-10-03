@@ -81,7 +81,7 @@ final class SafariExtensions: NSObject, WKWebExtensionControllerDelegate {
         let bookmark = try? applicationURL.bookmarkData(options: .withSecurityScope)
         let extensionURLs = safariExtensionBundleURLs(in: applicationURL)
         guard !extensionURLs.isEmpty else {
-            errorMessage = "The selected app does not contain a Safari web extension."
+            errorMessage = String(localized: "The selected app does not contain a Safari web extension.")
             releaseSecurityScopeIfUnused(for: applicationURL)
             return
         }
@@ -347,7 +347,7 @@ final class SafariExtensions: NSObject, WKWebExtensionControllerDelegate {
         guard entry.installation.isExtensionEnabled,
               entry.webExtension.hasBackgroundContent else { return }
 
-        entry.context.inspectionName = "\(entry.name) Background Page"
+        entry.context.inspectionName = String(localized: "\(entry.name) Background Page")
         entry.context.isInspectable = true
 
         Task {
@@ -355,11 +355,11 @@ final class SafariExtensions: NSObject, WKWebExtensionControllerDelegate {
                 try await entry.context.loadBackgroundContent()
                 await Task.yield()
                 guard let webView = extensionBackgroundWebViews[entry.id] else {
-                    errorMessage = "WebKit did not provide the extension background page for inspection."
+                    errorMessage = String(localized: "WebKit did not provide the extension background page for inspection.")
                     return
                 }
                 guard let inspector = webView._inspector else {
-                    errorMessage = "WebKit could not create an inspector for \(entry.name)'s background page."
+                    errorMessage = String(localized: "WebKit could not create an inspector for \(entry.name)'s background page.")
                     return
                 }
 
@@ -746,7 +746,7 @@ final class SafariExtensions: NSObject, WKWebExtensionControllerDelegate {
     }
 
     private func extensionName(for context: WKWebExtensionContext) -> String {
-        context.webExtension.displayName ?? "This extension"
+        context.webExtension.displayName ?? String(localized: "This extension")
     }
 
     private func presentPermissionAlert(
@@ -780,9 +780,13 @@ final class SafariExtensions: NSObject, WKWebExtensionControllerDelegate {
 
         let alert = NSAlert()
         alert.alertStyle = .informational
-        alert.messageText = "\(extensionName(for: context)) Wants Website Access"
-        let details = requested.isEmpty ? "" : "\n\nRequested access: " + requested.sorted().joined(separator: ", ")
-        alert.informativeText = "Choose whether \(extensionName(for: context)) can access websites.\(details)"
+        let name = extensionName(for: context)
+        alert.messageText = String(localized: "\(name) Wants Website Access")
+        var informativeText = String(localized: "Choose whether \(name) can access websites.")
+        if !requested.isEmpty {
+            informativeText += "\n\n" + String(localized: "Requested access: \(requested.sorted().joined(separator: ", "))")
+        }
+        alert.informativeText = informativeText
         for choice in SafariExtensionAccessChoice.allCases {
             alert.addButton(withTitle: choice.title)
         }
@@ -808,7 +812,7 @@ private enum SafariExtensionLoadError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .invalidBundle: "The app contains an invalid Safari web extension bundle."
+        case .invalidBundle: String(localized: "The app contains an invalid Safari web extension bundle.")
         }
     }
 }

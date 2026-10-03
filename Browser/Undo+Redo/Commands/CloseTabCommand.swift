@@ -12,7 +12,7 @@ struct CloseTabCommand: UndoableCommand {
     private weak var space: BrowserSpace?
     private let wasCurrentTab: Bool
     
-    var description: String {
+    var description: LocalizedStringResource {
         "Close Tab \"\(snapshot.title)\""
     }
     
@@ -23,7 +23,6 @@ struct CloseTabCommand: UndoableCommand {
     }
     
     func execute() {
-        print("Is there a space? \(space != nil)")
         guard let space,
               let modelContext = space.modelContext,
               let tab = space.tabs.first(where: { $0.id == snapshot.id })

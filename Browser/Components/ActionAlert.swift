@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ActionAlert {
-    private(set) var message: String
+    private(set) var message: LocalizedStringResource
     private(set) var systemImage: String
     private(set) var isPresented: Bool
     
@@ -18,7 +18,7 @@ struct ActionAlert {
         self.isPresented = false
     }
     
-    mutating func present(message: String, systemImage: String) {
+    mutating func present(message: LocalizedStringResource, systemImage: String) {
         self.message = message
         self.systemImage = systemImage
         isPresented = true

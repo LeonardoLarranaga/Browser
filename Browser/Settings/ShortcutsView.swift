@@ -35,7 +35,7 @@ struct SettingsShortcutsView: View {
         Section(title) {
             ForEach(shortcuts, id: \.rawValue) { shortcut in
                 HStack {
-                    Text(shortcut.rawValue.replacingOccurrences(of: "_", with: " ").capitalized)
+                    Text(shortcut.rawValue)
                     Spacer()
                     KeyboardShortcuts.Recorder(for: shortcut)
                 }

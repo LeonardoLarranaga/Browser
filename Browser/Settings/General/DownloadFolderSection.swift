@@ -64,7 +64,7 @@ struct DownloadFolderSection: View {
         panel.canChooseFiles = false
         panel.canChooseDirectories = true
         panel.canCreateDirectories = true
-        panel.prompt = "Select Download Location"
+        panel.prompt = String(localized: "Select Download Location")
         panel.begin { response in
             if response == .OK, let url = panel.url {
                 Preferences.downloadURL = url

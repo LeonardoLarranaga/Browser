@@ -20,11 +20,11 @@ final class TabUndoManager {
     var canUndo: Bool { !undoStack.isEmpty }
     var canRedo: Bool { !redoStack.isEmpty }
     
-    var undoDescription: String {
-        "Undo " + (undoStack.last?.description ?? "Close Tab")
+    var undoDescription: LocalizedStringResource {
+        "Undo \(undoStack.last?.description ?? "Close Tab")"
     }
-    var redoDescription: String {
-        "Redo " + (redoStack.last?.description ?? "Close Tab")
+    var redoDescription: LocalizedStringResource {
+        "Redo \(redoStack.last?.description ?? "Close Tab")"
     }
     
     func execute(_ command: UndoableCommand) {

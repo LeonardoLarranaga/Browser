@@ -20,7 +20,7 @@ class MyWKWebView: WKWebView {
     /// The "Open Link In New Tab" action (passed from the WKWebViewController)
     var openLinkInNewTabAction: ((URL) -> Void)? = nil
     /// Present an action alert from the WKWebView (passed from the WKWebViewController)
-    var presentActionAlert: ((String, String) -> Void)? = nil
+    var presentActionAlert: ((LocalizedStringResource, String) -> Void)? = nil
     /// Toggle the Find UI action (passed from the WKWebViewController)
     var toggleFindUI: (() -> Void)? = nil
     var onZoomChanged: ((CGFloat) -> Void)? = nil

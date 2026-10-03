@@ -9,7 +9,6 @@ import AppKit
 import CoreImage
 
 extension NSImage {
-    /// Convert an NSImage to PNG data
     var pngData: Data? {
         guard let tiffRepresentation = tiffRepresentation else { return nil }
         return NSBitmapImageRep(data: tiffRepresentation)?.representation(using: .png, properties: [:])

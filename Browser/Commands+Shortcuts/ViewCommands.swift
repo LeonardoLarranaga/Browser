@@ -82,24 +82,24 @@ struct ViewCommands: Commands {
 }
 
 extension KeyboardShortcuts.Name {
-    static let toggleSidebar = Self("toggle_sidebar", default: .init(.s, modifiers: .command))
+    static let toggleSidebar = Self(localized: "Toggle Sidebar", default: .init(.s, modifiers: .command))
 
-    static let showTabSwitcher = Self("show_tab_switcher", default: .init(.tab, modifiers: .control))
+    static let showTabSwitcher = Self(localized: "Show Tab Switcher", default: .init(.tab, modifiers: .control))
     
-    static let stopLoading = Self("stop_loading", default: .init(.period, modifiers: .command))
-    static let reload = Self("reload", default: .init(.r, modifiers: .command))
-    static let clearCookiesAndReload = Self("clear_cookies_and_reload")
-    static let clearCacheAndReload = Self("clear_cache_and_reload")
+    static let stopLoading = Self(localized: "Stop Loading", default: .init(.period, modifiers: .command))
+    static let reload = Self(localized: "Reload This Page", default: .init(.r, modifiers: .command))
+    static let clearCookiesAndReload = Self(localized: "Clear Cookies And Reload")
+    static let clearCacheAndReload = Self(localized: "Clear Cache And Reload")
 
-    static let togglePictureInPicture = Self("toggle_picture_in_picture")
+    static let togglePictureInPicture = Self(localized: "Toggle Picture In Picture")
 
-    static let zoomActualSize = Self("zoom_actual_size", default: .init(.zero, modifiers: .command))
-    static let zoomIn = Self("zoom_in", default: .init(.equal, modifiers: .command))
-    static let zoomOut = Self("zoom_out", default: .init(.minus, modifiers: .command))
+    static let zoomActualSize = Self(localized: "Zoom Actual Size", default: .init(.zero, modifiers: .command))
+    static let zoomIn = Self(localized: "Zoom In", default: .init(.equal, modifiers: .command))
+    static let zoomOut = Self(localized: "Zoom Out", default: .init(.minus, modifiers: .command))
 
-    static let openDeveloperTools = Self("open_developer_tools", default: .init(.i, modifiers: [.option, .command]))
-    static let showJavaScriptConsole = Self("show_javascript_console", default: .init(.c, modifiers: [.option, .command]))
-    static let showPageResources = Self("show_page_resources", default: .init(.u, modifiers: [.option, .command]))
+    static let openDeveloperTools = Self(localized: "Toggle Web Inspector", default: .init(.i, modifiers: [.option, .command]))
+    static let showJavaScriptConsole = Self(localized: "Show JavaScript Console", default: .init(.c, modifiers: [.option, .command]))
+    static let showPageResources = Self(localized: "Show Page Resources", default: .init(.u, modifiers: [.option, .command]))
 }
 
 extension [KeyboardShortcuts.Name] {

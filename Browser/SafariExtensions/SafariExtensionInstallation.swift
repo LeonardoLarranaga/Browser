@@ -49,9 +49,9 @@ enum SafariExtensionAccessChoice: String, CaseIterable, Codable, Identifiable {
 
     var title: String {
         switch self {
-        case .ask: "Ask"
-        case .allow: "Allow"
-        case .deny: "Deny"
+        case .ask: String(localized: "Ask")
+        case .allow: String(localized: "Allow")
+        case .deny: String(localized: "Deny")
         }
     }
 

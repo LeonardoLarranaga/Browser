@@ -40,7 +40,8 @@ struct HistoryCommands: Commands {
         guard let currentSpace = browserWindow?.currentSpace else { return }
         
         let favicon = ImageRenderer(content: Image(systemName: "arrow.counterclockwise.square.fill").resizable().frame(width: 32, height: 32).scaledToFit().foregroundStyle(.gray)).nsImage?.pngData
-        let historyTab = BrowserTab(title: "History", favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: currentSpace, contentType: .history)
+        let historyTitle = String(localized: "History")
+        let historyTab = BrowserTab(title: historyTitle, favicon: favicon, url: URL(string: "History")!, order: 0, browserSpace: currentSpace, contentType: .history)
         
         do {
             currentSpace.tabs.append(historyTab)
@@ -53,10 +54,10 @@ struct HistoryCommands: Commands {
 }
 
 extension KeyboardShortcuts.Name {
-    static let goBack = Self("go_back", default: .init(.leftBracket, modifiers: .command))
-    static let goForward = Self("go_forward", default: .init(.rightBracket, modifiers: .command))
+    static let goBack = Self(localized: "Go Back", default: .init(.leftBracket, modifiers: .command))
+    static let goForward = Self(localized: "Go Forward", default: .init(.rightBracket, modifiers: .command))
     
-    static let showHistory = Self("show_history", default: .init(.y, modifiers: .command))
+    static let showHistory = Self(localized: "Show History", default: .init(.y, modifiers: .command))
 }
 
 extension [KeyboardShortcuts.Name] {

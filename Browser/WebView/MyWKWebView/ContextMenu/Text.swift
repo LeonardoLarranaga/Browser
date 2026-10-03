@@ -14,7 +14,7 @@ extension MyWKWebView {
         // Remove WKMenuItemIdentifierSearchWeb
         menu.items.remove(at: 2)
         
-        let searchWebItem = NSMenuItem(title: "Search With Google", action: #selector(searchWeb), keyEquivalent: "")
+        let searchWebItem = NSMenuItem(title: String(localized: "Search With Google"), action: #selector(searchWeb), keyEquivalent: "")
         menu.insertItem(searchWebItem, at: 2)
     }
     

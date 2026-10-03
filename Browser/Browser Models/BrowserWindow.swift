@@ -97,7 +97,7 @@ import SwiftUI
     }
 
     /// Presents an action alert with a message and a system image
-    func presentActionAlert(message: String, systemImage: String) {
+    func presentActionAlert(message: LocalizedStringResource, systemImage: String) {
         withAnimation(.browserDefault) {
             actionAlert.present(message: message, systemImage: systemImage)
         }

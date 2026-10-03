@@ -17,10 +17,10 @@ extension MyWKWebView {
         menu.items.removeAll { $0.identifier?.rawValue == "WKMenuItemIdentifierGoBack" }
         menu.items.removeAll { $0.identifier?.rawValue == "WKMenuItemIdentifierGoForward" }
         
-        let backItem = NSMenuItem(title: "Back", action: #selector(goBack(_:)), keyEquivalent: "")
+        let backItem = NSMenuItem(title: String(localized: "Back"), action: #selector(goBack(_:)), keyEquivalent: "")
         backItem.isEnabled = canGoBack
         
-        let forwardItem = NSMenuItem(title: "Forward", action: #selector(goForward(_:)), keyEquivalent: "")
+        let forwardItem = NSMenuItem(title: String(localized: "Forward"), action: #selector(goForward(_:)), keyEquivalent: "")
         forwardItem.isEnabled = canGoForward
         
         menu.insertItem(backItem, at: 0)
@@ -28,16 +28,16 @@ extension MyWKWebView {
         // Reload item is at index 2
         menu.insertItem(.separator(), at: 3)
         
-        let savePageAsItem = NSMenuItem(title: "Save Page As...", action: #selector(savePageAs), keyEquivalent: "")
+        let savePageAsItem = NSMenuItem(title: String(localized: "Save Page As..."), action: #selector(savePageAs), keyEquivalent: "")
         menu.insertItem(savePageAsItem, at: 4)
         
-        let printItem = NSMenuItem(title: "Print...", action: #selector(printPage), keyEquivalent: "")
+        let printItem = NSMenuItem(title: String(localized: "Print..."), action: #selector(printPage), keyEquivalent: "")
         menu.insertItem(printItem, at: 5)
         
         let translationMenu = translationMenuItem()
         menu.insertItem(translationMenu, at: 6)
         
-        let findItem = NSMenuItem(title: "Find...", action: #selector(triggerFindUI), keyEquivalent: "")
+        let findItem = NSMenuItem(title: String(localized: "Find..."), action: #selector(triggerFindUI), keyEquivalent: "")
         menu.insertItem(findItem, at: 7)
     }
     
@@ -45,24 +45,24 @@ extension MyWKWebView {
     @objc func savePageAs() {
         let savePanel = NSSavePanel()
         
-        savePanel.title = "Save Page As..."
-        savePanel.nameFieldStringValue = title ?? url?.cleanHost ?? "Web Page"
+        savePanel.title = String(localized: "Save Page As...")
+        savePanel.nameFieldStringValue = title ?? url?.cleanHost ?? String(localized: "Web Page")
         savePanel.canCreateDirectories = true
         
         // Add a custom accessory view to select the format
         // Using an NSView to center the NSStackView
         let containerView = NSView(frame: NSRect(x: 0, y: 0, width: 400, height: 60))
         
-        let titleLabel = NSTextField(labelWithString: "Format:")
+        let titleLabel = NSTextField(labelWithString: String(localized: "Format:"))
         titleLabel.frame.size.width = 50
         
         let formatMenu = NSPopUpButton(frame: NSRect(x: 0, y: 0, width: 150, height: 24))
-        formatMenu.addItem(withTitle: "Page Source (HTML)")
-        formatMenu.addItem(withTitle: "Safari Web Archive")
-        formatMenu.addItem(withTitle: "Current Page Portion Snapshot (PNG)")
-        formatMenu.addItem(withTitle: "Full Page Image (PNG)")
-        formatMenu.addItem(withTitle: "Single Page PDF")
-        formatMenu.addItem(withTitle: "Paginated Page PDF")
+        formatMenu.addItem(withTitle: String(localized: "Page Source (HTML)"))
+        formatMenu.addItem(withTitle: String(localized: "Safari Web Archive"))
+        formatMenu.addItem(withTitle: String(localized: "Current Page Portion Snapshot (PNG)"))
+        formatMenu.addItem(withTitle: String(localized: "Full Page Image (PNG)"))
+        formatMenu.addItem(withTitle: String(localized: "Single Page PDF"))
+        formatMenu.addItem(withTitle: String(localized: "Paginated Page PDF"))
         formatMenu.action = #selector(changeFileFormat(_:))
         formatMenu.target = self
         
@@ -89,18 +89,18 @@ extension MyWKWebView {
         
         savePanel.begin { response in
             guard response == .OK, let url = savePanel.url else { return }
-            switch formatMenu.titleOfSelectedItem {
-            case "Page Source (HTML)":
+            switch formatMenu.indexOfSelectedItem {
+            case 0:
                 self.savePageAsHTML(url)
-            case "Safari Web Archive":
+            case 1:
                 self.savePageAsWebArchive(url)
-            case "Current Page Portion Snapshot (PNG)":
+            case 2:
                 self.savePageAsPNG(url)
-            case "Full Page Image (PNG)":
+            case 3:
                 self.saveFullPageAsPNG(url)
-            case "Single Page PDF":
+            case 4:
                 self.savePageAsPDF(url)
-            case "Paginated Page PDF":
+            case 5:
                 self.savePageAsPDF(url, paginated: true)
             default:
                 break
@@ -147,7 +147,7 @@ extension MyWKWebView {
                     if let pngData = nsImage.pngData {
                         try pngData.write(to: url, options: .atomic)
                     } else {
-                        throw "Failed to create PNG data"
+                        throw String(localized: "Failed to create PNG data")
                     }
                 } catch {
                     NSAlert(error: error).runModal()
@@ -248,20 +248,14 @@ extension MyWKWebView {
         guard let formatMenu = sender as? NSPopUpButton else { return }
         guard let savePanel = self.currentNSSavePanel else { return }
         
-        switch formatMenu.titleOfSelectedItem {
-        case "Page Source (HTML)":
+        switch formatMenu.indexOfSelectedItem {
+        case 0:
             savePanel.allowedContentTypes = [.html]
-            break
-        case "Safari Web Archive":
+        case 1:
             savePanel.allowedContentTypes = [.webArchive]
-            break
-        case "Current Page Portion Snapshot (PNG)":
-            fallthrough
-        case "Full Page Image (PNG)":
+        case 2, 3:
             savePanel.allowedContentTypes = [.png]
-        case "Single Page PDF":
-            fallthrough
-        case "Paginated Page PDF":
+        case 4, 5:
             savePanel.allowedContentTypes = [.pdf]
         default:
             break

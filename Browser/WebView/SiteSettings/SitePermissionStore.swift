@@ -11,7 +11,7 @@ enum SitePermissionType: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
         case .camera: "Camera"
         case .microphone: "Microphone"
@@ -33,7 +33,7 @@ enum SitePermissionDecision: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
-    var title: String {
+    var title: LocalizedStringResource {
         switch self {
         case .ask: "Ask"
         case .allow: "Allow"

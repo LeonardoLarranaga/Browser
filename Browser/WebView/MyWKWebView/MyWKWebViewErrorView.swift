@@ -12,7 +12,7 @@ struct MyWKWebViewErrorView: View {
     @Environment(BrowserTab.self) private var tab
     
     private struct DisplayedError {
-        let title: String
+        let title: LocalizedStringResource
         let systemImage: String
     }
     
@@ -21,7 +21,7 @@ struct MyWKWebViewErrorView: View {
         case -1009:
             DisplayedError(title: "It appears you're not connected to the internet.", systemImage: "wifi.exclamationmark")
         default:
-            DisplayedError(title: "An error occured while loading the page.\n\(tab.webviewErrorDescription ?? "")", systemImage: "exclamationmark.triangle.fill")
+            DisplayedError(title: "An error occurred while loading the page.\n\(tab.webviewErrorDescription ?? "")", systemImage: "exclamationmark.triangle.fill")
         }
     }
     

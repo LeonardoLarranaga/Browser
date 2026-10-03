@@ -50,11 +50,11 @@ class BrowserAppDelegate: NSObject, NSApplicationDelegate, NSWindowDelegate {
     func applicationShouldTerminate(_ sender: NSApplication) -> NSApplication.TerminateReply {
         if Preferences.warnBeforeQuitting {
             let alert = NSAlert()
-            alert.messageText = "Are you sure you want to quit?"
-            alert.addButton(withTitle: "Cancel")
-            alert.addButton(withTitle: "Quit").hasDestructiveAction = true
+            alert.messageText = String(localized: "Are you sure you want to quit?")
+            alert.addButton(withTitle: String(localized: "Cancel"))
+            alert.addButton(withTitle: String(localized: "Quit")).hasDestructiveAction = true
 
-            let checkbox = NSButton(checkboxWithTitle: "Warn before quitting", target: self, action: #selector(setWarnBeforeQuitting(_:)))
+            let checkbox = NSButton(checkboxWithTitle: String(localized: "Warn before quitting"), target: self, action: #selector(setWarnBeforeQuitting(_:)))
             checkbox.state = .on
 
             alert.accessoryView = checkbox

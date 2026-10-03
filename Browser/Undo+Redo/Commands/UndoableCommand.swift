@@ -10,5 +10,5 @@
 protocol UndoableCommand {
     func execute()
     func undo()
-    var description: String { get }
+    var description: LocalizedStringResource { get }
 }

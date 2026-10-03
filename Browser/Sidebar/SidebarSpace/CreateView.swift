@@ -120,7 +120,7 @@ struct SidebarSpaceCreateView: View {
             .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             .onHover { isHover in
                 withAnimation(.browserDefault) {
-                    if !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    if !name.isReallyEmpty {
                         hoverCreateButton = isHover
                     } else {
                         hoverCreateButton = false

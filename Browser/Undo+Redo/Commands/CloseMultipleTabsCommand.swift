@@ -12,7 +12,7 @@ struct CloseMultipleTabsCommand: UndoableCommand {
     enum CommandType {
         case closeTabsAbove, closeTabsBelow, clear
         
-        func description(tabCount: Int) -> String {
+        func description(tabCount: Int) -> LocalizedStringResource {
             switch self {
             case .closeTabsAbove: "Close \(tabCount) Tabs Above"
             case .closeTabsBelow: "Close \(tabCount) Tabs Below"
@@ -26,7 +26,7 @@ struct CloseMultipleTabsCommand: UndoableCommand {
     private let currentTabId: UUID?
     private let commandType: CommandType
     
-    var description: String {
+    var description: LocalizedStringResource {
         commandType.description(tabCount: snapshots.count)
     }
     

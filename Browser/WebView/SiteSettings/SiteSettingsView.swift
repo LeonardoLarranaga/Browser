@@ -83,7 +83,7 @@ struct SiteSettingsView: View {
 
     private var connectionSection: some View {
         section("Connection") {
-            row("Protocol", value: (tab.url.scheme ?? "").uppercased())
+            row("Protocol", value: .init(stringLiteral: (tab.url.scheme ?? "").uppercased()))
             row("Encryption", value: isSecure ? "Encrypted (TLS)" : "None")
             row("Status", value: isSecure ? "Secure" : "Not secure")
         }
@@ -140,7 +140,7 @@ struct SiteSettingsView: View {
         }
     }
 
-    private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+    private func section<Content: View>(_ title: LocalizedStringResource, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
                 .font(.subheadline.weight(.semibold))
@@ -155,7 +155,7 @@ struct SiteSettingsView: View {
         }
     }
 
-    private func row(_ label: String, value: String) -> some View {
+    private func row(_ label: LocalizedStringResource, value: LocalizedStringResource) -> some View {
         HStack {
             Text(label)
             Spacer()

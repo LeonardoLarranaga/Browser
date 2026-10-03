@@ -48,7 +48,7 @@ struct ManageWebsiteDataView: View {
                         VStack(alignment: .leading) {
                             Text(record.displayName)
                                 .font(.headline)
-                            Text(record.dataTypesDescriptions.joined(separator: ", "))
+                            Text(record.dataTypesDescriptions.map { String(localized: $0) }.sorted().joined(separator: ", "))
                                 .font(.subheadline)
                                 .foregroundStyle(.secondary)
                         }
@@ -58,7 +58,7 @@ struct ManageWebsiteDataView: View {
                     ContentUnavailableView(
                         "No website data stored",
                         systemImage: "externaldrive.badge.xmark",
-                        description: Text("The \(profile?.name ?? "Default") profile has no stored website data.")
+                        description: Text(String(localized: "The \(profile.displayName) profile has no stored website data."))
                     )
                 }
             }

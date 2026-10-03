@@ -30,11 +30,11 @@ final class BrowserHistoryEntry: Identifiable {
 
     static func deleteAllHistory(using modelContext: ModelContext) {
         let alert = NSAlert()
-        alert.messageText = "Clear History"
-        alert.informativeText = "Are you sure you want to clear your history? This action cannot be undone."
+        alert.messageText = String(localized: "Clear History")
+        alert.informativeText = String(localized: "Are you sure you want to clear your history? This action cannot be undone.")
         alert.alertStyle = .warning
-        alert.addButton(withTitle: "Cancel")
-        alert.addButton(withTitle: "Clear").hasDestructiveAction = true
+        alert.addButton(withTitle: String(localized: "Cancel"))
+        alert.addButton(withTitle: String(localized: "Clear")).hasDestructiveAction = true
 
         let response = alert.runModal()
 

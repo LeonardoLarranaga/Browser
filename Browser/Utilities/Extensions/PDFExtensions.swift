@@ -17,8 +17,8 @@ extension PDFDocument {
         guard let provider = CGDataProvider(data: pdfData as CFData),
               let originalPDF = CGPDFDocument(provider),
               let firstPage = originalPDF.page(at: 1)
-        else { throw "Invalid PDF data" }
-        
+        else { throw String(localized: "Invalid PDF data") }
+
         let mediaBox = firstPage.getBoxRect(.mediaBox)
         let pageWidth = mediaBox.width
         
@@ -29,7 +29,7 @@ extension PDFDocument {
         let newPDFData = NSMutableData()
         guard let consumer = CGDataConsumer(data: newPDFData),
               let context = CGContext(consumer: consumer, mediaBox: &contextMediaBox, nil)
-        else { throw "Couldn't get PDF data" }
+        else { throw String(localized: "Couldn't get PDF data") }
         
         for i in 0..<pageCount {
             context.beginPDFPage(nil)

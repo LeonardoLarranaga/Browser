@@ -1,0 +1,1047 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@ Background Page" : {
+
+    },
+    "%@ left" : {
+
+    },
+    "%@ says:" : {
+
+    },
+    "%@ Spaces" : {
+
+    },
+    "%@ Wants Website Access" : {
+
+    },
+    "%lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "•" : {
+
+    },
+    "^[%lld tab](inflect: true)" : {
+
+    },
+    "A restart may be required after changing shortcuts." : {
+
+    },
+    "Actual Size" : {
+
+    },
+    "Add" : {
+
+    },
+    "Add a Safari web extension from an app on your Mac." : {
+
+    },
+    "Add Passwords App Shortcut to Text Fields" : {
+
+    },
+    "Add Safari Extension" : {
+
+    },
+    "Add Safari Extension from App" : {
+
+    },
+    "Add to Essentials" : {
+
+    },
+    "Add Website Searcher" : {
+
+    },
+    "All tabs and nested folders inside this folder will be deleted." : {
+
+    },
+    "Allow" : {
+
+    },
+    "An error occurred while loading the page.\n%@" : {
+
+    },
+    "Animation" : {
+
+    },
+    "App" : {
+
+    },
+    "Appearance" : {
+
+    },
+    "Are you sure you want to clear your history? This action cannot be undone." : {
+
+    },
+    "Are you sure you want to delete the %@ profile? This will also delete all your history, cookies, and other browsing data associated with this profile. This action cannot be undone." : {
+
+    },
+    "Are you sure you want to move %@? Close and reopen the tabs in the space to apply the change." : {
+
+    },
+    "Are you sure you want to quit?" : {
+
+    },
+    "Are you sure you want to remove all data stored by the %lld displayed websites on your computer?" : {
+
+    },
+    "Ask" : {
+
+    },
+    "Ask for each download" : {
+
+    },
+    "AutoFill" : {
+
+    },
+    "Automatic Page Suspension" : {
+
+    },
+    "Back" : {
+
+    },
+    "Block" : {
+
+    },
+    "Cache" : {
+
+    },
+    "Camera" : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Cancel %@" : {
+
+    },
+    "Cancel download" : {
+
+    },
+    "Cancel Download" : {
+
+    },
+    "Checking…" : {
+
+    },
+    "Choose whether %@ can access websites." : {
+
+    },
+    "Choose..." : {
+
+    },
+    "Clear" : {
+
+    },
+    "Clear All Site Data" : {
+
+    },
+    "Clear Cache" : {
+
+    },
+    "Clear Cache & Reload" : {
+
+    },
+    "Clear Cache And Reload" : {
+
+    },
+    "Clear Cookies" : {
+
+    },
+    "Clear Cookies & Reload" : {
+
+    },
+    "Clear Cookies And Reload" : {
+
+    },
+    "Clear History" : {
+
+    },
+    "Clear Space With %lld Tabs" : {
+
+    },
+    "Close" : {
+
+    },
+    "Close %lld Tabs Above" : {
+
+    },
+    "Close %lld Tabs Below" : {
+
+    },
+    "Close All Windows" : {
+
+    },
+    "Close Tab" : {
+
+    },
+    "Close Tab \"%@\"" : {
+
+    },
+    "Close Tabs Above" : {
+
+    },
+    "Close Tabs Below" : {
+
+    },
+    "Close Window" : {
+
+    },
+    "Color" : {
+
+    },
+    "Color Opacity" : {
+
+    },
+    "Connection" : {
+
+    },
+    "Connection is not secure" : {
+
+    },
+    "Connection is secure" : {
+
+    },
+    "Contact…" : {
+
+    },
+    "Cookies" : {
+
+    },
+    "Copied Current URL" : {
+
+    },
+    "Copy" : {
+
+    },
+    "Copy Current URL" : {
+
+    },
+    "Copy Link" : {
+
+    },
+    "Could not open %@." : {
+
+    },
+    "Couldn't get image URL." : {
+
+    },
+    "Couldn't get PDF data" : {
+
+    },
+    "Create QR Code" : {
+
+    },
+    "Create Space" : {
+
+    },
+    "Credit Card…" : {
+
+    },
+    "CSS" : {
+
+    },
+    "Current Page Portion Snapshot (PNG)" : {
+
+    },
+    "Current Page Portion Snapshot Copied!" : {
+
+    },
+    "Custom Website Searchers" : {
+
+    },
+    "Databases" : {
+
+    },
+    "Default" : {
+
+    },
+    "Default App" : {
+
+    },
+    "Default Profile" : {
+
+    },
+    "Delete" : {
+
+    },
+    "Delete \"%@\"" : {
+
+    },
+    "Delete %@" : {
+
+    },
+    "Delete %lld Entries" : {
+
+    },
+    "Delete Entries From %@" : {
+
+    },
+    "Delete Entry" : {
+
+    },
+    "Delete Folder" : {
+
+    },
+    "Delete Profile" : {
+
+    },
+    "Delete Space" : {
+
+    },
+    "Deny" : {
+
+    },
+    "Developer" : {
+
+    },
+    "Disable Animations" : {
+
+    },
+    "DOM" : {
+
+    },
+    "Done" : {
+
+    },
+    "Download" : {
+
+    },
+    "Download failed" : {
+
+    },
+    "Download progress %lld percent" : {
+
+    },
+    "Downloads" : {
+
+    },
+    "Drop here" : {
+
+    },
+    "Drop to add to Essentials" : {
+
+    },
+    "Drop to pin" : {
+
+    },
+    "Duplicate Tab" : {
+
+    },
+    "Edit" : {
+
+    },
+    "Edit Profile" : {
+
+    },
+    "Edit Space" : {
+
+    },
+    "Edit Text On Page" : {
+
+    },
+    "Edit Website Searcher" : {
+
+    },
+    "Embedder" : {
+
+    },
+    "Enable %@" : {
+
+    },
+    "Enable Padding" : {
+
+    },
+    "Enable Shadow" : {
+
+    },
+    "Encrypted (HTTPS)" : {
+
+    },
+    "Encrypted (TLS)" : {
+
+    },
+    "Encryption" : {
+
+    },
+    "Estimating…" : {
+
+    },
+    "ETA n/a" : {
+
+    },
+    "Extensions" : {
+
+    },
+    "Failed to create PNG data" : {
+
+    },
+    "Feature Flags" : {
+
+    },
+    "File" : {
+
+    },
+    "File Download Location" : {
+
+    },
+    "File System" : {
+
+    },
+    "Find" : {
+
+    },
+    "Find In Page..." : {
+
+    },
+    "Find Next" : {
+
+    },
+    "Find Previous" : {
+
+    },
+    "Find..." : {
+
+    },
+    "Format:" : {
+
+    },
+    "Forward" : {
+
+    },
+    "Full Page Image (PNG)" : {
+
+    },
+    "Full Page Snapshot Copied!" : {
+
+    },
+    "General" : {
+
+    },
+    "Go Back" : {
+
+    },
+    "Go Forward" : {
+
+    },
+    "Go Next" : {
+
+    },
+    "Go Previous" : {
+
+    },
+    "Grain Effect" : {
+
+    },
+    "Hash Salt" : {
+
+    },
+    "History" : {
+
+    },
+    "HTML" : {
+
+    },
+    "Icon" : {
+
+    },
+    "Immersive View On Full Screen" : {
+
+    },
+    "Immersive View On Full Screen: Removes padding, shadow, and rounded corners when in full screen and the sidebar is collapsed." : {
+
+    },
+    "Internal" : {
+
+    },
+    "Invalid PDF data" : {
+
+    },
+    "It appears you're not connected to the internet." : {
+
+    },
+    "JavaScript" : {
+
+    },
+    "Keyboard Shortcuts" : {
+
+    },
+    "Launch Extension Console" : {
+
+    },
+    "Leading" : {
+
+    },
+    "Legal" : {
+
+    },
+    "Local Storage" : {
+
+    },
+    "macOS AutoFill is available for webpage text fields from the Edit menu. This option adds a shortcut to open your selected passwords app from those fields." : {
+
+    },
+    "Make Default" : {
+
+    },
+    "Manage Website Data..." : {
+
+    },
+    "Mature" : {
+
+    },
+    "Media" : {
+
+    },
+    "Media Keys" : {
+
+    },
+    "Microphone" : {
+
+    },
+    "More actions for %@" : {
+
+    },
+    "Move" : {
+
+    },
+    "Move %@ to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Move %1$@ to %2$@"
+          }
+        }
+      }
+    },
+    "Move Space" : {
+
+    },
+    "Move to Trash" : {
+
+    },
+    "Mute Tab" : {
+
+    },
+    "Networking" : {
+
+    },
+    "New Folder" : {
+
+    },
+    "New Nested Folder" : {
+
+    },
+    "New No-Trace Window" : {
+
+    },
+    "New Profile" : {
+
+    },
+    "New Space" : {
+
+    },
+    "New Tab" : {
+
+    },
+    "New Temporary Window" : {
+
+    },
+    "New Window" : {
+
+    },
+    "No details available." : {
+
+    },
+    "No Extensions" : {
+
+    },
+    "No matches" : {
+
+    },
+    "No Spaces" : {
+
+    },
+    "No stored data" : {
+
+    },
+    "No website data stored" : {
+
+    },
+    "No-Trace Window" : {
+
+    },
+    "None" : {
+
+    },
+    "Not encrypted (HTTP)" : {
+
+    },
+    "Not secure" : {
+
+    },
+    "Note: Custom searchers will not have autosuggestions." : {
+
+    },
+    "OK" : {
+
+    },
+    "Open" : {
+
+    },
+    "Open %@" : {
+
+    },
+    "Open %@ when download finishes" : {
+
+    },
+    "Open %lld Entries" : {
+
+    },
+    "Open Downloads Folder" : {
+
+    },
+    "Open File" : {
+
+    },
+    "Open Image in New Tab" : {
+
+    },
+    "Open in %@" : {
+
+    },
+    "Open in New Tab" : {
+
+    },
+    "Open Link in New Tab" : {
+
+    },
+    "Open Passwords App" : {
+
+    },
+    "Open Picture in Picture Automatically" : {
+
+    },
+    "Open the extension’s background console in a new Eva window." : {
+
+    },
+    "Opening in %@" : {
+
+    },
+    "Opening when download finishes" : {
+
+    },
+    "Opening when ready…" : {
+
+    },
+    "Other" : {
+
+    },
+    "Page Source (HTML)" : {
+
+    },
+    "Page Translated. Refresh To Revert" : {
+
+    },
+    "Paginated Page PDF" : {
+
+    },
+    "Passwords…" : {
+
+    },
+    "Permissions" : {
+
+    },
+    "Pin Tab" : {
+
+    },
+    "Preparing download…" : {
+
+    },
+    "Preview" : {
+
+    },
+    "Print" : {
+
+    },
+    "Print..." : {
+
+    },
+    "Privacy" : {
+
+    },
+    "Profile Name" : {
+
+    },
+    "Profiles" : {
+
+    },
+    "Protocol" : {
+
+    },
+    "Query URL" : {
+
+    },
+    "Quit" : {
+
+    },
+    "Recent" : {
+
+    },
+    "Redo %@" : {
+
+    },
+    "Redo Close Tab" : {
+
+    },
+    "Refresh" : {
+
+    },
+    "Reload" : {
+
+    },
+    "Reload Tab" : {
+
+    },
+    "Reload This Page" : {
+
+    },
+    "Remove" : {
+
+    },
+    "Remove All" : {
+
+    },
+    "Remove Extension" : {
+
+    },
+    "Remove from Essentials" : {
+
+    },
+    "Remove Now" : {
+
+    },
+    "Rename Folder" : {
+
+    },
+    "Rename Tab" : {
+
+    },
+    "Replace Pinned URL with Current" : {
+
+    },
+    "Requested access: %@" : {
+
+    },
+    "Reset to Pinned URL" : {
+
+    },
+    "Reset zoom to %@" : {
+
+    },
+    "Reverse Background Colors on Trailing Sidebar" : {
+
+    },
+    "Rounded Corners" : {
+
+    },
+    "Safari Extension Error" : {
+
+    },
+    "Safari Web Archive" : {
+
+    },
+    "Save" : {
+
+    },
+    "Save Image As..." : {
+
+    },
+    "Save Page As..." : {
+
+    },
+    "Screen Time" : {
+
+    },
+    "Search Feature Flags..." : {
+
+    },
+    "Search Field Recent Searches" : {
+
+    },
+    "Search History" : {
+
+    },
+    "Search with %@" : {
+
+    },
+    "Search With Google" : {
+
+    },
+    "Secure" : {
+
+    },
+    "Security" : {
+
+    },
+    "Select Download Location" : {
+
+    },
+    "Select Download Location For \"%@\"" : {
+
+    },
+    "Select Icon" : {
+
+    },
+    "Select Passwords App" : {
+
+    },
+    "Service Workers" : {
+
+    },
+    "Session Storage" : {
+
+    },
+    "Set as Default Browser" : {
+
+    },
+    "Share" : {
+
+    },
+    "Share..." : {
+
+    },
+    "Share…" : {
+
+    },
+    "Show Feature Flags for Web Developers" : {
+
+    },
+    "Show History" : {
+
+    },
+    "Show Hover URL" : {
+
+    },
+    "Show in Finder" : {
+
+    },
+    "Show JavaScript Console" : {
+
+    },
+    "Show Page Resources" : {
+
+    },
+    "Show Tab Switcher" : {
+
+    },
+    "Show Window Controls On Trailling Sidebar" : {
+
+    },
+    "Sidebar Options" : {
+
+    },
+    "Sidebar Position" : {
+
+    },
+    "Single Page PDF" : {
+
+    },
+    "Site Settings & Permissions…" : {
+
+    },
+    "Snapshot Current Page Portion" : {
+
+    },
+    "Snapshot Full Page" : {
+
+    },
+    "Space Name" : {
+
+    },
+    "Stable" : {
+
+    },
+    "Start Navigating To Fill The History" : {
+
+    },
+    "Status" : {
+
+    },
+    "Stop Editing Text On Page" : {
+
+    },
+    "Stop Loading" : {
+
+    },
+    "Stop opening %@ when download finishes" : {
+
+    },
+    "Tab" : {
+
+    },
+    "Temporary Window" : {
+
+    },
+    "Testable" : {
+
+    },
+    "The %@ profile has no stored website data." : {
+
+    },
+    "The app contains an invalid Safari web extension bundle." : {
+
+    },
+    "The Default profile uses the shared website data store. Each additional profile has its own isolated cookies, cache, and history." : {
+
+    },
+    "The selected app does not contain a Safari web extension." : {
+
+    },
+    "These websites have stored data that can be used to track your browsing. Removing the data may reduce tracking, but may also log you out of websites or change website behavior." : {
+
+    },
+    "This action cannot be undone. All tabs in this space will be lost." : {
+
+    },
+    "This extension" : {
+
+    },
+    "This profile has no spaces yet." : {
+
+    },
+    "This site has stored data" : {
+
+    },
+    "Toggle Editing" : {
+
+    },
+    "Toggle Picture In Picture" : {
+
+    },
+    "Toggle Sidebar" : {
+
+    },
+    "Toggle Web Inspector" : {
+
+    },
+    "Trailing" : {
+
+    },
+    "Translate Using Google" : {
+
+    },
+    "Uncategorized" : {
+
+    },
+    "Undo %@" : {
+
+    },
+    "Undo Close Tab" : {
+
+    },
+    "Unknown" : {
+
+    },
+    "Unpin Tab" : {
+
+    },
+    "Unstable" : {
+
+    },
+    "Use '%s' as the placeholder for the search query." : {
+
+    },
+    "Use Selection For Find" : {
+
+    },
+    "Version %@ · %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Version %1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "View" : {
+
+    },
+    "Warn before quitting" : {
+
+    },
+    "Warn Before Quitting" : {
+
+    },
+    "Web Inspector" : {
+
+    },
+    "Web Page" : {
+
+    },
+    "Web View" : {
+
+    },
+    "WebKit could not create an inspector for %@'s background page." : {
+
+    },
+    "WebKit did not provide the extension background page for inspection." : {
+
+    },
+    "Website" : {
+
+    },
+    "Website Access" : {
+
+    },
+    "Website Data" : {
+
+    },
+    "Website Settings and Extensions" : {
+
+    },
+    "Where to?" : {
+
+    },
+    "You Are No Longer Editing The Text On The Page" : {
+
+    },
+    "You Can Now Edit The Text On The Page" : {
+
+    },
+    "You can't undo this action" : {
+
+    },
+    "You may only delete a profile if it has no associated spaces." : {
+
+    },
+    "Zoom" : {
+
+    },
+    "Zoom Actual Size" : {
+
+    },
+    "Zoom In" : {
+
+    },
+    "Zoom Out" : {
+
+    }
+  },
+  "version" : "1.2"
+}

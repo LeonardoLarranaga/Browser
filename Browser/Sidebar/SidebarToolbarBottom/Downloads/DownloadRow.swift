@@ -14,7 +14,54 @@ struct DownloadRow: View {
     
     @State private var hover = false
     @State private var cancelHover = false
-    
+
+    private var rowActionLabel: LocalizedStringResource {
+        if download.state == .downloading {
+            return download.opensWhenFinished
+            ? "Stop opening \(download.name) when download finishes"
+            : "Open \(download.name) when download finishes"
+        }
+        return "Open \(download.name)"
+    }
+
+    private var openingStatus: LocalizedStringResource {
+        guard let interval = download.estimatedTimeRemaining else {
+            return Date.now.timeIntervalSince(download.date) < 5
+            ? "Opening when ready…"
+            : "Opening when download finishes"
+        }
+        return "Opening in \(formatTimeRemaining(interval))"
+    }
+
+    private var defaultApplicationName: String {
+        guard let applicationURL = NSWorkspace.shared.urlForApplication(toOpen: download.url) else {
+            return String(localized: "Default App")
+        }
+
+        let applicationBundle = Bundle(url: applicationURL)
+        return applicationBundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
+        ?? applicationBundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
+        ?? applicationURL.deletingPathExtension().lastPathComponent
+    }
+
+    private var transferDetails: String {
+        guard let completedBytes = download.completedBytes,
+              let totalBytes = download.totalBytes else {
+            return String(localized: "Preparing download…")
+        }
+
+        let completed = ByteCountFormatter.string(fromByteCount: completedBytes, countStyle: .file)
+        let total = ByteCountFormatter.string(fromByteCount: totalBytes, countStyle: .file)
+        return "\(completed)/\(total)"
+    }
+
+    private var timeRemainingDetails: LocalizedStringResource {
+        guard let interval = download.estimatedTimeRemaining else {
+            return Date.now.timeIntervalSince(download.date) < 5 ? "Estimating…" : "ETA n/a"
+        }
+        return "\(formatTimeRemaining(interval)) left"
+    }
+
     var body: some View {
         HStack(spacing: 5) {
             Button {
@@ -105,35 +152,6 @@ struct DownloadRow: View {
         }
     }
 
-    private var rowActionLabel: String {
-        if download.state == .downloading {
-            return download.opensWhenFinished
-                ? "Stop opening \(download.name) when download finishes"
-                : "Open \(download.name) when download finishes"
-        }
-        return "Open \(download.name)"
-    }
-
-    private var openingStatus: String {
-        guard let interval = download.estimatedTimeRemaining else {
-            return Date.now.timeIntervalSince(download.date) < 5
-                ? "Opening when ready…"
-                : "Opening when download finishes"
-        }
-        return "Opening in \(formatTimeRemaining(interval))"
-    }
-
-    private var defaultApplicationName: String {
-        guard let applicationURL = NSWorkspace.shared.urlForApplication(toOpen: download.url) else {
-            return "Default App"
-        }
-
-        let applicationBundle = Bundle(url: applicationURL)
-        return applicationBundle?.object(forInfoDictionaryKey: "CFBundleDisplayName") as? String
-            ?? applicationBundle?.object(forInfoDictionaryKey: "CFBundleName") as? String
-            ?? applicationURL.deletingPathExtension().lastPathComponent
-    }
-
     @ViewBuilder
     private var leadingIcon: some View {
         if download.state == .downloading {
@@ -186,45 +204,14 @@ struct DownloadRow: View {
         .foregroundStyle(.secondary)
     }
 
-    private var transferDetails: String {
-        guard let completedBytes = download.completedBytes,
-              let totalBytes = download.totalBytes else {
-            return "Preparing download…"
-        }
-
-        let (unit, divisor) = transferUnit(for: totalBytes)
-        let completed = (Double(completedBytes) / divisor).formatted(.number.precision(.fractionLength(1)))
-        let total = (Double(totalBytes) / divisor).formatted(.number.precision(.fractionLength(1)))
-        return "\(completed)/\(total) \(unit)"
-    }
-
-    private var timeRemainingDetails: String {
-        guard let interval = download.estimatedTimeRemaining else {
-            return Date.now.timeIntervalSince(download.date) < 5 ? "Estimating…" : "ETA n/a"
-        }
-        return "\(formatTimeRemaining(interval)) left"
-    }
-
-    private func transferUnit(for totalBytes: Int64) -> (name: String, divisor: Double) {
-        let bytes = Double(totalBytes)
-        if bytes >= 999_950_000_000_000 { return ("TB", 1_000_000_000_000) }
-        if bytes >= 999_950_000_000 { return ("GB", 1_000_000_000) }
-        if bytes >= 999_950_000 { return ("MB", 1_000_000) }
-        if bytes >= 999_950 { return ("KB", 1_000) }
-        return ("B", 1)
-    }
-
     private func formatTimeRemaining(_ interval: TimeInterval) -> String {
-        guard interval.isFinite, interval >= 0, interval < Double(Int.max) else { return "ETA n/a" }
+        guard interval.isFinite, interval >= 0, interval < Double(Int.max) else { return String(localized: "ETA n/a") }
 
         let seconds = max(0, Int(interval.rounded(.up)))
-        let hours = seconds / 3_600
-        let minutes = (seconds % 3_600) / 60
-        let remainingSeconds = seconds % 60
-        if hours > 0 { return "\(hours)h \(minutes)m" }
-        if minutes > 0 {
-            return "\(minutes)m \(remainingSeconds)s"
-        }
-        return "\(seconds)s"
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        formatter.maximumUnitCount = 2
+        return formatter.string(from: TimeInterval(seconds)) ?? String(localized: "ETA n/a")
     }
 }

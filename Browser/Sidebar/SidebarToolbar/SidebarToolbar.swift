@@ -63,7 +63,7 @@ struct SidebarToolbar: View {
         .toolbar {
             // Reserve the native header without overlapping the sidebar controls.
             ToolbarItem(placement: .principal) {
-                Text(" ")
+                Text(verbatim: " ")
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
             }
